@@ -1,0 +1,58 @@
+<div class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
+  <div class="w-full max-w-md">
+    <div class="bg-gray-800 p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-700 backdrop-blur-sm">
+
+      <div class="text-center mb-10">
+        <h1 class="text-4xl font-extrabold text-white">
+          Change Your Password
+        </h1>
+        <p class="mt-2 text-gray-400">Enter a new password below to reset your account.</p>
+      </div>
+
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: 'space-y-6' }) do |f| %>
+        
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <%= f.hidden_field :reset_password_token %>
+
+        <!-- New Password -->
+        <div class="relative">
+          <%= f.password_field :password, 
+                                autofocus: true, 
+                                autocomplete: "new-password", 
+                                placeholder: "New password",
+                                class: "w-full px-5 py-3 border border-gray-700 rounded-xl bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200 shadow-md" %>
+          <label for="user_password" class="sr-only">New Password</label>
+          <% if @minimum_password_length %>
+            <p class="text-xs text-gray-400 mt-1">Minimum <%= @minimum_password_length %> characters</p>
+          <% end %>
+        </div>
+
+        <!-- Password Confirmation -->
+        <div class="relative">
+          <%= f.password_field :password_confirmation, 
+                                autocomplete: "new-password", 
+                                placeholder: "Confirm new password",
+                                class: "w-full px-5 py-3 border border-gray-700 rounded-xl bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200 shadow-md" %>
+          <label for="user_password_confirmation" class="sr-only">Confirm New Password</label>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <%= f.submit "Change my password", class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-lg font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer transition duration-300 transform hover:scale-[1.01]" %>
+        </div>
+
+      <% end %>
+
+      <!-- Shared Links (Back to Login) -->
+      <div class="mt-6 text-center text-sm text-white">
+        <%= render "devise/shared/links" %>
+      </div>
+
+      <p class="text-xs mt-4 text-center text-gray-500">
+        Make sure your password is secure and easy to remember.
+      </p>
+
+    </div>
+  </div>
+</div>

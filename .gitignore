@@ -9,7 +9,9 @@
 
 # Ignore all environment files.
 /.env*
-
+# Ignore test and helpers folders
+/test/
+/helpers/
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*

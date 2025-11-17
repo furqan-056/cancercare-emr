@@ -15,7 +15,6 @@
 
         <%= f.hidden_field :reset_password_token %>
 
-        <!-- New Password -->
         <div class="relative">
           <%= f.password_field :password, 
                                 autofocus: true, 
@@ -28,7 +27,6 @@
           <% end %>
         </div>
 
-        <!-- Password Confirmation -->
         <div class="relative">
           <%= f.password_field :password_confirmation, 
                                 autocomplete: "new-password", 
@@ -37,14 +35,12 @@
           <label for="user_password_confirmation" class="sr-only">Confirm New Password</label>
         </div>
 
-        <!-- Submit Button -->
         <div>
           <%= f.submit "Change my password", class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-lg font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer transition duration-300 transform hover:scale-[1.01]" %>
         </div>
 
       <% end %>
 
-      <!-- Shared Links (Back to Login) -->
       <div class="mt-6 text-center text-sm text-white">
         <%= render "devise/shared/links" %>
       </div>

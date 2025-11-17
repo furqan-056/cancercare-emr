@@ -1,8 +1,6 @@
 <div class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
-  <!-- Main Container -->
   <div class="w-full max-w-md">
 
-    <!-- Card Background -->
     <div class="bg-gray-800 p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-700 backdrop-blur-sm">
       
       <div class="text-center mb-10">
@@ -12,13 +10,10 @@
         <p class="mt-2 text-gray-400">Enter your email to receive a reset link.</p>
       </div>
       
-      <!-- Devise Form Start -->
       <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: 'space-y-6' }) do |f| %>
 
-        <!-- Error Messages -->
         <%= render "devise/shared/error_messages", resource: resource %>
 
-        <!-- Email Field -->
         <div class="relative">
           <%= f.email_field :email, 
                             autofocus: true, 
@@ -28,14 +23,11 @@
           <label for="admin_email" class="sr-only">Email Address</label>
         </div>
 
-        <!-- Submit Button -->
         <div>
           <%= f.submit "Send Reset Instructions", class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-lg font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer transition duration-300 transform hover:scale-[1.01]" %>
         </div>
       <% end %>
-      <!-- Devise Form End -->
 
-      <!-- Shared Links (Back to Login) -->
       <div class="mt-6 text-center text-sm text-white">
         <%= render "devise/shared/links" %>
       </div>

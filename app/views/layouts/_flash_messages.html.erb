@@ -1,0 +1,30 @@
+<div id="flash-container" class="fixed top-6 right-6 z-50 space-y-2">
+  <% flash.each do |type, message| %>
+    <% next if message.blank? %>
+
+    <% color_class = case type.to_sym
+      when :notice, :success then "bg-green-500" 
+      when :alert, :error then "bg-red-500"
+      when :warning, :warn then "bg-yellow-500"
+      when :info then "bg-blue-500"
+      else "bg-gray-500"
+    end %>
+
+    <div
+      data-controller="flash"
+      class="relative <%= color_class %> text-white px-5 py-3 rounded-2xl shadow-lg flex items-center justify-between animate-slide-in-right transition-opacity duration-500">
+      <span><%= message %></span>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        data-action="click->flash#close"
+        class="h-5 w-5 text-white/80 hover:text-white cursor-pointer ml-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </div>
+  <% end %>
+</div>

@@ -3,17 +3,17 @@ class Admins::OrganizationsController < Admins::BaseController
   layout 'admins'
 
   def index
-    @organizations = current_admin.organizations
+    @organizations = Organization.all
   end
 
   def show; end
 
   def new
-    @organization = current_admin.organizations.new
+    @organization = Organization.new
   end
 
   def create
-    @organization = current_admin.organizations.new(organization_params)
+    @organization = Organization.new(organization_params)
     if @organization.save
       redirect_to admins_organization_path(@organization), notice: "Organization created successfully."
     else
@@ -39,7 +39,9 @@ class Admins::OrganizationsController < Admins::BaseController
   private
 
   def set_organization
-    @organization = current_admin.organizations.find(params[:id])
+    @organization = Organization.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to admins_organizations_path, alert: "Organization not found."
   end
 
   def organization_params

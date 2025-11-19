@@ -1,5 +1,5 @@
 class Admins::OrganizationsController < Admins::BaseController
-  before_action :set_organization, only: [:show, :edit, :update, :destroy]
+  before_action :set_organization, only: %i[show edit update destroy]
   layout 'admins'
 
   def index
@@ -45,6 +45,6 @@ class Admins::OrganizationsController < Admins::BaseController
   end
 
   def organization_params
-    params.require(:organization).permit(:name, :email, :organization_type, :phone_number)
+    params.require(:organization).permit(:name, :email, :organization_type, :phone_number, :logo)
   end
 end

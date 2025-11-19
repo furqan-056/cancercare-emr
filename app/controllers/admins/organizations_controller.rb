@@ -1,5 +1,6 @@
 class Admins::OrganizationsController < Admins::BaseController
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
+  layout 'admins'
 
   def index
     @organizations = current_admin.organizations

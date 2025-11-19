@@ -34,46 +34,47 @@
   }
 }
 
-/* Dark/light theme support */
-#app-root.light {
-  background-color: #f7f7f7;
-  color: #1f2937;
-}
+/* Define the light theme overrides. 
+   The 'light' class is applied to the <html> tag by Stimulus. */
 
-#app-root.light .bg-gray-900 {
+html.light .bg-gray-900 {
   background-color: #f7f7f7 !important;
 }
 
-#app-root.light .bg-gray-800 {
+html.light .bg-gray-800 {
   background-color: #ffffff !important;
   color: #1f2937 !important;
   border-color: #e5e7eb !important;
 }
 
-#app-root.light .text-white {
+html.light .text-white {
   color: #1f2937 !important;
 }
 
-#app-root.light .text-gray-400 {
+html.light .text-gray-400 {
   color: #6b7280 !important;
 }
 
-#app-root.light .border-gray-700 {
+html.light .border-gray-700 {
   border-color: #e5e7eb !important;
 }
 
-#app-root.light .bg-gray-700 {
+html.light .bg-gray-700 {
   background-color: #e5e7eb !important;
 }
 
-#app-root.light .hover\:bg-gray-600:hover {
+html.light .hover\:bg-gray-600:hover {
   background-color: #d1d5db !important;
 }
 
-#app-root.light .text-gray-300 {
+html.light .text-gray-300 {
   color: #4b5563 !important;
 }
 
-#app-root.light .text-green-400 {
+html.light .text-green-400 {
   color: #10b981 !important;
+}
+
+html.light .flex.h-screen { 
+  background-color: #f7f7f7 !important; 
 }

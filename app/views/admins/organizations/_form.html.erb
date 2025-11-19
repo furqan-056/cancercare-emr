@@ -1,7 +1,11 @@
-<div class="max-w-xl mx-auto p-4 sm:p-6 lg:p-8 bg-white shadow-lg rounded-lg">
+<div class="max-w-xl mx-auto p-4 sm:p-6 lg:p-8 
+  bg-white shadow-lg rounded-lg 
+  dark:bg-gray-800">
+
   <%= form_with model: [:admins, @organization], local: true do |f| %>
     <% if @organization.errors.any? %>
-      <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md">
+      <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md 
+        dark:bg-red-900 dark:text-red-300 dark:border-red-700">
         <h2 class="font-bold mb-2">
           <%= pluralize(@organization.errors.count, "error") %> prohibited this organization from saving:
         </h2>
@@ -14,35 +18,48 @@
     <% end %>
 
     <div class="space-y-6">
+      
       <div>
-        <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :name, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %> 
         <div class="mt-1">
           <%= f.text_field :name, 
-              class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" %>
+              class: "block w-full rounded-md border-gray-300 shadow-sm sm:text-sm p-2
+                      focus:border-indigo-500 focus:ring-indigo-500 
+                      bg-white text-gray-900 
+                      dark:bg-gray-700 dark:text-white dark:border-gray-600" %>
         </div>
       </div>
 
       <div>
-        <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :email, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
         <div class="mt-1">
           <%= f.email_field :email, 
-              class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" %>
+              class: "block w-full rounded-md border-gray-300 shadow-sm sm:text-sm p-2
+                      focus:border-indigo-500 focus:ring-indigo-500 
+                      bg-white text-gray-900 
+                      dark:bg-gray-700 dark:text-white dark:border-gray-600" %>
         </div>
       </div>
 
       <div>
-        <%= f.label :organization_type, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :organization_type, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
         <div class="mt-1">
           <%= f.text_field :organization_type, 
-              class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" %>
+              class: "block w-full rounded-md border-gray-300 shadow-sm sm:text-sm p-2
+                      focus:border-indigo-500 focus:ring-indigo-500 
+                      bg-white text-gray-900 
+                      dark:bg-gray-700 dark:text-white dark:border-gray-600" %>
         </div>
       </div>
 
       <div>
-        <%= f.label :phone_number, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :phone_number, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
         <div class="mt-1">
           <%= f.text_field :phone_number, 
-              class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" %>
+              class: "block w-full rounded-md border-gray-300 shadow-sm sm:text-sm p-2
+                      focus:border-indigo-500 focus:ring-indigo-500 
+                      bg-white text-gray-900 
+                      dark:bg-gray-700 dark:text-white dark:border-gray-600" %>
         </div>
       </div>
 

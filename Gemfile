@@ -65,3 +65,4 @@ group :test do
 end
 gem 'devise_invitable'
 gem 'devise'
+gem "importmap-rails"

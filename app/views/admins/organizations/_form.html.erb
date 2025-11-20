@@ -1,0 +1,131 @@
+<div class="max-w-xl mx-auto p-6 lg:p-8 bg-card-bg shadow-2xl rounded-3xl border border-primary-border">
+  <%= form_with model: [:admins, @organization], local: true do |f| %>
+    <% if @organization.errors.any? %>
+      <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md">
+        <h2 class="font-bold mb-2 text-secondary-text">
+          <%= pluralize(@organization.errors.count, "error") %> prohibited this organization from saving:
+        </h2>
+        <ul class="list-disc list-inside space-y-1 text-secondary-text">
+          <% @organization.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="space-y-6">
+      <h3 class="text-xl font-semibold text-secondary-text mb-4">Organization Information</h3>
+
+      <div>
+        <%= f.label :name, class: "block text-sm font-medium text-secondary-text" %>
+        <div class="mt-1">
+          <%= f.text_field :name, placeholder: "e.g., CancerCare Center", class: "block w-full rounded-xl border border-primary-border shadow-sm sm:text-sm p-3
+                                         focus:border-accent-1 focus:ring-accent-1
+                                         bg-card-bg text-secondary-text placeholder-main-area-text" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :email, class: "block text-sm font-medium text-secondary-text" %>
+        <div class="mt-1">
+          <%= f.email_field :email, placeholder: "contact@cancercare.org", class: "block w-full rounded-xl border border-primary-border shadow-sm sm:text-sm p-3
+                                           focus:border-accent-1 focus:ring-accent-1
+                                           bg-card-bg text-secondary-text placeholder-main-area-text" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :organization_type, class: "block text-sm font-medium text-secondary-text" %>
+        <div class="mt-1">
+          <%= f.text_field :organization_type, placeholder: "Hospital, Clinic, NGO, etc.", class: "block w-full rounded-xl border border-primary-border shadow-sm sm:text-sm p-3
+                                                    focus:border-accent-1 focus:ring-accent-1
+                                                    bg-card-bg text-secondary-text placeholder-main-area-text" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :phone_number, class: "block text-sm font-medium text-secondary-text" %>
+        <div class="mt-1">
+          <%= f.text_field :phone_number, placeholder: "+1 (555) 123-4567", class: "block w-full rounded-xl border border-primary-border shadow-sm sm:text-sm p-3
+                                                 focus:border-accent-1 focus:ring-accent-1
+                                                 bg-card-bg text-secondary-text placeholder-main-area-text" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :logo, "Organization Image (Logo)", class: "block text-sm font-medium text-secondary-text" %>
+        <div class="mt-1">
+          <% if @organization.logo.attached? %>
+            <div class="mb-2">
+              <p class="text-xs text-secondary-text">Current Image:</p>
+              <%= image_tag @organization.logo.variant(resize_to_limit: [100, 100]), class: "rounded-md border border-primary-border" %>
+            </div>
+          <% end %>
+
+          <%= f.file_field :logo, class: "block w-full text-sm text-secondary-text border border-primary-border rounded-xl cursor-pointer
+                                           bg-card-bg focus:outline-none p-3" %>
+        </div>
+      </div>
+
+      <div class="pt-8">
+        <h3 class="text-xl font-semibold text-secondary-text mb-4">Address Information</h3>
+
+        <%= f.fields_for :address do |a| %>
+          <div class="space-y-6">
+            <div>
+              <%= a.label :street_address, "Street Address", class: "block text-sm font-medium text-secondary-text" %>
+              <div class="mt-1">
+                <%= a.text_field :street_address, placeholder: "123 Main St", class: "block w-full rounded-xl border border-primary-border shadow-sm sm:text-sm p-3
+                                                          focus:border-accent-1 focus:ring-accent-1
+                                                          bg-card-bg text-secondary-text placeholder-main-area-text" %>
+              </div>
+            </div>
+
+            <div>
+              <%= a.label :location, "Location", class: "block text-sm font-medium text-secondary-text" %>
+              <div class="mt-1">
+                <%= a.text_field :location, placeholder: "Suite 100", class: "block w-full rounded-xl border border-primary-border shadow-sm sm:text-sm p-3
+                                                   focus:border-accent-1 focus:ring-accent-1
+                                                   bg-card-bg text-secondary-text placeholder-main-area-text" %>
+              </div>
+            </div>
+
+            <div>
+              <%= a.label :city, class: "block text-sm font-medium text-secondary-text" %>
+              <div class="mt-1">
+                <%= a.text_field :city, placeholder: "Springfield", class: "block w-full rounded-xl border border-primary-border shadow-sm sm:text-sm p-3
+                                               focus:border-accent-1 focus:ring-accent-1
+                                               bg-card-bg text-secondary-text placeholder-main-area-text" %>
+              </div>
+            </div>
+
+            <div>
+              <%= a.label :postal_code, "Postal Code", class: "block text-sm font-medium text-secondary-text" %>
+              <div class="mt-1">
+                <%= a.text_field :postal_code, placeholder: "12345", class: "block w-full rounded-xl border border-primary-border shadow-sm sm:text-sm p-3
+                                                     focus:border-accent-1 focus:ring-accent-1
+                                                     bg-card-bg text-secondary-text placeholder-main-area-text" %>
+              </div>
+            </div>
+
+            <div>
+              <%= a.label :country, class: "block text-sm font-medium text-secondary-text" %>
+              <div class="mt-1">
+                <%= a.text_field :country, placeholder: "USA", class: "block w-full rounded-xl border border-primary-border shadow-sm sm:text-sm p-3
+                                                  focus:border-accent-1 focus:ring-accent-1
+                                                  bg-card-bg text-secondary-text placeholder-main-area-text" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="pt-5">
+        <%= f.submit "Save", class: "inline-flex justify-center rounded-xl border border-transparent bg-accent-1
+                                     py-3 px-6 text-sm font-medium text-primary-text shadow-lg
+                                     hover:bg-accent-1-hover focus:outline-none focus:ring-2
+                                     focus:ring-accent-1 focus:ring-offset-2 cursor-pointer transition duration-200" %>
+      </div>
+    </div>
+  <% end %>
+</div>

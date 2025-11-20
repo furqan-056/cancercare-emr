@@ -1,0 +1,74 @@
+<div class="p-4 sm:p-6 lg:p-8">
+  <div class="sm:flex sm:items-center sm:justify-between border-b border-primary-border pb-4 mb-8">
+    <div class="sm:flex-auto">
+      <h1 class="text-3xl font-bold leading-tight tracking-tight text-secondary-text"><%= @organization.name %></h1>
+    </div>
+    <div class="mt-4 sm:ml-16 sm:mt-0 flex space-x-3">
+      <%= link_to "Edit", edit_admins_organization_path(@organization), class: "inline-flex items-center rounded-xl border border-transparent bg-accent-1 px-3 py-2 text-sm font-medium text-primary-text shadow-lg hover:bg-accent-1-hover focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 transition duration-200" %>
+      <%= link_to "Back", admins_organizations_path, class: "inline-flex items-center rounded-xl border border-primary-border bg-card-bg px-3 py-2 text-sm font-medium text-secondary-text shadow-sm hover:bg-hover-dark focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 transition duration-200" %>
+    </div>
+  </div>
+
+  <div class="bg-card-bg shadow-2xl overflow-hidden rounded-3xl mb-8 border border-primary-border max-w-4xl mx-auto">
+    <div class="divide-y divide-primary-border">
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-lg font-semibold text-accent-1 sm:col-span-3">Organization Logo</dt>
+        <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0">
+          <% if @organization.logo.attached? %>
+            <%= image_tag @organization.logo.variant(resize_to_limit: [300, 300]), class: "rounded-xl shadow-md max-w-full h-auto border border-primary-border" %>
+          <% else %>
+            <span class="text-secondary-text">No logo uploaded.</span>
+          <% end %>
+        </dd>
+      </div>
+
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-secondary-bg/20">
+        <dt class="text-lg font-semibold text-accent-1 sm:col-span-3">Organization Details</dt>
+      </div>
+
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-secondary-text">Email</dt>
+        <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @organization.email %></dd>
+      </div>
+
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-secondary-text">Organization Type</dt>
+        <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @organization.organization_type %></dd>
+      </div>
+
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-secondary-text">Phone Number</dt>
+        <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @organization.phone_number %></dd>
+      </div>
+
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-secondary-bg/20">
+        <dt class="text-lg font-semibold text-accent-1 sm:col-span-3">Address Details</dt>
+      </div>
+
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-secondary-text">Street Address</dt>
+        <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @organization.address&.street_address || "N/A" %></dd>
+      </div>
+
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-secondary-text">Location</dt>
+        <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @organization.address&.location || "N/A" %></dd>
+      </div>
+
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-secondary-text">City</dt>
+        <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @organization.address&.city || "N/A" %></dd>
+      </div>
+
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-secondary-text">Postal Code</dt>
+        <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @organization.address&.postal_code || "N/A" %></dd>
+      </div>
+
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-secondary-text">Country</dt>
+        <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @organization.address&.country || "N/A" %></dd>
+      </div>
+    </div>
+  </div>
+</div>

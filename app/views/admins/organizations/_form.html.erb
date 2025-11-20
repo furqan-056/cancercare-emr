@@ -1,7 +1,6 @@
 <div class="max-w-xl mx-auto p-6 lg:p-8 bg-card-bg shadow-2xl rounded-3xl border border-primary-border">
   <%= form_with model: [:admins, @organization], local: true do |f| %>
     <% if @organization.errors.any? %>
-      <%# Using standard Tailwind reds for error messages, which provide adequate contrast in both modes %>
       <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md">
         <h2 class="font-bold mb-2 text-secondary-text">
           <%= pluralize(@organization.errors.count, "error") %> prohibited this organization from saving:

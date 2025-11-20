@@ -10,6 +10,7 @@ class Admins::OrganizationsController < Admins::BaseController
 
   def new
     @organization = Organization.new
+    @organization.build_address
   end
 
   def create
@@ -21,7 +22,9 @@ class Admins::OrganizationsController < Admins::BaseController
     end
   end
 
-  def edit; end
+  def edit
+    @organization.build_address unless @organization.address
+  end
 
   def update
     if @organization.update(organization_params)
@@ -45,6 +48,21 @@ class Admins::OrganizationsController < Admins::BaseController
   end
 
   def organization_params
-    params.require(:organization).permit(:name, :email, :organization_type, :phone_number, :logo)
+    params.require(:organization).permit(
+      :name, 
+      :email, 
+      :organization_type, 
+      :phone_number, 
+      :logo,
+      address_attributes: [
+        :id,
+        :street_address,
+        :location,
+        :city,
+        :postal_code,
+        :country,
+        :_destroy
+      ]
+    )
   end
 end

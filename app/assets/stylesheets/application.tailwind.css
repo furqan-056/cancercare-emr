@@ -33,45 +33,108 @@
   }
 }
 
-
-html.light .bg-gray-900 {
-  background-color: #f7f7f7 !important;
+:root {
+  --deep-twilight: #03045eff;
+  --bright-teal-blue: #0077b6ff;
+  --turquoise-surf: #00b4d8ff;
+  --frosted-blue: #90e0efff;
+  --light-cyan: #caf0f8ff;
 }
 
-html.light .bg-gray-800 {
-  background-color: #ffffff !important;
-  color: #1f2937 !important;
-  border-color: #e5e7eb !important;
+:root {
+  --color-primary-bg: #000000;
+  --color-secondary-bg: var(--deep-twilight);
+  --color-primary-text: var(--light-cyan);
+  --color-secondary-text: var(--frosted-blue);
+  --color-primary-accent: var(--turquoise-surf);
+  --color-primary-border: #1a1a1a;
+  
+  --color-link-bg: var(--bright-teal-blue);
+  --color-hover-bg: #002d4d;
+  --color-hover-dark: #001e33;
+  --color-success-text: var(--turquoise-surf);
+  --color-logout-button: #e30425;
+  --color-logout-hover: #b9031f;
+
+  --color-accent-1: var(--turquoise-surf);
+  --color-accent-1-hover: #008eb3;
+  --color-accent-2: #ffc400;
+  --color-accent-2-hover: #cc9c00;
 }
 
-html.light .text-white {
-  color: #1f2937 !important;
+html.light {
+  --color-primary-bg: var(--light-cyan);
+  --color-secondary-bg: var(--deep-twilight);
+  --color-primary-text: #ffffff;
+  --color-secondary-text: var(--frosted-blue);
+  --color-primary-accent: var(--turquoise-surf); 
+  --color-primary-border: #002d4d;
+  
+  --color-main-area-bg: #ffffff;
+  --color-main-area-text: #1f2937;
+  --color-main-area-secondary-text: #4b5563;
+
+  --color-link-bg: var(--light-cyan);
+  --color-hover-bg: var(--bright-teal-blue);
+  --color-hover-dark: #005a8f;
+  --color-success-text: var(--bright-teal-blue);
+  --color-logout-button: #b43d3d; 
+  --color-logout-hover: #e23c3c;
+
+  --color-accent-1: var(--bright-teal-blue);
+  --color-accent-1-hover: #005a8f;
+  --color-accent-2: #ffc400;
+  --color-accent-2-hover: #cc9c00;
 }
 
-html.light .text-gray-400 {
-  color: #6b7280 !important;
+
+.bg-primary-bg { background-color: var(--color-primary-bg) !important; }
+
+.bg-secondary-bg { 
+  background-color: var(--color-secondary-bg) !important;
 }
 
-html.light .border-gray-700 {
-  border-color: #e5e7eb !important;
+.text-primary-text { color: var(--color-primary-text) !important; }
+.text-secondary-text { color: var(--color-secondary-text) !important; }
+.text-primary-accent { color: var(--color-primary-accent) !important; }
+
+.border-primary-border { border-color: var(--color-primary-border) !important; }
+
+.bg-hover-bg { background-color: var(--color-hover-bg) !important; }
+.hover\:bg-hover-bg:hover { background-color: var(--color-hover-bg) !important; }
+.hover\:bg-hover-dark:hover { background-color: var(--color-hover-dark) !important; }
+
+html.light .flex-1.flex.flex-col .bg-secondary-bg {
+  background-color: var(--color-main-area-bg) !important;
+  color: var(--color-main-area-text) !important;
+  border-color: var(--color-primary-border) !important;
 }
 
-html.light .bg-gray-700 {
-  background-color: #e5e7eb !important;
+html.light .flex-1.flex.flex-col .text-primary-text {
+  color: var(--color-main-area-text) !important;
 }
 
-html.light .hover\:bg-gray-600:hover {
-  background-color: #d1d5db !important;
+html.light main .text-primary-text {
+  color: var(--color-main-area-text) !important;
 }
 
-html.light .text-gray-300 {
-  color: #4b5563 !important;
+html.light main .text-secondary-text {
+  color: var(--color-main-area-secondary-text) !important;
 }
 
-html.light .text-green-400 {
-  color: #10b981 !important;
+html.light .hover\:bg-hover-bg:hover { 
+  background-color: var(--color-link-bg) !important; 
+  color: var(--color-secondary-bg) !important;
 }
 
-html.light .flex.h-screen { 
-  background-color: #f7f7f7 !important; 
-}
+.bg-logout-button { background-color: var(--color-logout-button) !important; }
+.hover\:bg-logout-hover:hover { background-color: var(--color-logout-hover) !important; }
+
+.text-success-text { color: var(--color-success-text) !important; }
+
+.text-accent-1 { color: var(--color-accent-1) !important; }
+.text-accent-2 { color: var(--color-accent-2) !important; }
+.bg-accent-1 { background-color: var(--color-accent-1) !important; }
+.hover\:bg-accent-1-hover:hover { background-color: var(--color-accent-1-hover) !important; }
+.bg-accent-2 { background-color: var(--color-accent-2) !important; }
+.hover\:bg-accent-2-hover:hover { background-color: var(--color-accent-2-hover) !important; }

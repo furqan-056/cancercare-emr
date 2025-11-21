@@ -18,3 +18,6 @@ application.register("sidebar", SidebarController)
 
 import ThemeToggleController from "./theme_toggle_controller"
 application.register("theme-toggle", ThemeToggleController)
+
+import ModalController from "./modal_controller"
+application.register("modal", ModalController)

@@ -58,6 +58,7 @@
         <main class="flex-1 overflow-y-auto p-6 text-main-area-text">
           <%= render "layouts/flash_messages" %>
           <%= yield %>
+          <%=turbo_frame_tag "modal" %>
         </main>
       </div>
     </div>

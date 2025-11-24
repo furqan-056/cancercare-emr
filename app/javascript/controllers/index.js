@@ -21,3 +21,6 @@ application.register("theme-toggle", ThemeToggleController)
 
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)
+
+import ActiveLinkController from "./active_link_controller"
+application.register("active-link", ActiveLinkController)

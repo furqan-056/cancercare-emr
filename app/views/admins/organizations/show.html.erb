@@ -1,5 +1,5 @@
 <%= turbo_frame_tag "modal" do %>
-  <div id="modal" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div id="modal" class="fixed inset-0 z-50 overflow-y-auto backdrop-blur-md bg-opacity-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 
       <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
@@ -22,7 +22,7 @@
                 <h1 id="modal-title" class="text-3xl font-bold leading-tight tracking-tight text-secondary-text"><%= @organization.name %></h1>
               </div>
               <div class="mt-4 sm:ml-16 sm:mt-0 flex space-x-3">
-                <%= link_to "Edit", edit_admins_organization_path(@organization), data: { turbo_frame: "_top" }, class: "inline-flex items-center rounded-xl border border-transparent bg-accent-1 px-3 py-2 text-sm font-medium text-primary-text shadow-lg hover:bg-accent-1-hover focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 transition duration-200" %>
+                <%= link_to "Edit", edit_admins_organization_path(@organization), data: { turbo_frame: "modal" }, class: "inline-flex items-center rounded-xl border border-transparent bg-accent-1 px-3 py-2 text-sm font-medium text-primary-text shadow-lg hover:bg-accent-1-hover focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 transition duration-200" %>
               </div>
             </div>
 

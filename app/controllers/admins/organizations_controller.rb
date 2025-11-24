@@ -5,8 +5,7 @@ class Admins::OrganizationsController < Admins::BaseController
     @organizations = Organization.all
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @organization = Organization.new
@@ -94,21 +93,6 @@ class Admins::OrganizationsController < Admins::BaseController
   end
 
   def organization_params
-    params.require(:organization).permit(
-      :name,
-      :email,
-      :organization_type,
-      :phone_number,
-      :logo,
-      address_attributes: [
-        :id,
-        :street_address,
-        :location,
-        :city,
-        :postal_code,
-        :country,
-        :_destroy
-      ]
-    )
+    params.require(:organization).permit(:name, :email, :organization_type, :phone_number, :logo, address_attributes: [:id, :street_address, :location, :city, :postal_code, :country, :_destroy])
   end
 end

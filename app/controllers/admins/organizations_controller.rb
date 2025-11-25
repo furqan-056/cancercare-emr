@@ -22,17 +22,8 @@ class Admins::OrganizationsController < Admins::BaseController
     respond_to do |format|
       if @organization.save
         format.turbo_stream
-        format.html do
-          redirect_to admins_organization_path(@organization), notice: "Organization created successfully."
-        end
+        format.html { redirect_to admins_organization_path(@organization), notice: "Organization created successfully." }
       else
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            "modal",
-            partial: "admins/organizations/form",
-            locals: { organization: @organization }
-          )
-        end
         format.html { render :new, status: :unprocessable_entity }
       end
     end
@@ -49,24 +40,9 @@ class Admins::OrganizationsController < Admins::BaseController
   def update
     respond_to do |format|
       if @organization.update(organization_params)
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            "organization_#{@organization.id}",
-            partial: "organization",
-            locals: { org: @organization }
-          )
-        end
-        format.html do
-          redirect_to admins_organization_path(@organization), notice: "Organization updated successfully."
-        end
+        format.turbo_stream
+        format.html { redirect_to admins_organization_path(@organization), notice: "Organization updated successfully." }
       else
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            "modal",
-            partial: "admins/organizations/form",
-            locals: { organization: @organization }
-          )
-        end
         format.html { render :edit, status: :unprocessable_entity }
       end
     end
@@ -78,9 +54,7 @@ class Admins::OrganizationsController < Admins::BaseController
       format.turbo_stream do
         render turbo_stream: turbo_stream.remove("organization_#{@organization.id}")
       end
-      format.html do
-        redirect_to admins_organizations_path, notice: "Organization deleted successfully."
-      end
+      format.html { redirect_to admins_organizations_path, notice: "Organization deleted successfully." }
     end
   end
 
@@ -91,7 +65,7 @@ class Admins::OrganizationsController < Admins::BaseController
   rescue ActiveRecord::RecordNotFound
     redirect_to admins_organizations_path, alert: "Organization not found."
   end
-
+  
   def organization_params
     params.require(:organization).permit(:name, :email, :organization_type, :phone_number, :logo, address_attributes: [:id, :street_address, :location, :city, :postal_code, :country, :_destroy])
   end

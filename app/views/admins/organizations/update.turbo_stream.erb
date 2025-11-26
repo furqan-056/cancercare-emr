@@ -4,7 +4,7 @@
   <% end %>
 <% else %>
 
-  <%= turbo_stream.prepend "organizations_list" do %>
+  <%= turbo_stream.replace "organization_#{@organization.id}" do %>
     <%= render partial: "organization", locals: { org: @organization } %>
   <% end %>
 <% end %>

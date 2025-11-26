@@ -1,0 +1,36 @@
+<div class="p-6 lg:p-8">
+  <div class="sm:flex sm:items-center border-b border-primary-border pb-4 mb-6">
+    <div class="sm:flex-auto">
+      <h1 class="text-3xl font-bold tracking-tight text-secondary-text">Create Members</h1>
+      <p class="mt-2 text-sm text-secondary-text">Manage all system members</p>
+    </div>
+
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <%= link_to "New Member",
+          new_admins_user_path,
+          data: { turbo_frame: "modal" },
+          class: "block rounded-xl bg-accent-1 px-4 py-2 text-center text-sm font-semibold 
+                  text-primary-text shadow hover:bg-accent-1-hover transition" %>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto rounded-xl border border-primary-border shadow">
+    <table class="min-w-full divide-y divide-primary-border">
+      <thead class="bg-secondary-bg">
+        <tr>
+          <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Email</th>
+          <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Role</th>
+          <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Organization</th>
+          <th class="px-6 py-3 text-right text-sm font-semibold text-secondary-text">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody id="users" class="divide-y divide-primary-border bg-card-bg">
+        <% @users.each do |user| %>
+          <%= render "user_row", user: user %>
+        <% end %>
+      </tbody>
+
+    </table>
+  </div>
+</div>

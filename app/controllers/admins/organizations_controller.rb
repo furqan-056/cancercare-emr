@@ -2,10 +2,12 @@ class Admins::OrganizationsController < Admins::BaseController
   before_action :set_organization, only: %i[show edit update destroy]
 
   def index
-    @organizations = Organization.all
+    @organizations = Organization.order(created_at: :desc).page(params[:page]).per(5)
   end
 
-  def show; end
+  def show
+    @organization = Organization.find(params[:id])
+  end
 
   def new
     @organization = Organization.new

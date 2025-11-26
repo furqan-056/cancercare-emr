@@ -14,23 +14,37 @@
     </div>
   </div>
 
-  <div class="overflow-x-auto rounded-xl border border-primary-border shadow">
-    <table class="min-w-full divide-y divide-primary-border">
-      <thead class="bg-secondary-bg">
-        <tr>
-          <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Email</th>
-          <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Role</th>
-          <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Organization</th>
-          <th class="px-6 py-3 text-right text-sm font-semibold text-secondary-text">Actions</th>
-        </tr>
-      </thead>
+  <%= turbo_frame_tag "users_list" do %>
+    <div class="overflow-x-auto rounded-xl border shadow">
+      <table class="min-w-full divide-y divide-primary-border">
+        <thead class="bg-secondary-bg">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Email</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Role</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Organization</th>
+            <th class="px-6 py-3 text-right text-sm font-semibold text-secondary-text">Actions</th>
+          </tr>
+        </thead>
 
-      <tbody id="users" class="divide-y divide-primary-border bg-card-bg">
-        <% @users.each do |user| %>
-          <%= render "user_row", user: user %>
+        <tbody id="users" class="divide-y divide-primary-border bg-card-bg">
+          <% @users.each do |user| %>
+            <%= render "user_row", user: user %>
+          <% end %>
+        </tbody>
+
+        <% if @users.total_pages > 1 %>
+          <tfoot>
+            <tr>
+              <td colspan="4" class="py-4 px-6 bg-card-bg">
+                <div class="flex justify-center">
+                  <%= paginate @users, params: { turbo_frame: "users_list" } %>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
         <% end %>
-      </tbody>
 
-    </table>
-  </div>
+      </table>
+    </div>
+  <% end %>
 </div>

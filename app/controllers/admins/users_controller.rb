@@ -2,7 +2,7 @@ class Admins::UsersController < Admins::BaseController
   before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
-    @users = User.all
+    @users = User.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   def new

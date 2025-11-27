@@ -1,17 +1,43 @@
 <div class="p-6 lg:p-8">
   <div class="sm:flex sm:items-center border-b border-primary-border pb-4 mb-6">
     <div class="sm:flex-auto">
-      <h1 class="text-3xl font-bold tracking-tight text-secondary-text">Organizations</h1>
-      <p class="mt-2 text-sm text-secondary-text">Manage all healthcare organizations.</p>
+      <h1 class="text-3xl font-bold tracking-tight text-secondary-text">
+        Organizations
+      </h1>
+      <p class="mt-2 text-sm text-secondary-text">
+        Manage all healthcare organizations.
+      </p>
     </div>
 
     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
       <%= link_to "New Organization",
-          new_admins_organization_path,
-          data: { turbo_frame: "modal" },
-          class: "block rounded-xl bg-accent-1 px-4 py-2 text-center text-sm font-semibold 
-                  text-primary-text shadow hover:bg-accent-1-hover transition" %>
+                  new_admins_organization_path,
+                  data: { turbo_frame: "modal" },
+                  class: "block rounded-xl bg-accent-1 px-4 py-2 text-center text-sm font-semibold text-white shadow hover:bg-accent-1-hover transition" %>
     </div>
+  </div>
+
+  <div class="mb-6">
+    <%= search_form_for @q,
+                        url: admins_organizations_path,
+                        method: :get,
+                        html: { data: { turbo_frame: "organizations_list" } },
+                        class: "flex items-center gap-4" do |f| %>
+
+      <div class="flex-1">
+        <%= f.search_field :name_or_email_or_organization_type_or_phone_number_or_address_street_address_or_address_location_or_address_city_or_address_postal_code_or_address_country_cont,
+                           placeholder: "Search organizations or address...",
+                           class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-secondary-text bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1" %>
+      </div>
+
+      <%= f.submit "Search",
+                   class: "rounded-xl bg-accent-1 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-accent-1-hover transition" %>
+
+      <%= link_to "Reset",
+                  admins_organizations_path,
+                  data: { turbo_frame: "organizations_list" },
+                  class: "rounded-xl border border-primary-border px-4 py-2 text-sm font-semibold text-secondary-text hover:bg-secondary-bg transition" %>
+    <% end %>
   </div>
 
   <%= turbo_frame_tag "organizations_list" do %>
@@ -40,7 +66,9 @@
             <% end %>
           <% else %>
             <tr>
-              <td colspan="11" class="text-center py-6 text-sm text-secondary-text">No organizations found.</td>
+              <td colspan="11" class="text-center py-6 text-sm text-secondary-text">
+                No organizations found.
+              </td>
             </tr>
           <% end %>
         </tbody>
@@ -49,16 +77,14 @@
           <tfoot>
             <tr>
               <td colspan="11" class="py-4 px-6 bg-card-bg">
-                <div class="flex justify-center" data-turbo-action="advance">
+                <div class="flex justify-center">
                   <%= paginate @organizations, params: { turbo_frame: "organizations_list" } %>
                 </div>
               </td>
             </tr>
           </tfoot>
         <% end %>
-
       </table>
     </div>
   <% end %>
-
 </div>

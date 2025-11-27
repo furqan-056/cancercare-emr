@@ -14,6 +14,14 @@ class Organization < ApplicationRecord
 
   before_validation :set_temp_password_for_users
 
+  def self.ransackable_attributes(auth_object = nil)
+    %w[id name email organization_type phone_number created_at updated_at]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    %w[address users]
+  end
+
   private
 
   def set_temp_password_for_users

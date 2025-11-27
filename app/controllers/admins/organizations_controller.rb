@@ -2,7 +2,12 @@ class Admins::OrganizationsController < Admins::BaseController
   before_action :set_organization, only: %i[show edit update destroy]
 
   def index
-    @organizations = Organization.order(created_at: :desc).page(params[:page]).per(5)
+    @q = Organization.ransack(params[:q])
+    @organizations = @q.result.includes(:address, :users).order(created_at: :desc).page(params[:page]).per(5)
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   def show

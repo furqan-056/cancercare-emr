@@ -2,7 +2,12 @@ class Admins::UsersController < Admins::BaseController
   before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
-    @users = User.order(created_at: :desc).page(params[:page]).per(10)
+    @q = User.ransack(params[:q])
+    @users = @q.result.includes(:organization).order(created_at: :desc).page(params[:page]).per(10)
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   def new

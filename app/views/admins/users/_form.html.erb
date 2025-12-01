@@ -1,11 +1,9 @@
 <div id="modal" class="fixed inset-0 z-50 overflow-y-auto bg-opacity-50 backdrop-blur-md" aria-modal="true">
   <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
-
     <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-lg md:max-w-2xl w-95">
       <div class="p-6 lg:p-8 bg-card-bg">
 
         <%= form_with(model: [:admins, user], local: true, id: "new_user_form") do |f| %>
-
           <% if user.errors.any? %>
             <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md">
               <h2 class="font-bold mb-2 text-secondary-text">
@@ -23,61 +21,45 @@
             <a href="<%= admins_users_path %>" data-turbo-frame="_top" 
                class="text-secondary-text hover:text-red-500 transition">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M6 18L18 6M6 6l12 12" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </a>
           </div>
 
           <div class="space-y-6">
-
-            <!-- Title -->
             <h3 class="text-xl font-semibold text-secondary-text mb-4">User Information</h3>
 
-            <!-- Email -->
             <div>
               <%= f.label :email, class: "block text-sm font-medium text-secondary-text" %>
               <%= f.email_field :email, 
-                                class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3
-                                          focus:border-accent-1 focus:ring-accent-1 bg-card-bg 
-                                          text-secondary-text placeholder-main-area-text",
+                                class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text placeholder-main-area-text",
                                 placeholder: "user@example.com" %>
             </div>
 
-            <!-- Role -->
             <div>
               <%= f.label :role, class: "block text-sm font-medium text-secondary-text" %>
               <%= f.select :role, 
-                  User.roles.keys.map { |r| [r.humanize, r] },
-                  { prompt: "Select role" },
-                  class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3
-                          focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
+                           User.roles.keys.map { |r| [r.humanize, r] },
+                           { prompt: "Select role" },
+                           class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
             </div>
 
-            <!-- Organization -->
             <div>
               <%= f.label :organization_id, "Organization", class: "block text-sm font-medium text-secondary-text" %>
               <%= f.collection_select :organization_id, 
-                    Organization.all, :id, :name,
-                    { prompt: "Select organization" },
-                    class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3
-                            focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
+                                     Organization.all, :id, :name,
+                                     { prompt: "Select organization" },
+                                     class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
             </div>
 
-            <!-- Submit Button -->
             <div class="pt-5">
               <%= f.submit "Save User",
-                  class: "inline-flex justify-center rounded-xl border border-transparent bg-accent-1
-                           py-3 px-6 text-sm font-medium text-primary-text shadow-lg
-                           hover:bg-accent-1-hover focus:outline-none focus:ring-2
-                           focus:ring-accent-1 focus:ring-offset-2 cursor-pointer transition duration-200" %>
+                           class: "inline-flex justify-center rounded-xl border border-transparent bg-accent-1 py-3 px-6 text-sm font-medium text-primary-text shadow-lg hover:bg-accent-1-hover focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 cursor-pointer transition duration-200" %>
             </div>
-
           </div>
-
         <% end %>
+
       </div>
     </div>
-
   </div>
 </div>

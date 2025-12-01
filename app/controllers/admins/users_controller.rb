@@ -18,7 +18,6 @@ class Admins::UsersController < Admins::BaseController
     @user = User.new(user_params)
     respond_to do |format|
       if @user.save
-        @user.send_reset_password_instructions
         format.html { redirect_to admins_users_path, notice: "User created successfully. A password setup email has been sent." }
         format.turbo_stream
       else

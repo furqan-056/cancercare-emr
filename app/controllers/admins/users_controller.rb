@@ -1,5 +1,5 @@
 class Admins::UsersController < Admins::BaseController
-  before_action :find_user, only: [:edit, :update, :destroy]
+  before_action :find_user, only: %i[edit update destroy]
 
   def index
     @q = User.ransack(params[:q])

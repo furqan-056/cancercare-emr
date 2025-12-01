@@ -1,2 +1,2 @@
 <%= turbo_stream.prepend "users", partial: "user_row", locals: { user: @user } %>
-<%= turbo_stream.replace "modal", "" %>
+<%= turbo_stream.update "modal", "" %>

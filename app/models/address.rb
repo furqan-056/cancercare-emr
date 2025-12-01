@@ -3,6 +3,6 @@ class Address < ApplicationRecord
   validates :street_address, :location, :city, :postal_code, :country, presence: true
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[id addressable_id addressable_type street_address location city postal_code country created_at updated_at]
+    %w[street_address location city postal_code country]
   end
 end

@@ -4,9 +4,10 @@ class User < ApplicationRecord
 
   enum :role, { manager: 0, doctor: 1, patient: 2 }
 
-  validates :role, presence: true
-  validates :organization, presence: true
+  validates :role, :organization, presence: true
   before_validation :set_temp_password_for_new_user, on: :create
+
+  after_commit :send_reset_email, on: :create
 
   ransacker :role do |parent|
     Arel.sql("CASE users.role
@@ -21,7 +22,7 @@ class User < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[id email role organization_id created_at updated_at]
+    %w[email role]
   end
 
   def self.ransackable_associations(auth_object = nil)
@@ -36,5 +37,9 @@ class User < ApplicationRecord
     generated_password = SecureRandom.hex(10)
     self.password = generated_password
     self.password_confirmation = generated_password
+  end
+
+  def send_reset_email
+    send_reset_password_instructions
   end
 end

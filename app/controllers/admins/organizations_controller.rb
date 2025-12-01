@@ -26,10 +26,6 @@ class Admins::OrganizationsController < Admins::BaseController
     @organization = Organization.new(organization_params)
     respond_to do |format|
       if @organization.save
-        newly_created_users.each do |user|
-          user.send_reset_password_instructions if user.email.present?
-        end
-
         format.html do
           redirect_to admins_organization_path(@organization), notice: "Organization created successfully. New users will receive an email to set their password."
         end
@@ -52,10 +48,6 @@ class Admins::OrganizationsController < Admins::BaseController
   def update
     respond_to do |format|
       if @organization.update(organization_params)
-        newly_created_users.each do |user|
-          user.send_reset_password_instructions if user.email.present?
-        end
-
         format.html do
           redirect_to admins_organization_path(@organization),
                       notice: "Organization updated successfully. New users will receive an email to set their password."
@@ -71,16 +63,12 @@ class Admins::OrganizationsController < Admins::BaseController
   def destroy
     @organization.destroy
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove("organization_#{@organization.id}") }
+      format.turbo_stream
       format.html { redirect_to admins_organizations_path, notice: "Organization deleted successfully." }
     end
   end
 
   private
-
-  def newly_created_users
-    @organization.users.select { |user| user.previous_changes.key?("id") }
-  end
 
   def set_organization
     @organization = Organization.find(params[:id])

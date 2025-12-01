@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   validates :role, presence: true
   validates :organization, presence: true
+  before_validation :set_temp_password_for_new_user, on: :create
 
   ransacker :role do |parent|
     Arel.sql("CASE users.role
@@ -25,5 +26,15 @@ class User < ApplicationRecord
 
   def self.ransackable_associations(auth_object = nil)
     ["organization"]
+  end
+
+  private
+
+  def set_temp_password_for_new_user
+    return if password.present? && password_confirmation.present?
+
+    generated_password = SecureRandom.hex(10)
+    self.password = generated_password
+    self.password_confirmation = generated_password
   end
 end

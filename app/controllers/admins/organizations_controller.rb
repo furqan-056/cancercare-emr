@@ -10,9 +10,7 @@ class Admins::OrganizationsController < Admins::BaseController
     end
   end
 
-  def show
-    @organization = Organization.find(params[:id])
-  end
+  def show; end
 
   def new
     @organization = Organization.new
@@ -26,21 +24,14 @@ class Admins::OrganizationsController < Admins::BaseController
 
   def create
     @organization = Organization.new(organization_params)
-
-    @organization.users.each do |user|
-      if user.new_record? && user.password.blank?
-        temp_password = Devise.friendly_token.first(12)
-        user.password = temp_password
-        user.password_confirmation = temp_password
-      end
-    end
-
     respond_to do |format|
       if @organization.save
-        @organization.users.each { |user| user.send_reset_password_instructions if user.email.present? }
+        newly_created_users.each do |user|
+          user.send_reset_password_instructions if user.email.present?
+        end
 
         format.html do
-          redirect_to admins_organization_path(@organization), notice: "Organization created successfully. Users will receive an email to set their password."
+          redirect_to admins_organization_path(@organization), notice: "Organization created successfully. New users will receive an email to set their password."
         end
         format.turbo_stream
       else
@@ -52,7 +43,6 @@ class Admins::OrganizationsController < Admins::BaseController
 
   def edit
     @organization.build_address unless @organization.address
-    @organization.users.build if @organization.users.empty?
     respond_to do |format|
       format.html
       format.turbo_stream
@@ -60,22 +50,15 @@ class Admins::OrganizationsController < Admins::BaseController
   end
 
   def update
-    @organization.users.each do |user|
-      if user.new_record? && user.password.blank?
-        temp_password = Devise.friendly_token.first(12)
-        user.password = temp_password
-        user.password_confirmation = temp_password
-      end
-    end
-
     respond_to do |format|
       if @organization.update(organization_params)
-        @organization.users.each do |user|
-          user.send_reset_password_instructions if user.previous_changes.key?(:id)
+        newly_created_users.each do |user|
+          user.send_reset_password_instructions if user.email.present?
         end
 
         format.html do
-          redirect_to admins_organization_path(@organization), notice: "Organization updated successfully. New users will receive an email to set their password."
+          redirect_to admins_organization_path(@organization),
+                      notice: "Organization updated successfully. New users will receive an email to set their password."
         end
         format.turbo_stream
       else
@@ -95,6 +78,10 @@ class Admins::OrganizationsController < Admins::BaseController
 
   private
 
+  def newly_created_users
+    @organization.users.select { |user| user.previous_changes.key?("id") }
+  end
+
   def set_organization
     @organization = Organization.find(params[:id])
   rescue ActiveRecord::RecordNotFound
@@ -104,6 +91,6 @@ class Admins::OrganizationsController < Admins::BaseController
   def organization_params
     params.require(:organization).permit(:name, :email, :organization_type, :phone_number, :logo,
       address_attributes: %i[id street_address location city postal_code country _destroy],
-      users_attributes:   %i[id email role _destroy])
+      users_attributes: %i[id email role _destroy])
   end
 end

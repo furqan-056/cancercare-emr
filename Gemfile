@@ -66,3 +66,10 @@ end
 gem 'devise_invitable'
 gem 'devise'
 gem "importmap-rails"
+
+gem "pundit", "~> 2.5"
+gem 'cocoon'
+gem 'jquery-rails'
+
+gem "kaminari"
+gem 'ransack'

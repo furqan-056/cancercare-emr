@@ -1,7 +1,10 @@
-<%= turbo_stream.replace "organization_#{@organization.id}" do %>
-  <%= render partial: "organization", locals: { org: @organization } %>
-<% end %>
+<% if @organization.errors.any? %>
+  <%= turbo_stream.replace "modal" do %>
+    <%= render partial: "admins/organizations/form", locals: { organization: @organization } %>
+  <% end %>
+<% else %>
 
-<%= turbo_stream.replace "modal" do %>
-  <div></div>
+  <%= turbo_stream.replace "organization_#{@organization.id}" do %>
+    <%= render partial: "organization", locals: { org: @organization } %>
+  <% end %>
 <% end %>

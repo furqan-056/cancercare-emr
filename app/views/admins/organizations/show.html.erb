@@ -2,7 +2,7 @@
   <div id="modal" class="fixed inset-0 z-50 overflow-y-auto backdrop-blur-md bg-opacity-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 
-      <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+      <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
         <div class="p-6 lg:p-8 bg-card-bg">
 
           <div class="flex justify-end">
@@ -58,6 +58,26 @@
                   <dt class="text-sm font-medium text-secondary-text">Phone Number</dt>
                   <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @organization.phone_number %></dd>
                 </div>
+                
+                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-secondary-bg/10">
+                  <dt class="text-sm font-medium text-secondary-text">Total Associated Members</dt>
+                  <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0">
+                    <span class="font-bold text-lg text-accent-1"><%= @organization.users.size %></span>
+                  </dd>
+                </div>
+
+                <% if @organization.users.any? %>
+                  <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-secondary-text">Member Email List</dt>
+                    <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0">
+                      <ul class="list-disc list-inside space-y-1">
+                        <% @organization.users.each do |user| %>
+                          <li><%= user.email %></li>
+                        <% end %>
+                      </ul>
+                    </dd>
+                  </div>
+                <% end %>
 
                 <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-secondary-bg/20">
                   <dt class="text-lg font-semibold text-accent-1 sm:col-span-3">Address Details</dt>

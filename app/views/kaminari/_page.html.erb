@@ -1,0 +1,7 @@
+<li class="inline-flex items-center">
+  <%= link_to_unless page.current?, page, url, {remote: remote, rel: page.next? ? 'next' : page.prev? ? 'prev' : nil, class: "text-sm font-medium", 'aria-current': page.current? ? 'page' : nil} do %>
+    <span class="<%= page.current? ? 'bg-accent-1 text-white border-accent-1 shadow-lg' : 'bg-card-bg text-secondary-text border-primary-border hover:bg-hover-dark/20' %> rounded-xl px-3 py-1 transition duration-150 border">
+      <%= page %>
+    </span>
+  <% end %>
+</li>

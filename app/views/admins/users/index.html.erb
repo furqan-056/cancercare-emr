@@ -21,14 +21,21 @@
     <%= search_form_for @q,
                         url: admins_users_path,
                         method: :get,
-                        html: { data: { turbo_frame: "users_list", controller: "form" } },
+                        html: {
+                          data: {
+                            turbo_frame: "users_list",
+                            controller: "live-search",
+                            live_search_target: "form",
+                            action: "input->live-search#search"
+                          }
+                        },
                         class: "flex items-center gap-4" do |f| %>
 
       <div class="flex-1">
         <%= f.search_field :email_or_role_or_organization_name_cont,
                            placeholder: "Search users by email, role, or organization...",
                            class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-secondary-text bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1",
-                           data: { action: "input->form#submit" } %>
+                           autocomplete: "off" %>
       </div>
 
       <%= f.submit "Search",

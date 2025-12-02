@@ -11,4 +11,11 @@ Rails.application.routes.draw do
       resources :users
     end
   end
+
+  constraints OrganizationSubdomainConstraint do
+    namespace :managers do
+      get 'dashboard', to: 'dashboards#index', as: 'dashboard'
+      resources :doctors
+    end
+  end
 end

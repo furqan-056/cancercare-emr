@@ -1,6 +1,5 @@
 class Organization < ApplicationRecord
   has_one_attached :logo
-
   has_one :address, as: :addressable, dependent: :destroy
   has_many :users, dependent: :destroy
 
@@ -9,6 +8,9 @@ class Organization < ApplicationRecord
 
   validates :name, :organization_type, :phone_number, presence: true
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :slug, presence: true, uniqueness: true
+
+  before_validation :set_slug
 
   def self.ransackable_attributes(auth_object = nil)
     %w[name email organization_type phone_number]
@@ -16,5 +18,9 @@ class Organization < ApplicationRecord
 
   def self.ransackable_associations(auth_object = nil)
     %w[address users]
+  end
+
+  def set_slug
+    self.slug ||= name.parameterize
   end
 end

@@ -1,8 +1,11 @@
-<div id="modal" class="fixed inset-0 z-50 overflow-y-auto bg-opacity-50 backdrop-blur-md" aria-modal="true">
-  <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
-    <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-lg md:max-w-2xl w-99">
+<div id="modal" class="fixed inset-0 z-50 overflow-y-auto bg-opacity-50 backdrop-blur-md" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+
+    <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-lg md:max-w-4xl w-150">
       <div class="p-6 lg:p-8 bg-card-bg">
-        <%= form_with(model: [:managers, doctor], local: true, id: "doctor_form") do |f| %>
+
+        <%= form_with model: [:managers, doctor], data: { turbo_frame: "modal" } do |f| %>
+
           <% if doctor.errors.any? %>
             <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md">
               <h2 class="font-bold mb-2 text-secondary-text">
@@ -17,7 +20,7 @@
           <% end %>
 
           <div class="flex justify-end mb-4">
-            <a href="<%= managers_doctors_path %>" data-turbo-frame="_top" class="text-secondary-text hover:text-red-500 transition">
+            <a href="#" data-action="modals#close" class="text-secondary-text hover:text-red-500 transition">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -28,20 +31,20 @@
             <h3 class="text-xl font-semibold text-secondary-text mb-4">Doctor Details</h3>
 
             <div>
-              <%= f.label :user_id, "Associate with existing user (optional)", class: "block text-sm font-medium text-secondary-text" %>
-              <%= f.collection_select :user_id, User.where(role: :doctor, organization_id: current_user.organization_id).left_outer_joins(:doctor).where(doctors: { id: nil }) + (doctor.user ? [doctor.user] : []),
-                                      :id, :email,
-                                      { prompt: "Select existing user" },
-                                      class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
-                                      data: { user_selector_target: "existingUser", action: "change->user-selector#existingUserChanged" } %>
+              <%= f.label :existing_user_id, "Associate with existing user (optional)", class: "block text-sm font-medium text-secondary-text" %>
+              <%= f.collection_select :existing_user_id,
+                  User.where(role: :doctor, organization_id: current_user.organization_id, type: nil),
+                  :id, :email,
+                  { prompt: "Select existing user" },
+                  class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
+                  data: { user_selector_target: "existingUser", action: "change->user-selector#existingUserChanged" } %>
             </div>
 
             <div>
-              <%= label_tag :new_user_email, "Or create a new user by email", class: "block text-sm font-medium text-secondary-text" %>
-              <%= text_field_tag :new_user_email, nil,
-                                  placeholder: "doctor@example.com",
-                                  class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
-                                  data: { user_selector_target: "emailField", action: "input->user-selector#emailChanged" } %>
+              <%= label_tag :email, "Or create a new doctor by email", class: "block text-sm font-medium text-secondary-text" %>
+              <%= f.email_field :email, placeholder: "doctor@example.com",
+                  class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
+                  data: { user_selector_target: "emailField", action: "input->user-selector#emailChanged" } %>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -55,44 +58,47 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <%= f.label :specialization, class: "block text-sm font-medium text-secondary-text" %>
-                <%= f.text_field :specialization, placeholder: "e.g., Cardiology", class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text placeholder-main-area-text" %>
+                <%= f.text_field :specialization, placeholder: "Cardiology", class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
               </div>
               <div>
                 <%= f.label :department, class: "block text-sm font-medium text-secondary-text" %>
-                <%= f.text_field :department, placeholder: "e.g., Surgery", class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text placeholder-main-area-text" %>
+                <%= f.text_field :department, placeholder: "Surgery", class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
+              </div>
+              <div>
+                <%= f.label :years_of_experience, class: "block text-sm font-medium text-secondary-text" %>
+                <%= f.number_field :years_of_experience, min: 0, class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
               </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <%= f.label :years_of_experience, class: "block text-sm font-medium text-secondary-text" %>
-                <%= f.number_field :years_of_experience, min: 0, class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text placeholder-main-area-text" %>
-              </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <%= f.label :consultation_fee, class: "block text-sm font-medium text-secondary-text" %>
-                <%= f.number_field :consultation_fee, step: 0.01, min: 0, class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text placeholder-main-area-text" %>
+                <%= f.number_field :consultation_fee, step: 0.01, min: 0, class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
               </div>
               <div>
-                <%= f.label :phone, class: "block text-sm font-medium text-secondary-text" %>
-                <%= f.text_field :phone, placeholder: "e.g., 555-123-4567", class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text placeholder-main-area-text" %>
+                <%= f.label :availability, class: "block text-sm font-medium text-secondary-text" %>
+                <%= f.text_area :availability, rows: 2, placeholder: "Mon, Wed, Fri 9am-5pm", class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
               </div>
             </div>
 
             <div>
-              <%= f.label :availability, class: "block text-sm font-medium text-secondary-text" %>
-              <%= f.text_area :availability, rows: 2, placeholder: "e.g., Mon, Wed, Fri 9am-5pm", class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text placeholder-main-area-text" %>
+              <%= f.label :phone, class: "block text-sm font-medium text-secondary-text" %>
+              <%= f.text_field :phone, placeholder: "555-123-4567", class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
             </div>
 
             <div class="pt-5">
               <%= f.submit doctor.new_record? ? "Create Doctor" : "Update Doctor",
-                            class: "inline-flex justify-center rounded-xl border border-transparent bg-accent-1 py-3 px-6 text-sm font-medium text-primary-text shadow-lg hover:bg-accent-1-hover focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 cursor-pointer transition duration-200" %>
+                    class: "inline-flex justify-center rounded-xl border border-transparent bg-accent-1 py-3 px-6 text-sm font-medium text-primary-text shadow-lg hover:bg-accent-1-hover focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 cursor-pointer transition duration-200" %>
             </div>
+
           </div>
         <% end %>
+
       </div>
     </div>
+
   </div>
 </div>

@@ -7,8 +7,8 @@
   <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= doctor.years_of_experience %></td>
   <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text">Rs <%= number_with_precision(doctor.consultation_fee, precision: 2) %></td>
   <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= doctor.availability %></td>
-  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= doctor.user.email %></td>
-  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= doctor.user.organization.name %></td>
+  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= doctor.email %></td>
+  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= doctor.organization.name if doctor.organization.present? %></td>
   <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
     <div class="flex justify-end items-center space-x-3">
       

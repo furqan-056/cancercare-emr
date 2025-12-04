@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
+  allow_browser versions: :modern
   before_action :set_current_organization
   include Pundit
 
@@ -12,7 +14,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if resource.is_a?(User) && resource.manager?
+    if resource.manager?
       managers_dashboard_url(host: "#{resource.organization.slug}.localhost", allow_other_host: true)
     elsif resource.is_a?(Admin)
       admins_dashboard_url(allow_other_host: true)
@@ -22,7 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_resetting_password_path_for(resource)
-    return managers_dashboard_path if resource.is_a?(User) && resource.manager?
+    return managers_dashboard_path if resource.manager?
 
     super
   end

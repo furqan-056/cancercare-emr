@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_02_134250) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_04_084933) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -67,21 +67,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_02_134250) do
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
 
-  create_table "doctors", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.string "phone"
-    t.string "specialization"
-    t.string "department"
-    t.integer "years_of_experience"
-    t.decimal "consultation_fee", precision: 8, scale: 2
-    t.string "availability"
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_doctors_on_user_id"
-  end
-
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -103,6 +88,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_02_134250) do
     t.datetime "updated_at", null: false
     t.integer "role", default: 0, null: false
     t.bigint "organization_id", null: false
+    t.string "type"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "phone"
+    t.string "specialization"
+    t.string "department"
+    t.integer "years_of_experience"
+    t.decimal "consultation_fee"
+    t.string "availability"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -110,6 +104,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_02_134250) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "doctors", "users"
   add_foreign_key "users", "organizations"
 end

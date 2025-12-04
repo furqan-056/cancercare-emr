@@ -2,7 +2,8 @@ class Organization < ApplicationRecord
   has_one_attached :logo
   has_one :address, as: :addressable, dependent: :destroy
   has_many :users, dependent: :destroy
-  has_many :doctors, through: :users
+  has_many :doctors, -> { where(type: 'Doctor') }, class_name: 'User'
+  has_many :managers, -> { where(type: 'Manager') }, class_name: 'User'
 
   accepts_nested_attributes_for :users, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :address, allow_destroy: true

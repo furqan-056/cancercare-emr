@@ -6,10 +6,7 @@
         <div class="p-6 lg:p-8 bg-card-bg">
 
           <div class="flex justify-end">
-            <%= link_to "#", data: {
-              controller: "modals",
-              action: "modals#close"
-            }, class: "text-secondary-text hover:text-red-500 transition" do %>
+            <%= link_to "#", data: { controller: "modals", action: "modals#close" }, class: "text-secondary-text hover:text-red-500 transition" do %>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -37,13 +34,13 @@
                 </div>
 
                 <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-secondary-text">Associated User Email</dt>
-                  <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @doctor.user&.email || "N/A" %></dd>
+                  <dt class="text-sm font-medium text-secondary-text">Email</dt>
+                  <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @doctor.email %></dd>
                 </div>
-                
+
                 <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-secondary-text">Organization</dt>
-                  <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @doctor.user&.organization&.name || "N/A" %></dd>
+                  <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @doctor.organization&.name || "N/A" %></dd>
                 </div>
 
                 <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-secondary-bg/20">
@@ -54,7 +51,7 @@
                   <dt class="text-sm font-medium text-secondary-text">Specialization</dt>
                   <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @doctor.specialization %></dd>
                 </div>
-                
+
                 <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-secondary-text">Department</dt>
                   <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @doctor.department %></dd>
@@ -73,7 +70,7 @@
                     Rs <%= number_with_precision(@doctor.consultation_fee, precision: 2) %>
                   </dd>
                 </div>
-                
+
                 <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-secondary-text">Availability</dt>
                   <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @doctor.availability %></dd>
@@ -87,7 +84,7 @@
                   <dt class="text-sm font-medium text-secondary-text">Phone</dt>
                   <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @doctor.phone %></dd>
                 </div>
-                
+
                 <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-secondary-text">Full Name</dt>
                   <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @doctor.first_name %> <%= @doctor.last_name %></dd>
@@ -96,6 +93,7 @@
               </div>
             </div>
           </div>
+
         </div>
       </div>
 

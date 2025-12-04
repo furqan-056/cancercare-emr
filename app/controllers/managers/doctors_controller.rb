@@ -3,7 +3,7 @@ class Managers::DoctorsController < Managers::BaseController
 
   def index
     @q = policy_scope(Doctor).ransack(params[:q])
-    @doctors = @q.result(distinct: true).page(params[:page]).per(10)
+    @doctors = @q.result(distinct: true).where(organization_id: current_user.organization_id).page(params[:page]).per(10)
   end
 
   def show
@@ -16,18 +16,8 @@ class Managers::DoctorsController < Managers::BaseController
   end
 
   def create
-    @doctor = Doctor.new(doctor_params)
-    authorize @doctor
-
-    if params[:new_user_email].present?
-      new_user = User.create!(
-        email: params[:new_user_email],
-        organization_id: current_user.organization_id,
-        role: :doctor
-      )
-      @doctor.assign_new_user(new_user)
-    end
-
+    authorize Doctor
+    @doctor = Doctor.build_for_create(doctor_params, current_user.organization_id)
     respond_to do |format|
       if @doctor.save
         format.html { redirect_to managers_doctors_path, notice: "Doctor created successfully." }
@@ -41,7 +31,6 @@ class Managers::DoctorsController < Managers::BaseController
 
   def edit
     authorize @doctor
-    @doctor.build_user if @doctor.user.nil?
   end
 
   def update
@@ -69,11 +58,14 @@ class Managers::DoctorsController < Managers::BaseController
   private
 
   def find_doctor
-    @doctor = Doctor.find(params[:id])
+    @doctor = Doctor.where(organization_id: current_user.organization_id).find(params[:id])
   end
 
   def doctor_params
-    params.require(:doctor).permit(:first_name, :last_name, :phone, :specialization, :department, :years_of_experience, :consultation_fee, :availability, :user_id,
-    user_attributes: [:email])
+    permitted = [:first_name, :last_name, :phone, :specialization, :department, :years_of_experience, :consultation_fee, :availability, :email]
+
+    permitted << :existing_user_id if action_name == "create"
+
+    params.require(:doctor).permit(permitted)
   end
 end

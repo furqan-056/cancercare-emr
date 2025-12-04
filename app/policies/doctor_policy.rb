@@ -3,16 +3,17 @@ class DoctorPolicy < ApplicationPolicy
     def resolve
       if user.is_a?(Admin)
         scope.all
+      elsif user.manager?
+        scope.where(type: 'Doctor', organization_id: user.organization_id)
       else
-        scope.joins(:user)
-             .where(users: { role: :doctor, organization_id: user.organization_id })
+        scope.none
       end
     end
   end
 
   def show?
     return true if user.is_a?(Admin)
-    user.manager? && record.user.organization_id == user.organization_id
+    user.manager? && record.organization_id == user.organization_id
   end
 
   def create?
@@ -25,7 +26,7 @@ class DoctorPolicy < ApplicationPolicy
 
   def update?
     return true if user.is_a?(Admin)
-    user.manager? && record.user.organization_id == user.organization_id
+    user.manager? && record.organization_id == user.organization_id
   end
 
   def edit?
@@ -34,6 +35,6 @@ class DoctorPolicy < ApplicationPolicy
 
   def destroy?
     return true if user.is_a?(Admin)
-    user.manager? && record.user.organization_id == user.organization_id
+    user.manager? && record.organization_id == user.organization_id
   end
 end

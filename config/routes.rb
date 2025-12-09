@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       get 'dashboard', to: 'dashboards#index', as: 'dashboard'
       resources :organizations
       resources :users
+      resources :doctors
+      resources :patients
     end
   end
 
@@ -16,6 +18,16 @@ Rails.application.routes.draw do
     namespace :managers do
       get 'dashboard', to: 'dashboards#index', as: 'dashboard'
       resources :doctors
+    end
+
+    namespace :doctors do
+      get 'dashboard', to: 'dashboards#index', as: 'dashboard'
+      resources :patients
+    end
+
+    namespace :patients do
+      get 'dashboard', to: 'dashboards#index', as: 'dashboard'
+      resources :patients
     end
   end
 end

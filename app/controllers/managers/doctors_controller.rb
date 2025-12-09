@@ -2,8 +2,8 @@ class Managers::DoctorsController < Managers::BaseController
   before_action :find_doctor, only: %i[show edit update destroy]
 
   def index
-    @q = policy_scope(Doctor).ransack(params[:q])
-    @doctors = @q.result(distinct: true).where(organization_id: current_user.organization_id).page(params[:page]).per(10)
+    @q = policy_scope(Doctor).where(organization_id: current_user.organization_id, role: "doctor").ransack(params[:q])
+    @doctors = @q.result(distinct: true).page(params[:page]).per(10)
   end
 
   def show
@@ -24,7 +24,7 @@ class Managers::DoctorsController < Managers::BaseController
         format.turbo_stream { flash.now[:notice] = "Doctor created successfully." }
       else
         format.html { render :new }
-        format.turbo_stream { render :new, status: :unprocessable_entity }
+        format.turbo_stream
       end
     end
   end

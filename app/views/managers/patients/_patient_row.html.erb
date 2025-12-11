@@ -1,26 +1,26 @@
 <tr id="<%= dom_id(patient) %>" class="hover:bg-secondary-bg/20 transition duration-150">
   <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= patient.first_name || "N/A"%></td>
   <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= patient.last_name || "N/A"%></td>
-  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= patient.phone  || "N/A"%></td>
-  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= patient.department  || "N/A"%></td>
-  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= patient.email  || "N/A"%></td>
-  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= patient.organization.name if patient.organization.present?  || "N/A"%></td>
+  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= patient.phone|| "N/A" %></td>
+  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= patient.department || "N/A"%></td>
+  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= patient.email || "N/A"%></td>
+  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text"><%= patient.organization.name if patient.organization.present? || "N/A"%></td>
   <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
     <div class="flex justify-end items-center space-x-3">
 
-      <%= link_to doctors_patient_path(patient), data: { turbo_frame: "modal" }, class: "text-accent-1 hover:text-accent-1-hover", title: "Show Patient Details" do %>
+      <%= link_to managers_patient_path(patient), data: { turbo_frame: "modal" }, class: "text-accent-1 hover:text-accent-1-hover", title: "Show Patient Details" do %>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" />
         </svg>
       <% end %>
 
-      <%= link_to edit_doctors_patient_path(patient), title: "Edit Patient", data: { turbo_frame: "modal" }, class: "text-accent-1 hover:text-accent-1-hover" do %>
+      <%= link_to edit_managers_patient_path(patient), title: "Edit Patient", data: { turbo_frame: "modal" }, class: "text-accent-1 hover:text-accent-1-hover" do %>
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
         </svg>
       <% end %>
 
-      <%= link_to doctors_patient_path(patient),
+      <%= link_to managers_patient_path(patient),
                   method: :delete,
                   data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove #{patient.first_name}?" },
                   title: "Delete Patient",

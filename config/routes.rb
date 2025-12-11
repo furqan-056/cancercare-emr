@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     namespace :managers do
       get 'dashboard', to: 'dashboards#index', as: 'dashboard'
       resources :doctors
+      resources :patients
     end
 
     namespace :doctors do

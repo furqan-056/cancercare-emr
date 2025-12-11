@@ -1,10 +1,10 @@
 class DoctorPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      if user.is_a?(Admin)
-        scope.all
-      elsif user.manager?
-        scope.where(type: 'Doctor', organization_id: user.organization_id)
+      return scope.all if user.is_a?(Admin)
+
+      if user.manager?
+        scope.where(organization_id: user.organization_id)
       else
         scope.none
       end
@@ -12,29 +12,20 @@ class DoctorPolicy < ApplicationPolicy
   end
 
   def show?
-    return true if user.is_a?(Admin)
-    user.manager? && record.organization_id == user.organization_id
+    user.is_a?(Admin) ||
+      (user.manager? && record.organization_id == user.organization_id)
   end
 
   def create?
     user.is_a?(Admin) || user.manager?
   end
 
-  def new?
-    create?
-  end
-
   def update?
-    return true if user.is_a?(Admin)
-    user.manager? && record.organization_id == user.organization_id
-  end
-
-  def edit?
-    update?
+    show?
   end
 
   def destroy?
-    return true if user.is_a?(Admin)
-    user.manager? && record.organization_id == user.organization_id
+    user.is_a?(Admin) ||
+      (user.manager? && record.organization_id == user.organization_id)
   end
 end

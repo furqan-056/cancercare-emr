@@ -1,13 +1,13 @@
 class Managers::DoctorsController < Managers::BaseController
   before_action :find_doctor, only: %i[show edit update destroy]
+  before_action :authorize_doctor, only: %i[show edit update destroy]
 
   def index
-    @q = policy_scope(Doctor).where(organization_id: current_user.organization_id, role: "doctor").ransack(params[:q])
-    @doctors = @q.result(distinct: true).page(params[:page]).per(10)
-  end
+    @q = policy_scope(Doctor)
+          .where(organization_id: current_user.organization_id, role: "doctor")
+          .ransack(params[:q])
 
-  def show
-    authorize @doctor
+    @doctors = @q.result(distinct: true).page(params[:page]).per(10)
   end
 
   def new
@@ -17,24 +17,27 @@ class Managers::DoctorsController < Managers::BaseController
 
   def create
     authorize Doctor
-    @doctor = Doctor.build_for_create(doctor_params, current_user.organization_id)
+
+    @doctor = Doctor.new(doctor_params)
+    @doctor.organization_id = current_user.organization_id
+    @doctor.role = "doctor"
+
     respond_to do |format|
       if @doctor.save
         format.html { redirect_to managers_doctors_path, notice: "Doctor created successfully." }
         format.turbo_stream { flash.now[:notice] = "Doctor created successfully." }
       else
         format.html { render :new }
-        format.turbo_stream
+        format.turbo_stream { render :new, status: :unprocessable_entity }
       end
     end
   end
 
-  def edit
-    authorize @doctor
-  end
+  def show; end
+
+  def edit; end
 
   def update
-    authorize @doctor
     respond_to do |format|
       if @doctor.update(doctor_params)
         format.html { redirect_to managers_doctors_path, notice: "Doctor updated successfully." }
@@ -47,7 +50,6 @@ class Managers::DoctorsController < Managers::BaseController
   end
 
   def destroy
-    authorize @doctor
     @doctor.destroy
     respond_to do |format|
       format.html { redirect_to managers_doctors_path, notice: "Doctor deleted successfully." }
@@ -58,14 +60,16 @@ class Managers::DoctorsController < Managers::BaseController
   private
 
   def find_doctor
-    @doctor = Doctor.where(organization_id: current_user.organization_id).find(params[:id])
+    @doctor = policy_scope(Doctor)
+                .where(organization_id: current_user.organization_id)
+                .find(params[:id])
+  end
+
+  def authorize_doctor
+    authorize @doctor
   end
 
   def doctor_params
-    permitted = [:first_name, :last_name, :phone, :specialization, :department, :years_of_experience, :consultation_fee, :availability, :email]
-
-    permitted << :existing_user_id if action_name == "create"
-
-    params.require(:doctor).permit(permitted)
+    params.require(:doctor).permit(:first_name, :last_name, :phone, :specialization, :department, :years_of_experience, :consultation_fee, :availability, :email)
   end
 end

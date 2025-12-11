@@ -1,12 +1,9 @@
 <div class="p-6 lg:p-8">
+
   <div class="sm:flex sm:items-center border-b border-primary-border pb-4 mb-6">
     <div class="sm:flex-auto">
-      <h1 class="text-3xl font-bold tracking-tight text-secondary-text">
-        Doctors
-      </h1>
-      <p class="mt-2 text-sm text-secondary-text">
-        Manage all healthcare doctors.
-      </p>
+      <h1 class="text-3xl font-bold tracking-tight text-secondary-text">Doctors</h1>
+      <p class="mt-2 text-sm text-secondary-text">Manage all healthcare doctors.</p>
     </div>
 
     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -19,37 +16,41 @@
 
   <div class="mb-6">
     <%= search_form_for @q,
-                        url: managers_doctors_path,
-                        method: :get,
-                        html: {
-                          data: {
-                            turbo_frame: "doctors_list",
-                            controller: "live-search",
-                            live_search_target: "form",
-                            action: "input->live-search#search"
-                          }
-                        }, class: "flex items-center gap-4" do |f| %>
+        url: managers_doctors_path,
+        method: :get,
+        html: {
+          data: {
+            turbo_frame: "doctors_list",
+            controller: "live-search",
+            live_search_target: "form",
+            action: "input->live-search#search"
+          }
+        },
+        class: "flex items-center gap-4" do |f| %>
 
       <div class="flex-1">
-        <%= f.search_field :first_name_or_last_name_or_specialization_or_department_cont,
-                           placeholder: "Search doctors by name, specialization, or department...",
-                           class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-secondary-text bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1",
-                           autocomplete: "off" %>
+        <%= f.search_field :first_name_or_last_name_or_department_or_phone_or_email_cont,
+              placeholder: "Search doctors...",
+              class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-secondary-text bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1",
+              autocomplete: "off" %>
       </div>
 
       <%= f.submit "Search",
-                   class: "rounded-xl bg-accent-1 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-accent-1-hover transition" %>
+              class: "rounded-xl bg-accent-1 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-accent-1-hover transition" %>
 
       <%= link_to "Reset",
-                  managers_doctors_path,
-                  data: { turbo_frame: "doctors_list" },
-                  class: "rounded-xl border border-primary-border px-4 py-2 text-sm font-semibold text-secondary-text hover:bg-secondary-bg transition" %>
+              managers_doctors_path,
+              data: { turbo_frame: "doctors_list" },
+              class: "rounded-xl border border-primary-border px-4 py-2 text-sm font-semibold text-secondary-text hover:bg-secondary-bg transition" %>
+
     <% end %>
   </div>
 
   <%= turbo_frame_tag "doctors_list" do %>
     <div class="overflow-x-auto rounded-xl border border-primary-border shadow">
+
       <table class="min-w-full divide-y divide-primary-border">
+
         <thead class="bg-secondary-bg">
           <tr>
             <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">First Name</th>
@@ -57,18 +58,17 @@
             <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Phone</th>
             <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Specialization</th>
             <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Department</th>
-            
             <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Years Exp.</th>
             <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Fee</th>
             <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Availability</th>
-            
-            <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">User Email</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Email</th>
             <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Organization</th>
             <th class="px-6 py-3 text-right text-sm font-semibold text-secondary-text">Actions</th>
           </tr>
         </thead>
 
-        <tbody id="doctors" class="divide-y divide-primary-border bg-card-bg">
+        <tbody class="divide-y divide-primary-border bg-card-bg">
+
           <% if @doctors.any? %>
             <% @doctors.each do |doctor| %>
               <%= render "doctor_row", doctor: doctor %>
@@ -80,6 +80,7 @@
               </td>
             </tr>
           <% end %>
+
         </tbody>
 
         <% if @doctors.respond_to?(:total_pages) && @doctors.total_pages > 1 %>
@@ -93,7 +94,9 @@
             </tr>
           </tfoot>
         <% end %>
+
       </table>
     </div>
   <% end %>
+
 </div>

@@ -27,6 +27,3 @@ application.register("active-link", ActiveLinkController)
 
 import LiveSearchController from "./live_search_controller"
 application.register("live-search", LiveSearchController)
-
-import UserSelectorController from "./user_selector_controller"
-application.register("user-selector", UserSelectorController)

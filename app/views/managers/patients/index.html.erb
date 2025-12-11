@@ -8,19 +8,28 @@
         Manage all patients under your organization.
       </p>
     </div>
+
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <%= link_to "New Patient",
+                  new_managers_patient_path,
+                  data: { turbo_frame: "modal" },
+                  class: "block rounded-xl bg-accent-1 px-4 py-2 text-center text-sm font-semibold text-white shadow hover:bg-accent-1-hover transition" %>
+    </div>
   </div>
 
   <div class="mb-6">
-    <%= search_form_for @q, url: doctors_patients_path,
-                        method: :get,
-                        html: {
-                          data: {
-                            turbo_frame: "patients_list",
-                            controller: "live-search",
-                            live_search_target: "form",
-                            action: "input->live-search#search"
-                          }
-                        }, class: "flex items-center gap-4" do |f| %>
+    <%= search_form_for @q,
+          url: managers_patients_path,
+          method: :get,
+          html: {
+            data: {
+              turbo_frame: "patients_list",
+              controller: "live-search",
+              live_search_target: "form",
+              action: "input->live-search#search"
+            }
+          },
+          class: "flex items-center gap-4" do |f| %>
 
       <div class="flex-1">
         <%= f.search_field :first_name_or_last_name_or_department_or_phone_cont,
@@ -33,7 +42,7 @@
                    class: "rounded-xl bg-accent-1 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-accent-1-hover transition" %>
 
       <%= link_to "Reset",
-                  doctors_patients_path,
+                  managers_patients_path,
                   data: { turbo_frame: "patients_list" },
                   class: "rounded-xl border border-primary-border px-4 py-2 text-sm font-semibold text-secondary-text hover:bg-secondary-bg transition" %>
     <% end %>

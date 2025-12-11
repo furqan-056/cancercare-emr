@@ -18,7 +18,6 @@ class ApplicationController < ActionController::Base
     return if request.subdomain.blank? || %w[www admin].include?(request.subdomain)
 
     @current_organization = Organization.find_by(slug: request.subdomain)
-    redirect_to root_url(subdomain: nil), alert: "Organization not found" unless @current_organization
   end
 
   def after_sign_in_path_for(resource)

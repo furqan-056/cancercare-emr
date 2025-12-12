@@ -1,94 +1,11 @@
-<div class="p-6 lg:p-8">
-  <div class="sm:flex sm:items-center border-b border-primary-border pb-4 mb-6">
-    <div class="sm:flex-auto">
-      <h1 class="text-3xl font-bold tracking-tight text-secondary-text">
-        Patients
-      </h1>
-      <p class="mt-2 text-sm text-secondary-text">
-        Manage all patients under your organization.
-      </p>
-    </div>
-
-    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-      <%= link_to "New Patient",
-                  new_managers_patient_path,
-                  data: { turbo_frame: "modal" },
-                  class: "block rounded-xl bg-accent-1 px-4 py-2 text-center text-sm font-semibold text-white shadow hover:bg-accent-1-hover transition" %>
-    </div>
-  </div>
-
-  <div class="mb-6">
-    <%= search_form_for @q,
-          url: managers_patients_path,
-          method: :get,
-          html: {
-            data: {
-              turbo_frame: "patients_list",
-              controller: "live-search",
-              live_search_target: "form",
-              action: "input->live-search#search"
-            }
-          },
-          class: "flex items-center gap-4" do |f| %>
-
-      <div class="flex-1">
-        <%= f.search_field :first_name_or_last_name_or_department_or_phone_cont,
-                           placeholder: "Search patients by name, phone, or department...",
-                           class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-secondary-text bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1",
-                           autocomplete: "off" %>
-      </div>
-
-      <%= f.submit "Search",
-                   class: "rounded-xl bg-accent-1 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-accent-1-hover transition" %>
-
-      <%= link_to "Reset",
-                  managers_patients_path,
-                  data: { turbo_frame: "patients_list" },
-                  class: "rounded-xl border border-primary-border px-4 py-2 text-sm font-semibold text-secondary-text hover:bg-secondary-bg transition" %>
-    <% end %>
-  </div>
-
-  <%= turbo_frame_tag "patients_list" do %>
-    <div class="overflow-x-auto rounded-xl border border-primary-border shadow">
-      <table class="min-w-full divide-y divide-primary-border">
-        <thead class="bg-secondary-bg">
-          <tr>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">First Name</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Last Name</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Phone</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Department</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Email</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold text-secondary-text">Organization</th>
-            <th class="px-6 py-3 text-right text-sm font-semibold text-secondary-text">Actions</th>
-          </tr>
-        </thead>
-
-        <tbody id="patients" class="divide-y divide-primary-border bg-card-bg">
-          <% if @patients.any? %>
-            <% @patients.each do |patient| %>
-              <%= render "patient_row", patient: patient %>
-            <% end %>
-          <% else %>
-            <tr>
-              <td colspan="7" class="text-center py-6 text-sm text-secondary-text">
-                No patients found.
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-
-        <% if @patients.respond_to?(:total_pages) && @patients.total_pages > 1 %>
-          <tfoot>
-            <tr>
-              <td colspan="7" class="py-4 px-6 bg-card-bg">
-                <div class="flex justify-center">
-                  <%= paginate @patients, params: { turbo_frame: "patients_list" } %>
-                </div>
-              </td>
-            </tr>
-          </tfoot>
-        <% end %>
-      </table>
-    </div>
-  <% end %>
-</div>
+<%= render "shared/patients_index",
+           title: "Manage Patients",
+           subtitle: "Full management of all patients under your organization.",
+           index_path: -> { managers_patients_path },
+           new_path: -> { new_managers_patient_path },
+           show_path: ->(p) { managers_patient_path(p) },
+           edit_path: ->(p) { edit_managers_patient_path(p) },
+           delete_path: ->(p) { managers_patient_path(p) },
+           can_create: true,
+           can_edit: true,
+           can_delete: true %>

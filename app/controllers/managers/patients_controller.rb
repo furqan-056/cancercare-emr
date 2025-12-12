@@ -24,10 +24,10 @@ class Managers::PatientsController < Managers::BaseController
     respond_to do |format|
       if @patient.save
         format.html { redirect_to managers_patients_path, notice: "Patient created successfully." }
-        format.turbo_stream { flash.now[:notice] = "Patient created successfully." }
+        format.turbo_stream
       else
-        format.html { render :new }
-        format.turbo_stream { render :new, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
+        format.turbo_stream { render :create }
       end
     end
   end

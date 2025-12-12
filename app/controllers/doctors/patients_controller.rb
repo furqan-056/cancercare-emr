@@ -14,25 +14,6 @@ class Doctors::PatientsController < Doctors::BaseController
     @patient = Patient.new
   end
 
-  def create
-    authorize Patient
-
-    @patient = Patient.new(patient_params)
-    @patient.organization_id = current_user.organization_id
-    @patient.role = :patient
-
-    respond_to do |format|
-      if @patient.save
-        format.html { redirect_to doctors_patients_path,
-                      notice: "Patient created successfully." }
-        format.turbo_stream { flash.now[:notice] = "Patient created successfully." }
-      else
-        format.html { render :new }
-        format.turbo_stream { flash.now[:notice] = "Patient created successfully." }
-      end
-    end
-  end
-
   def edit; end
 
   def update
@@ -47,16 +28,6 @@ class Doctors::PatientsController < Doctors::BaseController
           render :edit, status: :unprocessable_entity
         }
       end
-    end
-  end
-
-  def destroy
-    @patient.destroy
-
-    respond_to do |format|
-      format.html { redirect_to doctors_patients_path,
-                    notice: "Patient deleted successfully." }
-      format.turbo_stream { flash.now[:notice] = "Patient deleted successfully." }
     end
   end
 

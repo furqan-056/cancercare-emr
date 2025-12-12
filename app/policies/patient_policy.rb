@@ -1,5 +1,4 @@
 class PatientPolicy < ApplicationPolicy
-
   class Scope < Scope
     def resolve
       return scope.all if user.is_a?(Admin)
@@ -38,6 +37,6 @@ class PatientPolicy < ApplicationPolicy
 
 
   def destroy?
-    user.is_a?(Admin) || user.manager? || user.doctor?
+    user.is_a?(Admin) || user.manager?
   end
 end

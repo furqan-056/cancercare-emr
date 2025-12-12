@@ -12,8 +12,7 @@ class DoctorPolicy < ApplicationPolicy
   end
 
   def show?
-    user.is_a?(Admin) ||
-      (user.manager? && record.organization_id == user.organization_id)
+    user.is_a?(Admin) || (user.manager? && record.organization_id == user.organization_id)
   end
 
   def create?
@@ -25,7 +24,6 @@ class DoctorPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.is_a?(Admin) ||
-      (user.manager? && record.organization_id == user.organization_id)
+    show?
   end
 end

@@ -31,8 +31,7 @@ class PatientPolicy < ApplicationPolicy
 
 
   def update?
-    user.is_a?(Admin) || user.manager? ||
-      user.doctor?
+    show?
   end
 
 

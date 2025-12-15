@@ -34,9 +34,7 @@ class Doctors::PatientsController < Doctors::BaseController
   private
 
   def find_patient
-    @patient = policy_scope(Patient)
-                .where(organization_id: current_user.organization_id)
-                .find(params[:id])
+    @patient = policy_scope(Patient).find(params[:id])
   end
 
   def authorize_patient

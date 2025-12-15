@@ -37,6 +37,6 @@ class PatientPolicy < ApplicationPolicy
 
 
   def destroy?
-    user.is_a?(Admin) || user.manager?
+    create?
   end
 end

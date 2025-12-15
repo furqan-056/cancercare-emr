@@ -2,14 +2,10 @@
   <div class="max-w-7xl mx-auto flex justify-between items-center">
     <%= link_to "CancerCare EMR", root_path, class: "text-2xl font-bold text-white tracking-wider" %>
     <div>
-      <% if request.subdomain == "admin" %>
-        <%= link_to "Login", new_admin_session_path, 
+      <% if request.subdomain == "admin" || (request.subdomain.present? && request.subdomain != "www") %>
+        <% path = request.subdomain == "admin" ? new_admin_session_path : new_user_session_path %>
+        <%= link_to "Login", path, 
             class: "bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-md" %>
-
-      <% elsif request.subdomain.present? && request.subdomain != "www" %>
-        <%= link_to "Login", new_user_session_path, 
-            class: "bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-md" %>
-
       <% else %>
         <%= link_to "Login", new_admin_session_url(subdomain: "admin"), 
             class: "bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-md", rel: "noopener" %>

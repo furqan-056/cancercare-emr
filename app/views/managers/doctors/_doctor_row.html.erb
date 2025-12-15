@@ -25,14 +25,6 @@
   </td>
 
   <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text">
-    <% if doctor.consultation_fee.present? %>
-      Rs <%= number_with_precision(doctor.consultation_fee, precision: 2) %>
-    <% else %>
-      N/A
-    <% end %>
-  </td>
-
-  <td class="whitespace-nowrap px-6 py-4 text-sm text-secondary-text">
     <%= doctor.availability.presence || "N/A" %>
   </td>
 

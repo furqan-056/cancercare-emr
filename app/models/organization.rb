@@ -4,6 +4,7 @@ class Organization < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :doctors, -> { where(type: 'Doctor') }, class_name: 'User'
   has_many :managers, -> { where(type: 'Manager') }, class_name: 'User'
+  has_many :patients, -> { where(type: 'Patient') }, class_name: 'User'
 
   accepts_nested_attributes_for :users, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :address, allow_destroy: true

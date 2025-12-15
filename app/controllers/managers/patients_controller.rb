@@ -16,9 +16,7 @@ class Managers::PatientsController < Managers::BaseController
 
   def create
     authorize Patient
-
-    @patient = Patient.new(patient_params)
-    @patient.organization_id = current_user.organization_id
+    @patient = current_user.organization.patients.build(patient_params)
     @patient.role = :patient
 
     respond_to do |format|

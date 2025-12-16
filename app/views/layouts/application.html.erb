@@ -32,7 +32,7 @@
   <body class="bg-white text-primary-text">
     <% 
       skip_layout_controllers = ['pages', 'devise/sessions', 'devise/registrations', 'devise/passwords', 'devise/confirmations', 'devise/unlocks']
-      show_dashboard = user_signed_in? && current_user.role.present? && !skip_layout_controllers.include?(params[:controller])
+      show_dashboard = ((user_signed_in? && current_user.role.present?) || admin_signed_in?) && !skip_layout_controllers.include?(params[:controller])
     %>
 
     <% if show_dashboard %>

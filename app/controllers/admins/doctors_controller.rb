@@ -1,6 +1,5 @@
 class Admins::DoctorsController < Admins::BaseController
-  before_action :find_doctor, only: %i[edit update destroy]
-  before_action :authorize_doctor, only: %i[edit update destroy]
+  before_action :find_and_authorize_doctor, only: %i[edit update destroy]
 
   def index
     @q = Doctor.ransack(params[:q])
@@ -37,12 +36,8 @@ class Admins::DoctorsController < Admins::BaseController
 
   private
 
-  def find_doctor
-    @doctor = Doctor.find(params[:id])
-  end
-
-  def authorize_doctor
-    authorize @doctor
+  def find_and_authorize_doctor
+    @doctor = authorize Doctor.find(params[:id])
   end
 
   def doctor_params

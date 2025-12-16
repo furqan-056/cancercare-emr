@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
   validates :role, :organization, presence: true
   before_validation :set_temp_password_for_new_user, on: :create
-  before_validation :sync_type_with_role
+  before_validation :sync_type_with_role, on: [:create, :update]
 
   after_commit :send_reset_email, on: :create
 

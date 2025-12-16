@@ -34,7 +34,6 @@ class PatientPolicy < ApplicationPolicy
     show?
   end
 
-
   def destroy?
     create?
   end

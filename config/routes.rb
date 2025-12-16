@@ -31,4 +31,8 @@ Rails.application.routes.draw do
       resources :patients
     end
   end
+
+  match "*path", to: redirect("/404.html"), via: :all, constraints: lambda { |req|
+    !req.path.starts_with?("/rails/active_storage")
+  }
 end

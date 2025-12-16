@@ -1,14 +1,19 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  connect() {}
+  connect() {
+    this.element.classList.remove('hidden');
+  }
+
   close(e) {
     e.preventDefault();
-    const modal = document.getElementById("modal");
-    modal.innerHTML = "";
+    
+    this.element.classList.add('hidden');
+  }
 
-    modal.removeAttribute("src");
-
-    modal.removeAttribute("complete");
+  closeOnOutsideClick(e) {
+    if (e.target === this.element) {
+      this.close(e);
+    }
   }
 }

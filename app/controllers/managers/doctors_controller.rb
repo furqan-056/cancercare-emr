@@ -1,6 +1,5 @@
 class Managers::DoctorsController < Managers::BaseController
-  before_action :find_doctor, only: %i[show edit update destroy]
-  before_action :authorize_doctor, only: %i[show edit update destroy]
+  before_action :find_and_authorize_doctor, only: %i[show edit update destroy]
 
   def index
     @q = policy_scope(Doctor).where(organization_id: current_user.organization_id, role: "doctor").ransack(params[:q])
@@ -54,12 +53,8 @@ class Managers::DoctorsController < Managers::BaseController
 
   private
 
-  def find_doctor
-    @doctor = policy_scope(Doctor).find(params[:id])
-  end
-
-  def authorize_doctor
-    authorize @doctor
+  def find_and_authorize_doctor
+    @doctor = authorize policy_scope(Doctor).find(params[:id])
   end
 
   def doctor_params

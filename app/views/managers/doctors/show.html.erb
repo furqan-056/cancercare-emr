@@ -1,12 +1,20 @@
 <%= turbo_frame_tag "modal" do %>
-  <div id="modal" class="fixed inset-0 z-50 overflow-y-auto backdrop-blur-md bg-opacity-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div id="modal" 
+       data-controller="modal"
+       data-action="click->modal#closeOnOutsideClick"
+       class="hidden fixed inset-0 z-50 overflow-y-auto backdrop-blur-md bg-opacity-50" 
+       aria-labelledby="modal-title" 
+       role="dialog" 
+       aria-modal="true">
     <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 
       <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
         <div class="p-6 lg:p-8 bg-card-bg">
 
           <div class="flex justify-end">
-            <%= link_to "#", data: { controller: "modals", action: "modals#close" }, class: "text-secondary-text hover:text-red-500 transition" do %>
+            <%= link_to "#", 
+                data: { action: "modal#close" }, 
+                class: "text-secondary-text hover:text-red-500 transition" do %>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>

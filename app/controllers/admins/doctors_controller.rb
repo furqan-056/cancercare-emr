@@ -37,7 +37,8 @@ class Admins::DoctorsController < Admins::BaseController
   private
 
   def find_and_authorize_doctor
-    @doctor = authorize Doctor.find(params[:id])
+    @doctor = Doctor.find(params[:id])
+    authorize @doctor
   end
 
   def doctor_params

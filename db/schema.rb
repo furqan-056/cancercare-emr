@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_15_080426) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_17_073500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -67,6 +67,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_15_080426) do
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
 
+  create_table "appointments", force: :cascade do |t|
+    t.bigint "patient_id", null: false
+    t.bigint "doctor_id", null: false
+    t.bigint "organization_id", null: false
+    t.string "appointmentable_type"
+    t.bigint "appointmentable_id"
+    t.integer "status", default: 0, null: false
+    t.datetime "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["appointmentable_type", "appointmentable_id"], name: "index_appointments_on_appointmentable"
+    t.index ["doctor_id"], name: "index_appointments_on_doctor_id"
+    t.index ["organization_id"], name: "index_appointments_on_organization_id"
+    t.index ["patient_id"], name: "index_appointments_on_patient_id"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -76,6 +92,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_15_080426) do
     t.datetime "updated_at", null: false
     t.string "slug"
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
+  end
+
+  create_table "slots", force: :cascade do |t|
+    t.bigint "doctor_id", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.boolean "available", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctor_id"], name: "index_slots_on_doctor_id"
+    t.index ["organization_id"], name: "index_slots_on_organization_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -103,5 +131,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_15_080426) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "appointments", "organizations"
+  add_foreign_key "appointments", "users", column: "doctor_id"
+  add_foreign_key "appointments", "users", column: "patient_id"
+  add_foreign_key "slots", "organizations"
+  add_foreign_key "slots", "users", column: "doctor_id"
   add_foreign_key "users", "organizations"
 end

@@ -15,8 +15,7 @@ class Managers::PatientsController < Managers::BaseController
 
   def create
     authorize Patient
-    @patient = current_user.organization.patients.build(patient_params)
-    @patient.role = :patient
+    @patient = current_user.organization.patients.build(patient_params.merge(role: "patient"))
 
     respond_to do |format|
       if @patient.save

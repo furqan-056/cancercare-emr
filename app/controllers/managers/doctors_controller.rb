@@ -13,8 +13,7 @@ class Managers::DoctorsController < Managers::BaseController
 
   def create
     authorize Doctor
-    @doctor = current_user.organization.doctors.build(doctor_params)
-    @doctor.role = :doctor
+    @doctor = current_user.organization.doctors.build(doctor_params.merge(role: "doctor"))
 
     respond_to do |format|
       if @doctor.save

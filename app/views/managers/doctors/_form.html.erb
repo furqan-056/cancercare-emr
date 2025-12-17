@@ -1,0 +1,134 @@
+<div id="modal"
+     data-controller="modal"
+     data-action="click->modal#closeOnOutsideClick"
+     class="hidden fixed inset-0 z-50 overflow-y-auto bg-opacity-50 backdrop-blur-md"
+     aria-labelledby="modal-title"
+     role="dialog"
+     aria-modal="true">
+
+  <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+
+    <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-lg md:max-w-4xl w-150">
+
+      <div class="p-6 lg:p-8 bg-card-bg">
+
+        <%= form_with model: [:managers, doctor],  url: doctor.persisted? ? managers_doctor_path(doctor) : managers_doctors_path,
+              data: { turbo_frame: "modal" } do |f| %>
+
+          <% if @doctor.errors.any? %>
+            <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md">
+              <h2 class="font-bold mb-2">
+                <%= pluralize(doctor.errors.count, "error") %> prevented this doctor from being saved:
+              </h2>
+              <ul class="list-disc list-inside">
+                <% doctor.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="flex justify-end mb-4">
+            <a href="#"
+               data-action="modal#close"
+               class="text-secondary-text hover:text-red-500 transition">
+
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   class="h-6 w-6"
+                   fill="none"
+                   viewBox="0 0 24 24"
+                   stroke="currentColor">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </a>
+          </div>
+
+          <div class="space-y-6">
+
+            <h3 class="text-xl font-semibold text-secondary-text mb-4">Doctor Details</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              <div>
+                <%= f.label :first_name, class: "block text-sm font-medium text-secondary-text" %>
+                <%= f.text_field :first_name,
+                      class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text placeholder-main-area-text",
+                      placeholder: "First Name" %>
+              </div>
+
+              <div>
+                <%= f.label :last_name, class: "block text-sm font-medium text-secondary-text" %>
+                <%= f.text_field :last_name,
+                      class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text placeholder-main-area-text",
+                      placeholder: "Last Name" %>
+              </div>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+              <div>
+                <%= f.label :specialization, class: "block text-sm font-medium text-secondary-text" %>
+                <%= f.text_field :specialization,
+                      class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
+                      placeholder: "Specialization (e.g. Oncology)" %>
+              </div>
+
+              <div>
+                <%= f.label :department, class: "block text-sm font-medium text-secondary-text" %>
+                <%= f.text_field :department,
+                      class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
+                      placeholder: "Department" %>
+              </div>
+
+              <div>
+                <%= f.label :years_of_experience, class: "block text-sm font-medium text-secondary-text" %>
+                <%= f.number_field :years_of_experience,
+                      class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
+                      placeholder: "Years of Experience" %>
+              </div>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              <div>
+                <%= f.label :availability, class: "block text-sm font-medium text-secondary-text" %>
+                <%= f.text_area :availability,
+                      rows: 2,
+                      class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
+                      placeholder: "Availability (e.g. Mon–Fri 10AM–4PM)" %>
+              </div>
+
+            </div>
+
+            <div>
+              <%= f.label :phone, class: "block text-sm font-medium text-secondary-text" %>
+              <%= f.text_field :phone,
+                    class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
+                    placeholder: "Phone Number" %>
+            </div>
+
+            <div>
+              <%= f.label :email, class: "block text-sm font-medium text-secondary-text" %>
+              <%= f.email_field :email,
+                    class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
+                    placeholder: "doctor@example.com" %>
+            </div>
+
+            <div class="pt-5">
+              <%= f.submit doctor.persisted? ? "Update Doctor" : "Create Doctor",
+                    class: "inline-flex justify-center rounded-xl border border-transparent bg-accent-1 py-3 px-6 text-sm font-medium text-primary-text shadow-lg hover:bg-accent-1-hover focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 cursor-pointer transition duration-200" %>
+            </div>
+
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>

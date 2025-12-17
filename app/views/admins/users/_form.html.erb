@@ -3,7 +3,7 @@
     <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-lg md:max-w-2xl w-95">
       <div class="p-6 lg:p-8 bg-card-bg">
 
-        <%= form_with(model: [:admins, user], local: true, id: "new_user_form") do |f| %>
+        <%= form_with(model: user, scope: :user, url: user.persisted? ? admins_user_path(user) : admins_users_path, local: true, id: "new_user_form") do |f| %>
           <% if user.errors.any? %>
             <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md">
               <h2 class="font-bold mb-2 text-secondary-text">

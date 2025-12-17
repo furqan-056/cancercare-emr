@@ -1,0 +1,45 @@
+<% user_email = current_admin&.email || current_user&.email %>
+<% role_name = if current_admin
+                 "Administrator"
+               else
+                 current_user.role.humanize
+               end %>
+
+<p class="text-xl text-success-text font-semibold mb-8 p-3 bg-secondary-bg rounded-xl shadow-md">
+  Welcome, <%= user_email %>! (<%= role_name %>)
+</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+  <div class="p-6 bg-secondary-bg border border-primary-border rounded-3xl shadow-2xl hover:shadow-xl transition duration-300">
+    <h2 class="text-xl font-bold text-accent-1 mb-4">Patient Records</h2>
+    <p class="text-secondary-text">Access and modify patient demographic information, medical histories, appointments, and treatment plans.</p>
+    <% patient_link = case
+                     when current_admin
+                       admins_patients_path
+                     when current_user&.manager?
+                       managers_patients_path
+                     when current_user&.doctor?
+                       doctors_patients_path
+                     when current_user&.patient?
+                       patients_patients_path
+                     else
+                       "#"
+                     end %>
+    <%= link_to 'Manage Patient Records', patient_link, class: 'inline-flex items-center text-sm font-medium text-primary-text bg-accent-1 hover:bg-accent-1-hover px-4 py-2 rounded-xl shadow-md mt-4 transition duration-200' %>
+  </div>
+
+  <% if current_admin || current_user&.manager? %>
+    <div class="p-6 bg-secondary-bg border border-primary-border rounded-3xl shadow-2xl hover:shadow-xl transition duration-300">
+      <h2 class="text-xl font-bold text-accent-2 mb-4">System Audit & Config</h2>
+      <p class="text-secondary-text">Review system activity, track data changes, and manage application configuration settings.</p>
+      <% audit_link = current_admin ? admins_audit_logs_path : managers_audit_logs_path rescue "#" %>
+      <%= link_to 'View Audit Logs', audit_link, class: 'inline-flex items-center text-sm font-medium text-primary-text bg-accent-2 hover:bg-accent-2-hover px-4 py-2 rounded-xl shadow-md mt-4 transition duration-200' %>
+    </div>
+  <% end %>
+
+</div>
+
+<p class="mt-8 text-center text-secondary-text text-sm">
+  This area is secured and monitored. Access is restricted to authorized <%= role_name.pluralize.downcase %>.
+</p>

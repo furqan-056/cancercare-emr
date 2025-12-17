@@ -77,7 +77,7 @@ class Admins::OrganizationsController < Admins::BaseController
   end
   
   def organization_params
-    params.require(:organization).permit(:name, :email, :organization_type, :phone_number, :logo,
+    params.require(:organization).permit(:name, :email, :organization_type, :phone_number, :logo, :slug,
       address_attributes: %i[id street_address location city postal_code country _destroy],
       users_attributes: %i[id email role _destroy])
   end

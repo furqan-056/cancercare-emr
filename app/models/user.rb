@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   validates :role, :organization, presence: true
   before_validation :set_temp_password_for_new_user, on: :create
+  before_validation :sync_type_with_role, on: [:create, :update]
 
   after_commit :send_reset_email, on: :create
 
@@ -30,6 +31,18 @@ class User < ApplicationRecord
   end
 
   private
+
+  def sync_type_with_role
+    return if role.blank?
+
+    self.type =
+      case role.to_s
+      when "doctor"  then "Doctor"
+      when "manager" then "Manager"
+      when "patient" then "Patient"
+      else type
+      end
+  end
 
   def set_temp_password_for_new_user
     return if password.present? && password_confirmation.present?

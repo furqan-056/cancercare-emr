@@ -24,3 +24,6 @@ application.register("modal", ModalController)
 
 import ActiveLinkController from "./active_link_controller"
 application.register("active-link", ActiveLinkController)
+
+import LiveSearchController from "./live_search_controller"
+application.register("live-search", LiveSearchController)

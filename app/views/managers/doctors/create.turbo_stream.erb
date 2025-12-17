@@ -1,0 +1,6 @@
+<% if @doctor.persisted? %>
+  <%= turbo_stream.prepend "doctors", partial: "doctor_row", locals: { doctor: @doctor } %>
+  <%= turbo_stream.update "modal", "" %>
+<% else %>
+  <%= turbo_stream.update "modal", partial: "form", locals: { doctor: @doctor } %>
+<% end %>

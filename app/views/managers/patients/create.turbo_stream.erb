@@ -1,0 +1,18 @@
+<% if @patient.persisted? %>
+  <%= turbo_stream.prepend "patients", 
+      partial: "shared/patient_row", 
+      locals: { 
+        patient: @patient, 
+        show_path: ->(p) { managers_patient_path(p) }, 
+        edit_path: ->(p) { edit_managers_patient_path(p) }, 
+        delete_path: ->(p) { managers_patient_path(p) }, 
+        can_edit: true, 
+        can_delete: true 
+      } %>
+
+  <%= turbo_stream.update "modal", "" %>
+<% else %>
+  <%= turbo_stream.update "modal", 
+        partial: "managers/patients/form", 
+        locals: { patient: @patient } %>
+<% end %>

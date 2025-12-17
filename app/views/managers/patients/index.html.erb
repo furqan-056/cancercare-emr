@@ -1,0 +1,11 @@
+<%= render "shared/patients_index",
+           title: "Manage Patients",
+           subtitle: "Full management of all patients under your organization.",
+           index_path: -> { managers_patients_path },
+           new_path: -> { new_managers_patient_path },
+           show_path: ->(p) { managers_patient_path(p) },
+           edit_path: ->(p) { edit_managers_patient_path(p) },
+           delete_path: ->(p) { managers_patient_path(p) },
+           can_create: true,
+           can_edit: true,
+           can_delete: true %>

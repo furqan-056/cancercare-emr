@@ -1,0 +1,10 @@
+<%= turbo_stream.replace @patient, partial: "shared/patient_row", locals: { 
+      patient: @patient, 
+      show_path: ->(p) { managers_patient_path(p) },
+      edit_path: ->(p) { edit_managers_patient_path(p) },
+      delete_path: ->(p) { managers_patient_path(p) },
+      can_edit: true,
+      can_delete: true
+    } %>
+
+<%= turbo_stream.update "modal", "" %>

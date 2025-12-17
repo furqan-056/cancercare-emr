@@ -10,11 +10,15 @@
 
     <%= yield :head %>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
-            crossorigin="anonymous"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@nathanvda/cocoon@1.2.14/cocoon.min.js"></script>
+    <% if content_for?(:external_scripts) %>
+      <%= yield :external_scripts %>
+    <% else %>
+      <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
+              integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
+              crossorigin="anonymous"></script>
+      
+      <script src="https://cdn.jsdelivr.net/npm/@nathanvda/cocoon@1.2.14/cocoon.min.js"></script>
+    <% end %>
 
     <link rel="icon" href="/emr.png" type="image/png">
     <link rel="icon" href="/emr.svg" type="image/svg+xml">
@@ -25,8 +29,29 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body>
-    <%= render "layouts/flash_messages" %>
-    <%= yield %>
+  <body class="bg-white text-primary-text">
+    <% 
+      skip_layout_controllers = ['pages', 'devise/sessions', 'devise/registrations', 'devise/passwords', 'devise/confirmations', 'devise/unlocks']
+      show_dashboard = ((user_signed_in? && current_user.role.present?) || admin_signed_in?) && !skip_layout_controllers.include?(params[:controller])
+    %>
+
+    <% if show_dashboard %>
+      <div data-controller="sidebar" class="flex h-screen bg-primary-bg">
+        <%= render 'layouts/sidebar' %>
+
+        <div class="flex-1 flex flex-col bg-primary-bg">
+          <%= render 'layouts/header' %>
+          
+          <main class="flex-1 overflow-y-auto p-6 text-main-area-text">
+            <%= render "layouts/flash_messages" %>
+            <%= yield %>
+            <%= turbo_frame_tag "modal" %>
+          </main>
+        </div>
+      </div>
+    <% else %>
+      <%= render "layouts/flash_messages" %>
+      <%= yield %>
+    <% end %>
   </body>
 </html>

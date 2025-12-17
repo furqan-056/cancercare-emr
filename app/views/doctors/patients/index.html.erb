@@ -1,0 +1,11 @@
+<%= render "shared/patients_index",
+           title: "Patients",
+           subtitle: "View and manage patients under your care.",
+           index_path: -> { doctors_patients_path },
+           new_path: nil,
+           show_path: ->(p) { doctors_patient_path(p) },
+           edit_path: ->(p) { edit_doctors_patient_path(p) },
+           delete_path: nil,
+           can_create: false,
+           can_edit: true,
+           can_delete: false %>

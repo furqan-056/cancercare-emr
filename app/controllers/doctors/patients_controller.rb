@@ -33,7 +33,8 @@ class Doctors::PatientsController < Doctors::BaseController
   private
 
   def find_and_authorize_patient
-    @patient = authorize policy_scope(Patient).find(params[:id])
+    @patient = Patient.find(params[:id])
+    authorize @patient
   end
 
   def patient_params

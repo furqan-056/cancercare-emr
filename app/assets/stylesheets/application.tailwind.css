@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "flatpickr/dist/flatpickr.min.css";
 
 @layer utilities {
   @keyframes slide-in-right {

@@ -1,0 +1,58 @@
+<tr id="<%= dom_id(appointment) %>" class="hover:bg-hover-bg transition">
+  <td class="px-4 py-2"><%= appointment.patient.full_name %></td>
+  <td class="px-4 py-2"><%= appointment.doctor.full_name %></td>
+  <td class="px-4 py-2"><%= appointment.date.strftime("%d %b %Y %I:%M %p") %></td>
+  
+  <td class="px-4 py-2">
+    <% bg_class =
+      case appointment.status
+      when "approved" then "bg-green-500"
+      when "rejected" then "bg-red-500"
+      when "pending", "no_slot" then "bg-yellow-400"
+      else "bg-gray-400"
+      end
+    %>
+
+    <span class="px-3 py-1 rounded-full text-xs font-bold text-black <%= bg_class %>">
+      <%= appointment.status.humanize %>
+    </span>
+  </td>
+  
+  <td class="px-4 py-2 flex justify-center space-x-3">
+    <%= link_to managers_appointment_path(appointment),
+        data: { turbo_frame: "modal" },
+        class: "flex items-center space-x-1 text-blue-600 hover:text-blue-800" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z"/>
+      </svg>
+    <% end %>
+
+    <%= link_to edit_managers_appointment_path(appointment),
+        data: { turbo_frame: "modal" },
+        class: "flex items-center space-x-1 text-yellow-500 hover:text-yellow-700" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+    <% end %>
+
+    <%= link_to managers_appointment_path(appointment),
+                data: {
+                  turbo_method: :delete,
+                  turbo_confirm: "Are you sure you want to remove the appointment for #{appointment.patient.full_name}?"
+                },
+                title: "Delete Appointment",
+                class: "text-red-600 hover:text-red-800" do %>
+
+      <svg class="h-5 w-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+        <path d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9.003a.75.75 0 1 0 1.499-.058l-.346-9.003Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9.003a.75.75 0 0 0 1.5.058l.345-9.003Z"/>
+      </svg>
+
+    <% end %>
+  </td>
+</tr>

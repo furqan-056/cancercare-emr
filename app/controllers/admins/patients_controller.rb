@@ -37,7 +37,8 @@ class Admins::PatientsController < Admins::BaseController
   private
 
   def find_and_authorize_patient
-    @patient = authorize Patient.find(params[:id])
+    @patient = Patient.find(params[:id])
+    authorize @patient
   end
 
   def patient_params

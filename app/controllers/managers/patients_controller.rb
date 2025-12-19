@@ -15,8 +15,7 @@ class Managers::PatientsController < Managers::BaseController
 
   def create
     authorize Patient
-    @patient = current_user.organization.patients.build(patient_params)
-    @patient.role = :patient
+    @patient = current_user.organization.patients.build(patient_params.merge(role: "patient"))
 
     respond_to do |format|
       if @patient.save
@@ -55,7 +54,8 @@ class Managers::PatientsController < Managers::BaseController
   private
 
   def find_and_authorize_patient
-    @patient = authorize policy_scope(Patient).find(params[:id])
+    @patient = Patient.find(params[:id])
+    authorize @patient
   end
 
   def patient_params

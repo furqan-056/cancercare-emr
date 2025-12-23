@@ -2,8 +2,11 @@ class Managers::AppointmentsController < Managers::BaseController
   before_action :find_and_authorize_appointment, only: %i[show edit update destroy]
 
   def index
-    @appointments = policy_scope(Appointment).includes(:doctor, :patient, :slot).order(:date)
-    @slots = policy_scope(Slot).includes(:doctor).order(:start_time)
+    @q_appointments = policy_scope(Appointment).ransack(params[:q_appointments])
+    @appointments = @q_appointments.result.includes(:doctor, :patient, :slot).order(:date).page(params[:page]).per(10)
+
+    @q_slots = policy_scope(Slot).ransack(params[:q_slots])
+    @slots = @q_slots.result.includes(:doctor).order(:start_time).page(params[:slots_page]).per(10)
   end
 
   def show; end

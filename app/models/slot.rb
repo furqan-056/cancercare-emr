@@ -9,6 +9,14 @@ class Slot < ApplicationRecord
   validate  :start_time_before_end_time
   validate  :no_overlapping_slots
 
+  def self.ransackable_attributes(auth_object = nil)
+    %w[id available start_time end_time created_at updated_at]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    %w[doctor]
+  end
+
   private
 
   def start_time_before_end_time

@@ -34,6 +34,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def self.ransackable_attributes(auth_object = nil)
+    %w[first_name last_name email phone]
+  end
+
   private
 
   def sync_type_with_role

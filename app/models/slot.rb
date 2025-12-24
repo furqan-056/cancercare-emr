@@ -10,7 +10,7 @@ class Slot < ApplicationRecord
   validate  :no_overlapping_slots
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[id available start_time end_time created_at updated_at]
+    %w[available start_time end_time]
   end
 
   def self.ransackable_associations(auth_object = nil)

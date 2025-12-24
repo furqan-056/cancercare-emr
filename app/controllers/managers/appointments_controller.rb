@@ -1,14 +1,6 @@
 class Managers::AppointmentsController < Managers::BaseController
   before_action :find_and_authorize_appointment, only: %i[show edit update destroy]
 
-  def index
-    @q_appointments = policy_scope(Appointment).ransack(params[:q_appointments])
-    @appointments = @q_appointments.result.includes(:doctor, :patient, :slot).order(:date).page(params[:page]).per(10)
-
-    @q_slots = policy_scope(Slot).ransack(params[:q_slots])
-    @slots = @q_slots.result.includes(:doctor).order(:start_time).page(params[:slots_page]).per(10)
-  end
-
   def show; end
 
   def new
@@ -17,8 +9,7 @@ class Managers::AppointmentsController < Managers::BaseController
   end
 
   def create
-    @appointment = current_user.organization.appointments.new(appointment_params)
-    @appointment.manager = current_user
+    @appointment = current_user.organization.appointments.new(appointment_params.merge(manager: current_user))
     authorize @appointment
 
     respond_to do |format|

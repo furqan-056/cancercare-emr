@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       get 'dashboard', to: 'dashboards#index', as: 'dashboard'
       resources :doctors
       resources :patients
+      get 'appointments', to: 'resources#index', as: :appointments
       resources :appointments
       resources :slots
     end

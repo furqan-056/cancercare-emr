@@ -15,7 +15,7 @@ class Appointment < ApplicationRecord
   after_update :send_notification_emails, if: :saved_change_to_status?
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[id date status doctor_id patient_id slot_id created_at updated_at]
+    %w[date status doctor_id patient_id slot_id]
   end
 
   def self.ransackable_associations(auth_object = nil)

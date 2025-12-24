@@ -87,7 +87,7 @@
             <tbody class="divide-y divide-primary-border" id="appointments">
               <% if @appointments.any? %>
                 <% @appointments.each do |appointment| %>
-                  <%= render "appointment", appointment: appointment %>
+                  <%= render "managers/appointments/appointment", appointment: appointment %>
                 <% end %>
               <% else %>
                 <tr>

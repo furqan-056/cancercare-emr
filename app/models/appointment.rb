@@ -9,6 +9,7 @@ class Appointment < ApplicationRecord
   enum :status, { pending: 0, approved: 1, rejected: 2, no_slots: 3 }
 
   before_validation :sync_from_slot, if: -> { slot.present? }
+  before_validation :assign_manager_if_doctor
   after_create :mark_slot_unavailable
 
   after_create :send_notification_emails
@@ -23,6 +24,12 @@ class Appointment < ApplicationRecord
   end
 
   private
+
+  def assign_manager_if_doctor
+    if doctor.present? && doctor.role == "doctor" && manager_id.blank?
+      self.manager_id = doctor.id
+    end
+  end
 
   def send_notification_emails
     if saved_change_to_status? && !previously_new_record?

@@ -38,8 +38,12 @@
               <div>
                 <p class="text-secondary-text font-semibold">Slot:</p>
                 <p class="text-primary-text">
-                  <%= @appointment.slot.start_time.strftime("%d %b %Y %I:%M %p") %> - 
-                  <%= @appointment.slot.end_time.strftime("%I:%M %p") %>
+                  <% if @appointment.slot.present? %>
+                    <%= @appointment.slot.start_time.strftime("%d %b %Y %I:%M %p") %> - 
+                    <%= @appointment.slot.end_time.strftime("%I:%M %p") %>
+                  <% else %>
+                    Not scheduled yet
+                  <% end %>
                 </p>
               </div>
 

@@ -1,7 +1,13 @@
 <tr id="<%= dom_id(appointment) %>" class="hover:bg-hover-bg transition">
   <td class="px-4 py-2"><%= appointment.patient.full_name %></td>
   <td class="px-4 py-2"><%= appointment.doctor.full_name %></td>
-  <td class="px-4 py-2"><%= appointment.date.strftime("%d %b %Y %I:%M %p") %></td>
+  <td class="px-4 py-2">
+    <% if appointment.date.present? %>
+      <%= appointment.date.strftime("%d %b %Y %I:%M %p") %>
+    <% else %>
+      Not scheduled
+    <% end %>
+  </td>
   
   <td class="px-4 py-2">
     <% bg_class =

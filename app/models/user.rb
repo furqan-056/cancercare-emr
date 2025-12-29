@@ -1,6 +1,9 @@
 class User < ApplicationRecord
   belongs_to :organization, optional: true
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
+  has_many :patient_appointments, class_name: "Appointment", foreign_key: :patient_id, dependent: :destroy
+  has_many :doctor_appointments, class_name: "Appointment", foreign_key: :doctor_id
+  has_many :managed_appointments, class_name: "Appointment", foreign_key: :manager_id
 
   enum :role, { manager: 0, doctor: 1, patient: 2 }
 

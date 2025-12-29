@@ -38,14 +38,32 @@
               <div>
                 <p class="text-secondary-text font-semibold">Slot:</p>
                 <p class="text-primary-text">
-                  <%= @appointment.slot.start_time.strftime("%d %b %Y %I:%M %p") %> - 
-                  <%= @appointment.slot.end_time.strftime("%I:%M %p") %>
+                  <% if @appointment.slot.present? %>
+                    <%= @appointment.slot.start_time.strftime("%d %b %Y %I:%M %p") %> - 
+                    <%= @appointment.slot.end_time.strftime("%I:%M %p") %>
+                  <% else %>
+                    Not Scheduled
+                  <% end %>
                 </p>
               </div>
 
-              <div>
+              <div class="mt-2">
                 <p class="text-secondary-text font-semibold">Status:</p>
-                <p class="text-primary-text"><%= @appointment.status.humanize %></p>
+                <p class="text-primary-text">
+                  <% status_class =
+                    case @appointment.status
+                    when "requested" then "bg-gray-400/20 text-gray-600"
+                    when "pending" then "bg-yellow-400/20 text-yellow-600"
+                    when "approved" then "bg-green-500/20 text-green-600"
+                    when "rejected" then "bg-red-500/20 text-red-800"
+                    when "no_slots" then "bg-gray-300/20 text-gray-800"
+                    else ""
+                    end %>
+
+                  <span class="px-2 py-1 rounded text-xs font-bold <%= status_class %>">
+                    <%= @appointment.status.humanize %>
+                  </span>
+                </p>
               </div>
 
               <div>

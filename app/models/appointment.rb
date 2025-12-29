@@ -1,19 +1,27 @@
 class Appointment < ApplicationRecord
   belongs_to :organization
-  belongs_to :slot
-
+  belongs_to :slot, optional: true
   belongs_to :patient, class_name: "User"
   belongs_to :doctor,  class_name: "User"
   belongs_to :manager, class_name: "User"
 
-  enum :status, { pending: 0, approved: 1, rejected: 2, no_slots: 3 }
+  enum :status, { requested: 0, pending: 1, approved: 2, rejected: 3, no_slots: 4 }
 
   before_validation :sync_from_slot, if: -> { slot.present? }
   before_validation :assign_manager_if_doctor
-  after_create :mark_slot_unavailable
+  after_create :mark_slot_unavailable, if: -> { slot.present? }
 
   after_create :send_notification_emails
   after_update :send_notification_emails, if: :saved_change_to_status?
+
+  def self.request_by_patient(patient:, doctor:)
+    create(
+      patient: patient,
+      doctor: doctor,
+      organization: patient.organization,
+      status: :requested
+    )
+  end
 
   def self.ransackable_attributes(auth_object = nil)
     %w[date status doctor_id patient_id slot_id]

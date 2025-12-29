@@ -1,0 +1,11 @@
+<%= turbo_stream.update "request-btn-#{params[:doctor_id]}" do %>
+  <button class="w-full py-2 px-4 rounded-xl bg-gray-400 text-white font-semibold cursor-not-allowed" disabled>
+    Requested
+  </button>
+<% end %>
+
+<%= turbo_stream.prepend "appointments-badges" do %>
+  <span class="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-bold bg-gray-400 text-white">
+    Requested
+  </span>
+<% end %>

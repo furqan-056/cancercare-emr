@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     namespace :patients do
       get 'dashboard', to: 'dashboards#index', as: 'dashboard'
       resources :patients
+      resources :appointments, only: [:index, :create]
     end
   end
 

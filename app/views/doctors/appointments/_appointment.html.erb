@@ -4,7 +4,7 @@
   </td>
 
   <td class="px-4 py-2">
-    <%= appointment.date.strftime("%d %b %Y %I:%M %p") %>
+    <%= appointment.date.present? ? appointment.date.strftime("%d %b %Y %I:%M %p") : "Not scheduled" %>
   </td>
 
   <td class="px-4 py-2">

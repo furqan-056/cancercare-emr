@@ -14,12 +14,13 @@ class SlotPolicy < ApplicationPolicy
   end
 
   def show?
-    user.is_a?(Admin) || user.manager? || user.doctor?
+    create? || user.doctor?
   end
 
   def create?
     user.is_a?(Admin) || user.manager?
   end
+
   def new?
     create?
   end

@@ -50,19 +50,7 @@
               <div class="mt-2">
                 <p class="text-secondary-text font-semibold">Status:</p>
                 <p class="text-primary-text">
-                  <% status_class =
-                    case @appointment.status
-                    when "requested" then "bg-gray-400/20 text-gray-600"
-                    when "pending" then "bg-yellow-400/20 text-yellow-600"
-                    when "approved" then "bg-green-500/20 text-green-600"
-                    when "rejected" then "bg-red-500/20 text-red-800"
-                    when "no_slots" then "bg-gray-300/20 text-gray-800"
-                    else ""
-                    end %>
-
-                  <span class="px-2 py-1 rounded text-xs font-bold <%= status_class %>">
-                    <%= @appointment.status.humanize %>
-                  </span>
+                  <%= manager_appointment_status_badge(@appointment.status) %>
                 </p>
               </div>
 

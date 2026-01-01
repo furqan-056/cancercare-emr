@@ -1,12 +1,10 @@
 class Patients::AppointmentsController < Patients::BaseController
-
   def index
-    @q = current_user.organization.users.where(role: :doctor).ransack(params[:q])
+    @q = current_user.organization.doctors.ransack(params[:q])
     @doctors = @q.result.page(params[:page]).per(9)
 
     @appointments_by_doctor = current_user.patient_appointments.pluck(:doctor_id, :status).to_h
   end
-
 
   def create
     doctor = current_user.organization.users.find(params[:doctor_id])

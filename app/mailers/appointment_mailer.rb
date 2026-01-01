@@ -28,4 +28,26 @@ class AppointmentMailer < ApplicationMailer
     @patient = appointment.patient
     mail(to: @patient.email, subject: "Your Appointment Status Updated")
   end
+
+  def requested_by_patient_doctor(appointment)
+    @appointment = appointment
+    @doctor = appointment.doctor
+    @patient = appointment.patient
+
+    mail(
+      to: @doctor.email,
+      subject: "New Appointment Request from #{@patient.full_name}"
+    )
+  end
+
+  def requested_by_patient_confirmation(appointment)
+    @appointment = appointment
+    @doctor = appointment.doctor
+    @patient = appointment.patient
+
+    mail(
+      to: @patient.email,
+      subject: "Your Appointment Request Has Been Sent"
+    )
+  end
 end

@@ -39,7 +39,7 @@ class Managers::SlotsController < Managers::BaseController
 
   def destroy
     @slot.destroy
-      respond_to do |format|
+    respond_to do |format|
         format.html { redirect_to managers_appointments_path, notice: "Slot deleted successfully." }
         format.turbo_stream { flash.now[:notice] = "Slot deleted successfully." }
     end

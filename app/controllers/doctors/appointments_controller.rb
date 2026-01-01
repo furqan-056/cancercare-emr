@@ -1,5 +1,6 @@
 class Doctors::AppointmentsController < Doctors::BaseController
   before_action :find_and_authorize_appointment, only: %i[show edit update destroy]
+  before_action :set_slots, only: %i[new edit create update]
 
   def index
     @q = policy_scope(Appointment).where(doctor: current_user).ransack(params[:q_appointments])
@@ -9,7 +10,7 @@ class Doctors::AppointmentsController < Doctors::BaseController
   def show; end
 
   def new
-    @appointment = Appointment.new(doctor: current_user,organization: current_user.organization)
+    @appointment = Appointment.new
     authorize @appointment
   end
 
@@ -58,6 +59,10 @@ class Doctors::AppointmentsController < Doctors::BaseController
   end
 
   def appointment_params
-    params.require(:appointment).permit(:patient_id,:slot_id,:status)
+    params.require(:appointment).permit(:patient_id, :slot_id, :status)
+  end
+
+  def set_slots
+      @slots = Slot.where(doctor_id: current_user.id).where(available: true).includes(:doctor).order(:start_time)
   end
 end

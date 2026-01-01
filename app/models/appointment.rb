@@ -3,14 +3,13 @@ class Appointment < ApplicationRecord
   belongs_to :slot, optional: true
   belongs_to :patient, class_name: "User"
   belongs_to :doctor,  class_name: "User"
-  belongs_to :manager, class_name: "User"
+  belongs_to :manager, class_name: "User", optional: true
 
   enum :status, { requested: 0, pending: 1, approved: 2, rejected: 3, no_slots: 4 }
+  attr_accessor :requested_by_user
 
   before_validation :sync_from_slot, if: -> { slot.present? }
-  before_validation :assign_manager_if_doctor
   after_create :mark_slot_unavailable, if: -> { slot.present? }
-
   after_create :send_notification_emails
   after_update :send_notification_emails, if: :saved_change_to_status?
 
@@ -33,21 +32,20 @@ class Appointment < ApplicationRecord
 
   private
 
-  def assign_manager_if_doctor
-    if doctor.present? && doctor.role == "doctor" && manager_id.blank?
-      self.manager_id = doctor.id
-    end
-  end
-
   def send_notification_emails
-    if saved_change_to_status? && !previously_new_record?
+    if previously_new_record?
+      if status == "requested" && patient.present?
+        AppointmentMailer.requested_by_patient_doctor(self).deliver_now
+        AppointmentMailer.requested_by_patient_confirmation(self).deliver_now
+      else
+        AppointmentMailer.notify_doctor(self).deliver_now
+        AppointmentMailer.notify_patient(self).deliver_now
+      end
+    end
+
+    if saved_change_to_status? && !previously_new_record? && status != "requested"
       AppointmentMailer.status_changed_doctor(self).deliver_now
       AppointmentMailer.status_changed_patient(self).deliver_now
-    end
-
-    if previously_new_record?
-      AppointmentMailer.notify_doctor(self).deliver_now
-      AppointmentMailer.notify_patient(self).deliver_now
     end
   end
 

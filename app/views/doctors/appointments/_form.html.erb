@@ -53,22 +53,12 @@
 
             <div>
               <%= f.label :slot_id, "Slot", class: "block text-sm font-medium text-secondary-text" %>
-              <% slots = current_user.organization.slots
-                        .where(available: true)
-                        .or(current_user.organization.slots.where(id: appointment.slot_id))
-                        .includes(:doctor) %>
 
               <select name="appointment[slot_id]"
                       id="appointment_slot_id"
                       class="block w-full rounded-xl border border-primary-border p-3 shadow-sm text-sm focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text">
                 <option value="">Select Slot</option>
-                <% slots.each do |slot| %>
-                  <option value="<%= slot.id %>"
-                          data-doctor-id="<%= slot.doctor_id %>"
-                          <%= "selected" if appointment.slot_id == slot.id %>>
-                    <%= slot.start_time.strftime("%B %d, %Y at %I:%M %p") %> — <%= slot.doctor.full_name %>
-                  </option>
-                <% end %>
+                <%= slot_options_for_select(@slots, appointment) %>
               </select>
             </div>
 

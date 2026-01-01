@@ -16,7 +16,7 @@ class AppointmentPolicy < ApplicationPolicy
   end
 
   def create?
-    user.is_a?(Admin) || user.manager? || user.doctor?
+    show?
   end
 
   def new?

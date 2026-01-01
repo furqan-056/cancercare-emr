@@ -1,10 +1,4 @@
-<div id="modal"
-     data-controller="modal"
-     data-action="click->modal#closeOnOutsideClick"
-     class="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-md"
-     aria-labelledby="modal-title"
-     role="dialog"
-     aria-modal="true">
+<div id="modal" data-controller="modal" data-action="click->modal#closeOnOutsideClick" class="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-md" aria-labelledby="modal-title" role="dialog" aria-modal="true">
 
   <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
     
@@ -46,7 +40,7 @@
               <div>
                 <%= f.label :doctor_id, "Doctor", class: "block text-sm font-medium text-secondary-text" %>
                 <%= f.collection_select :doctor_id,
-                      current_user.organization.users.where(role: :doctor),
+                      current_user.organization.doctors,
                       :id, :full_name,
                       { prompt: "Select Doctor" },
                       { data: { action: "change->slot-filter#filter" },
@@ -78,7 +72,7 @@
             <div>
               <%= f.label :patient_id, "Patient", class: "block text-sm font-medium text-secondary-text" %>
               <%= f.collection_select :patient_id,
-                    current_user.organization.users.where(role: :patient),
+                    current_user.organization.patients,
                     :id, :full_name,
                     { prompt: "Select Patient" },
                     { class: "block w-full rounded-xl border border-primary-border p-3 shadow-sm text-sm focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" } %>

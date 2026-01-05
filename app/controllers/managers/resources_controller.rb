@@ -5,7 +5,5 @@ class Managers::ResourcesController < Managers::BaseController
 
     @q_slots = policy_scope(Slot).ransack(params[:q_slots])
     @slots = @q_slots.result.includes(:doctor).order(:start_time).page(params[:slots_page]).per(10)
-
-    render "managers/appointments/index"
   end
 end

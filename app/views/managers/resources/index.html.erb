@@ -1,0 +1,189 @@
+<div class="p-6 lg:p-8">
+  <div class="sm:flex sm:items-center border-b border-primary-border pb-4 mb-6">
+    <div class="sm:flex-auto">
+      <h1 class="text-3xl font-bold tracking-tight text-secondary-text">Appointments & Slots</h1>
+      <p class="mt-2 text-sm text-secondary-text">Manage all appointments and doctor slots.</p>
+    </div>
+  </div>
+
+  <div data-controller="tabs">
+    <div class="flex items-center justify-between border-b border-primary-border mb-6">
+      <div class="flex space-x-2 bg-secondary-bg p-1 rounded-xl shadow-inner">
+        <button
+          data-action="click->tabs#toggle"
+          data-tab-target="appointments"
+          class="px-5 py-2 rounded-lg font-semibold transition-all duration-200 bg-primary-bg shadow-md scale-105 text-primary-text"
+          id="appointments-tab">
+          Appointments
+        </button>
+
+        <button
+          data-action="click->tabs#toggle"
+          data-tab-target="slots"
+          class="px-5 py-2 rounded-lg font-semibold transition-all duration-200 text-primary-text hover:bg-hover-bg"
+          id="slots-tab">
+          Slots
+        </button>
+      </div>
+
+      <div class="flex space-x-4">
+        <%= link_to "Create Appointment", new_managers_appointment_path, data: { turbo_frame: "modal" }, class: "hidden px-4 py-2 rounded-xl bg-accent-1 text-white font-semibold shadow hover:bg-accent-1-hover transition", id: "create-appointment-btn" %>
+        <%= link_to "Create Slot", new_managers_slot_path, data: { turbo_frame: "modal" }, class: "hidden px-4 py-2 rounded-xl bg-accent-1 text-white font-semibold shadow hover:bg-accent-1-hover transition", id: "create-slot-btn" %>
+      </div>
+    </div>
+
+    <div id="appointments-content" class="tab-content">
+      <div class="mb-6">
+        <%= search_form_for @q_appointments, as: :q_appointments, url: managers_appointments_path, method: :get,
+            html: {
+              data: {
+                turbo_frame: "appointments_results_frame",
+                controller: "live-search",
+                live_search_target: "form",
+                action: "input->live-search#search"
+              }
+            } do |f| %>
+          
+          <div class="flex flex-wrap gap-4 items-end">
+            <div class="flex-1 min-w-[250px]">
+              <label class="block text-xs font-medium text-secondary-text mb-1 ml-1">Search Patient/Doctor</label>
+              <%= f.search_field :patient_first_name_or_patient_last_name_or_doctor_first_name_or_doctor_last_name_cont,
+                    placeholder: "Search names...",
+                    class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-secondary-text bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1",
+                    autocomplete: "off" %>
+            </div>
+
+            <div class="w-48">
+              <label class="block text-xs font-medium text-secondary-text mb-1 ml-1">Status</label>
+              <%= f.select :status_eq, 
+                    Appointment.statuses.map { |k, v| [k.humanize, v] }, 
+                    { include_blank: "All Statuses" }, 
+                    { class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-secondary-text bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1" } %>
+            </div>
+            <div class="w-48">
+              <label class="block text-xs font-medium text-secondary-text mb-1 ml-1">Appointment Date</label>
+              <%= f.date_field :date_gteq, 
+                    class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-secondary-text bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <%= turbo_frame_tag "appointments_results_frame" do %>
+        <div class="overflow-x-auto bg-secondary-bg rounded-2xl shadow-md p-4">
+          <table class="min-w-full divide-y divide-primary-border">
+            <thead class="bg-primary-bg">
+              <tr>
+                <th class="px-4 py-2 text-left text-sm font-semibold">Patient</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold">Doctor</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold">Date & Time</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold">Status</th>
+                <th class="px-4 py-2 text-center text-sm font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-primary-border" id="appointments">
+              <% if @appointments.any? %>
+                <% @appointments.each do |appointment| %>
+                  <%= render "managers/appointments/appointment", appointment: appointment %>
+                <% end %>
+              <% else %>
+                <tr>
+                  <td colspan="5" class="text-center py-6 text-sm text-secondary-text">No appointments found.</td>
+                </tr>
+              <% end %>
+            </tbody>
+            <% if @appointments.respond_to?(:total_pages) && @appointments.total_pages > 1 %>
+              <tfoot>
+                <tr>
+                  <td colspan="5" class="py-4 px-6 bg-secondary-bg">
+                    <div class="flex justify-center">
+                      <%= paginate @appointments, params: { turbo_frame: "appointments_results_frame" } %>
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            <% end %>
+          </table>
+        </div>
+      <% end %>
+    </div>
+
+    <div id="slots-content" class="tab-content hidden">
+      <div class="mb-6">
+        <%= search_form_for @q_slots, as: :q_slots, url: managers_appointments_path, method: :get,
+            html: {
+              data: {
+                turbo_frame: "slots_results_frame",
+                controller: "live-search",
+                live_search_target: "form",
+                action: "input->live-search#search"
+              }
+            } do |f| %>
+
+          <div class="flex flex-wrap gap-4 items-end">
+            <div class="flex-1 min-w-[250px]">
+              <label class="block text-xs font-medium text-secondary-text mb-1 ml-1">Search Doctor</label>
+              <%= f.search_field :doctor_first_name_or_doctor_last_name_cont,
+                    placeholder: "Search doctor name...",
+                    class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-secondary-text bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1",
+                    autocomplete: "off" %>
+            </div>
+
+            <div class="w-48">
+              <label class="block text-xs font-medium text-secondary-text mb-1 ml-1">Availability</label>
+              <%= f.select :available_eq, 
+                    [["Not Booked", true], ["Booked", false]], 
+                    { include_blank: "All Slots" }, 
+                    { class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-secondary-text bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1" } %>
+            </div>
+
+            <div class="w-48">
+              <label class="block text-xs font-medium text-secondary-text mb-1 ml-1">Slot Date</label>
+              <%= f.date_field :start_time_gteq, 
+                    class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-secondary-text bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1" %>
+            </div>
+
+          </div>
+        <% end %>
+      </div>
+
+      <%= turbo_frame_tag "slots_results_frame" do %>
+        <div class="overflow-x-auto bg-secondary-bg rounded-2xl shadow-md p-4">
+          <table class="min-w-full divide-y divide-primary-border">
+            <thead class="bg-primary-bg">
+              <tr>
+                <th class="px-4 py-2 text-left text-sm font-semibold">Doctor</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold">Start</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold">End</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold">Availability</th>
+                <th class="px-4 py-2 text-center text-sm font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-primary-border" id="slots">
+              <% if @slots.any? %>
+                <% @slots.each do |slot| %>
+                  <%= render "managers/slots/slot", slot: slot %>
+                <% end %>
+              <% else %>
+                <tr id="empty-slots-row">
+                  <td colspan="5" class="text-center py-6 text-sm text-secondary-text">No slots found.</td>
+                </tr>
+              <% end %>
+            </tbody>
+            <% if @slots.respond_to?(:total_pages) && @slots.total_pages > 1 %>
+              <tfoot>
+                <tr>
+                  <td colspan="5" class="py-4 px-6 bg-secondary-bg">
+                    <div class="flex justify-center">
+                      <%= paginate @slots, param_name: :slots_page, params: { turbo_frame: "slots_results_frame" } %>
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            <% end %>
+          </table>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

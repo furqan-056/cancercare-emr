@@ -69,7 +69,7 @@
             </div>
           </div>
 
-          <%= appointment_status_badge(status) %>
+          <%= appointment_status_badge(status, variant: :patient) %>
 
           <div id="request-btn-<%= doctor.id %>">
             <%= button_to "Request Appointment",

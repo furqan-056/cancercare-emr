@@ -50,7 +50,7 @@
               <div class="mt-2">
                 <p class="text-secondary-text font-semibold">Status:</p>
                 <p class="text-primary-text">
-                  <%= manager_appointment_status_badge(@appointment.status) %>
+                  <%= appointment_status_badge(@appointment.status, variant: :manager_modal) %>
                 </p>
               </div>
 

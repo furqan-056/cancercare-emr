@@ -8,18 +8,7 @@
   </td>
 
   <td class="px-4 py-2">
-    <% bg_class =
-      case appointment.status
-      when "approved" then "bg-green-500"
-      when "rejected" then "bg-red-500"
-      when "pending", "no_slots" then "bg-yellow-400"
-      else "bg-gray-400"
-      end
-    %>
-
-    <span class="px-3 py-1 rounded-full text-xs font-bold text-black <%= bg_class %>">
-      <%= appointment.status.humanize %>
-    </span>
+    <%= appointment_status_badge(appointment.status, variant: :manager_table) %>
   </td>
 
   <td class="px-4 py-2 flex justify-center space-x-3">

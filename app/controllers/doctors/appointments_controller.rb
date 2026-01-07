@@ -4,7 +4,7 @@ class Doctors::AppointmentsController < Doctors::BaseController
 
   def index
     @q = policy_scope(Appointment).where(doctor: current_user).ransack(params[:q_appointments])
-    @appointments = @q.result.includes(:patient, :slot).order(date: :asc).page(params[:page]).per(10)
+    @appointments = @q.result.includes(:patient).order(date: :asc).page(params[:page]).per(10)
   end
 
   def show; end
@@ -63,6 +63,6 @@ class Doctors::AppointmentsController < Doctors::BaseController
   end
 
   def set_slots
-      @slots = Slot.where(doctor_id: current_user.id).where(available: true).includes(:doctor).order(:start_time)
+    @slots = Slot.where(doctor_id: current_user.id, available: true).includes(:doctor).order(:start_time)
   end
 end

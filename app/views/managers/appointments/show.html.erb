@@ -38,12 +38,7 @@
               <div>
                 <p class="text-secondary-text font-semibold">Slot:</p>
                 <p class="text-primary-text">
-                  <% if @appointment.slot.present? %>
-                    <%= @appointment.slot.start_time.strftime("%d %b %Y %I:%M %p") %> - 
-                    <%= @appointment.slot.end_time.strftime("%I:%M %p") %>
-                  <% else %>
-                    Not Scheduled
-                  <% end %>
+                  <%= @appointment.slot.present? ? "#{@appointment.slot.start_time.strftime('%d %b %Y %I:%M %p')} - #{@appointment.slot.end_time.strftime('%I:%M %p')}" : "Not Scheduled" %>
                 </p>
               </div>
 

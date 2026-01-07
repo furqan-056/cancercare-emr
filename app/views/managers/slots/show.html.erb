@@ -11,7 +11,6 @@
       <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
         <div class="p-6 lg:p-8 bg-card-bg">
 
-          <%# Close Button %>
           <div class="flex justify-end">
             <button data-action="click->modal#close" class="text-secondary-text hover:text-red-500 transition focus:outline-none">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -66,12 +65,10 @@
             </div>
 
             <div class="mt-6">
-              <%# Back button just closes the modal %>
               <button data-action="click->modal#close" class="bg-accent-1 hover:bg-accent-1-hover text-white px-4 py-2 rounded transition">
                 Back
               </button>
               
-              <%# Edit button loads the edit form into this same modal frame %>
               <%= link_to "Edit", 
                   edit_managers_slot_path(@slot), 
                   data: { turbo_frame: "modal" }, 

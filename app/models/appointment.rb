@@ -10,8 +10,7 @@ class Appointment < ApplicationRecord
 
   before_validation :sync_from_slot, if: -> { slot.present? }
   after_create :mark_slot_unavailable, if: -> { slot.present? }
-  after_create :send_notification_emails
-  after_update :send_notification_emails, if: :saved_change_to_status?
+  after_commit :send_notification_emails, on: [:create, :update]
 
   def self.request_by_patient(patient:, doctor:)
     create(
@@ -35,17 +34,17 @@ class Appointment < ApplicationRecord
   def send_notification_emails
     if previously_new_record?
       if status == "requested" && patient.present?
-        AppointmentMailer.requested_by_patient_doctor(self).deliver_now
-        AppointmentMailer.requested_by_patient_confirmation(self).deliver_now
+        AppointmentMailer.requested_by_patient_doctor(self).deliver_later(wait: 20.seconds)
+        AppointmentMailer.requested_by_patient_confirmation(self).deliver_later(wait: 20.seconds)
       else
-        AppointmentMailer.notify_doctor(self).deliver_now
-        AppointmentMailer.notify_patient(self).deliver_now
+        AppointmentMailer.notify_doctor(self).deliver_later(wait: 20.seconds)
+        AppointmentMailer.notify_patient(self).deliver_later(wait: 20.seconds)
       end
     end
 
     if saved_change_to_status? && !previously_new_record? && status != "requested"
-      AppointmentMailer.status_changed_doctor(self).deliver_now
-      AppointmentMailer.status_changed_patient(self).deliver_now
+      AppointmentMailer.status_changed_doctor(self).deliver_later(wait: 20.seconds)
+      AppointmentMailer.status_changed_patient(self).deliver_later(wait: 20.seconds)
     end
   end
 

@@ -1,0 +1,7 @@
+<h1>New Appointment Scheduled</h1>
+<p>Hello <%= @doctor.full_name %>,</p>
+<p>An appointment has been scheduled with <%= @patient.full_name %>.</p>
+<p>
+  Date & Time: <%= @appointment.slot&.start_time&.strftime("%B %d, %Y at %I:%M %p") || "Not assigned" %><br>
+  Status: <%= @appointment.status.humanize %>
+</p>

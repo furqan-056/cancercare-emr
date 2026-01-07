@@ -13,6 +13,7 @@
     "@hotwired/turbo-rails": "^8.0.20",
     "@nathanvda/cocoon": "^1.2.14",
     "@tailwindcss/cli": "^4.1.17",
+    "flatpickr": "^4.6.13",
     "jquery": "^3.7.1",
     "tailwindcss": "^4.1.17"
   }

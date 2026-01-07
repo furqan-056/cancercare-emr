@@ -1,0 +1,6 @@
+<h1>Appointment Status Updated</h1>
+<p>Hello <%= @doctor.full_name %>,</p>
+<p>The appointment with <%= @patient.full_name %> has changed status to <%= @appointment.status.humanize %>.</p>
+<p>
+  Date & Time: <%= @appointment.slot&.start_time&.strftime("%B %d, %Y at %I:%M %p") || "Not assigned" %>
+</p>

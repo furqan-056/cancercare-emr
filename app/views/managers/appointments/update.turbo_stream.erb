@@ -1,0 +1,6 @@
+<% if @appointment.errors.none? %>
+  <%= turbo_stream.replace dom_id(@appointment), partial: "appointment", locals: { appointment: @appointment } %>
+  <%= turbo_stream.update "modal", "" %>
+<% else %>
+  <%= turbo_stream.update "modal", partial: "form", locals: { appointment: @appointment } %>
+<% end %>

@@ -1,0 +1,83 @@
+<div id="slot-modal"
+     data-controller="modal"
+     data-action="click->modal#closeOnOutsideClick"
+     class="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-md"
+     aria-labelledby="modal-title"
+     role="dialog"
+     aria-modal="true">
+
+  <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-lg w-full">
+
+      <div class="p-6 lg:p-8 bg-card-bg">
+
+        <%= form_with model: [:managers, @slot], 
+                      data: { turbo_frame: "modal" }, 
+                      local: false do |f| %>
+
+          <% if @slot.errors.any? %>
+            <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md">
+              <h2 class="font-bold mb-2">
+                <%= pluralize(@slot.errors.count, "error") %> prevented this slot from being saved:
+              </h2>
+              <ul class="list-disc list-inside">
+                <% @slot.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="flex justify-end mb-4">
+            <button type="button"
+                    data-action="click->modal#close"
+                    class="text-secondary-text hover:text-red-500 transition focus:outline-none">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="space-y-6">
+
+            <div>
+              <%= f.label :doctor_id, class: "block text-sm font-medium text-secondary-text" %>
+              <%= f.collection_select :doctor_id,
+                    current_user.organization.users.doctor,
+                    :id, :first_name,
+                    { prompt: "Select Doctor" },
+                    { class: "block w-full rounded-xl border border-primary-border p-3 shadow-sm text-sm focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" } %>
+            </div>
+
+            <div>
+              <%= f.label :start_time, class: "block text-sm font-medium text-secondary-text" %>
+              <%= f.text_field :start_time,
+                    data: { controller: "datepicker" },
+                    class: "block w-full rounded-xl border border-primary-border p-3 shadow-sm text-sm focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
+                    autocomplete: "off" %>
+            </div>
+
+            <div>
+              <%= f.label :end_time, class: "block text-sm font-medium text-secondary-text" %>
+              <%= f.text_field :end_time,
+                    data: { controller: "datepicker" },
+                    class: "block w-full rounded-xl border border-primary-border p-3 shadow-sm text-sm focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
+                    autocomplete: "off" %>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <%= f.check_box :available, class: "h-4 w-4 text-accent-1 border-primary-border rounded focus:ring-accent-1" %>
+              <%= f.label :available, class: "text-sm font-medium text-secondary-text" %>
+            </div>
+
+            <div class="pt-5 flex justify-end">
+              <%= f.submit @slot.persisted? ? "Update Slot" : "Create Slot",
+                    class: "inline-flex justify-center rounded-xl border border-transparent bg-accent-1 py-3 px-6 text-sm font-medium text-primary-text shadow-lg hover:bg-accent-1-hover focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 cursor-pointer transition duration-200" %>
+            </div>
+
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

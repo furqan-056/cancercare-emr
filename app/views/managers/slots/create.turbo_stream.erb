@@ -1,0 +1,6 @@
+<% if @slot.persisted? %>
+  <%= turbo_stream.prepend "slots_list", partial: "managers/slots/slot", locals: { slot: @slot } %>
+  <%= turbo_stream.update "modal", "" %>
+<% else %>
+  <%= turbo_stream.update "modal", partial: "managers/slots/form", locals: { slot: @slot } %>
+<% end %>

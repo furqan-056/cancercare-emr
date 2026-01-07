@@ -1,0 +1,83 @@
+<%= turbo_frame_tag "modal" do %>
+  <div id="modal" 
+       data-controller="modal"
+       data-action="click->modal#closeOnOutsideClick"
+       class="fixed inset-0 z-50 overflow-y-auto backdrop-blur-md bg-black/50" 
+       aria-labelledby="modal-title" 
+       role="dialog" 
+       aria-modal="true">
+    <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+
+      <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+        <div class="p-6 lg:p-8 bg-card-bg">
+
+          <div class="flex justify-end">
+            <button data-action="click->modal#close" class="text-secondary-text hover:text-red-500 transition focus:outline-none">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="p-6 bg-secondary-bg rounded-xl shadow-md">
+            <h1 class="text-2xl font-bold text-primary-text mb-4">Slot Details</h1>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-secondary-text font-semibold">Doctor:</p>
+                <p class="text-primary-text"><%= @slot.doctor.full_name %></p>
+              </div>
+
+              <div>
+                <p class="text-secondary-text font-semibold">Availability:</p>
+                <p class="text-primary-text">
+                  <span class="px-2 py-1 rounded text-xs font-bold <%= @slot.available ? 'bg-green-500/20 text-green-600' : 'bg-red-500/20 text-red-600' %>">
+                    <%= @slot.available ? "Available" : "Booked" %>
+                  </span>
+                </p>
+              </div>
+
+              <div>
+                <p class="text-secondary-text font-semibold">Start Time:</p>
+                <p class="text-primary-text"><%= @slot.start_time.strftime("%d %b %Y %I:%M %p") %></p>
+              </div>
+
+              <div>
+                <p class="text-secondary-text font-semibold">End Time:</p>
+                <p class="text-primary-text"><%= @slot.end_time.strftime("%d %b %Y %I:%M %p") %></p>
+              </div>
+
+              <div>
+                <p class="text-secondary-text font-semibold">Appointment Assigned:</p>
+                <p class="text-primary-text">
+                  <% if @slot.appointment.present? %>
+                    <%= @slot.appointment.patient.full_name %>
+                  <% else %>
+                    <span class="text-gray-400 italic">None</span>
+                  <% end %>
+                </p>
+              </div>
+
+              <div>
+                <p class="text-secondary-text font-semibold">Created At:</p>
+                <p class="text-primary-text"><%= @slot.created_at.strftime("%d %b %Y %I:%M %p") %></p>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <button data-action="click->modal#close" class="bg-accent-1 hover:bg-accent-1-hover text-white px-4 py-2 rounded transition">
+                Back
+              </button>
+              
+              <%= link_to "Edit", 
+                  edit_managers_slot_path(@slot), 
+                  data: { turbo_frame: "modal" }, 
+                  class: "bg-primary-accent hover:opacity-90 px-4 py-2 rounded text-white ml-2 transition" %>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

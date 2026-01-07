@@ -1,6 +1,9 @@
 class User < ApplicationRecord
   belongs_to :organization, optional: true
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
+  has_many :patient_appointments, class_name: "Appointment", foreign_key: :patient_id, dependent: :destroy
+  has_many :doctor_appointments, class_name: "Appointment", foreign_key: :doctor_id
+  has_many :managed_appointments, class_name: "Appointment", foreign_key: :manager_id
 
   enum :role, { manager: 0, doctor: 1, patient: 2 }
 
@@ -23,11 +26,15 @@ class User < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[email role]
+    %w[email role first_name last_name email phone]
   end
 
   def self.ransackable_associations(auth_object = nil)
     ["organization"]
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
   end
 
   private

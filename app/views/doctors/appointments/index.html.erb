@@ -1,0 +1,103 @@
+<div class="p-6 lg:p-8">
+  <div class="flex items-center justify-between border-b pb-4 mb-6">
+    <div>
+      <h1 class="text-3xl font-bold tracking-tight text-secondary-text">
+        My Appointments
+      </h1>
+      <p class="mt-1 text-sm text-secondary-text">
+        Manage your patient appointments
+      </p>
+    </div>
+
+    <%= link_to "Create Appointment",
+          new_doctors_appointment_path,
+          data: { turbo_frame: "modal" },
+          class: "px-4 py-2 rounded-xl bg-accent-1 text-white font-semibold shadow hover:bg-accent-1-hover transition" %>
+  </div>
+
+  <div class="mb-6">
+    <%= search_form_for @q,
+        as: :q_appointments,
+        url: doctors_appointments_path,
+        method: :get,
+        html: {
+          data: {
+            turbo_frame: "appointments_results_frame",
+            controller: "live-search",
+            live_search_target: "form",
+            action: "input->live-search#search"
+          }
+        } do |f| %>
+
+      <div class="flex flex-wrap gap-4 items-end">
+        <div class="flex-1 min-w-[250px]">
+          <label class="block text-xs font-medium text-secondary-text mb-1 ml-1">
+            Search Patient
+          </label>
+          <%= f.search_field :patient_first_name_or_patient_last_name_cont,
+                placeholder: "Search patient name...",
+                class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-black bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1 text-secondary-text",
+                autocomplete: "off" %>
+        </div>
+
+        <div class="w-48">
+          <label class="block text-xs font-medium text-secondary-text mb-1 ml-1">
+            Status
+          </label>
+          <%= f.select :status_eq,
+                Appointment.statuses.map { |k, v| [k.humanize, v] },
+                { include_blank: "All Statuses" },
+                class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-black bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1 text-secondary-text" %>
+        </div>
+
+        <div class="w-48">
+          <label class="block text-xs font-medium text-secondary-text mb-1 ml-1">
+            Appointment Date
+          </label>
+          <%= f.date_field :date_gteq,
+                class: "w-full rounded-xl border border-primary-border px-4 py-2 text-sm text-black bg-card-bg shadow focus:outline-none focus:ring-2 focus:ring-accent-1 text-secondary-text" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%= turbo_frame_tag "appointments_results_frame" do %>
+    <div class="overflow-x-auto bg-secondary-bg rounded-2xl shadow-md p-4">
+      <table class="min-w-full divide-y divide-primary-border">
+        <thead class="bg-primary-bg">
+          <tr>
+            <th class="px-4 py-2 text-left text-sm font-semibold">Patient</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold">Date & Time</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold">Status</th>
+            <th class="px-4 py-2 text-center text-sm font-semibold">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody id="appointments" class="divide-y divide-primary-border">
+          <% if @appointments.any? %>
+            <%= render @appointments %>
+          <% else %>
+            <tr>
+              <td colspan="4" class="text-center py-6 text-sm text-secondary-text">
+                No appointments found.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+
+        <% if @appointments.respond_to?(:total_pages) && @appointments.total_pages > 1 %>
+          <tfoot>
+            <tr>
+              <td colspan="4" class="py-4 px-6 bg-secondary-bg">
+                <div class="flex justify-center">
+                  <%= paginate @appointments,
+                        params: { turbo_frame: "appointments_results_frame" } %>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+</div>

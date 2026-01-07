@@ -27,3 +27,12 @@ application.register("active-link", ActiveLinkController)
 
 import LiveSearchController from "./live_search_controller"
 application.register("live-search", LiveSearchController)
+
+import SlotFilterController from "./slot_filter_controller"
+application.register("slot-filter", SlotFilterController)
+
+import DatepickerController from "./datepicker_controller"
+application.register("datepicker", DatepickerController)
+
+import TabsController from "./tabs_controller"
+application.register("tabs", TabsController)

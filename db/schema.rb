@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_17_073500) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_29_072511) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -70,17 +70,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_17_073500) do
   create_table "appointments", force: :cascade do |t|
     t.bigint "patient_id", null: false
     t.bigint "doctor_id", null: false
+    t.bigint "manager_id", null: false
     t.bigint "organization_id", null: false
-    t.string "appointmentable_type"
-    t.bigint "appointmentable_id"
-    t.integer "status", default: 0, null: false
+    t.bigint "slot_id"
     t.datetime "date"
+    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["appointmentable_type", "appointmentable_id"], name: "index_appointments_on_appointmentable"
     t.index ["doctor_id"], name: "index_appointments_on_doctor_id"
+    t.index ["manager_id"], name: "index_appointments_on_manager_id"
     t.index ["organization_id"], name: "index_appointments_on_organization_id"
     t.index ["patient_id"], name: "index_appointments_on_patient_id"
+    t.index ["slot_id"], name: "index_appointments_on_slot_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -132,7 +133,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_17_073500) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appointments", "organizations"
+  add_foreign_key "appointments", "slots"
   add_foreign_key "appointments", "users", column: "doctor_id"
+  add_foreign_key "appointments", "users", column: "manager_id"
   add_foreign_key "appointments", "users", column: "patient_id"
   add_foreign_key "slots", "organizations"
   add_foreign_key "slots", "users", column: "doctor_id"

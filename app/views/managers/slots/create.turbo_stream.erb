@@ -1,0 +1,14 @@
+<% if @slot.errors.any? %>
+  <%= turbo_stream.update "modal" do %>
+    <%= render "form", slot: @slot %>
+  <% end %>
+<% else %>
+  <% cell_id = "slot_row_#{@slot.weekday}_#{(@slot.start_time.strftime('%H:%M') + '-' + @slot.end_time.strftime('%H:%M')).parameterize}" %>
+  <%= turbo_stream.append cell_id do %>
+    <%= render partial: "slot_row", locals: { slot: @slot } %>
+  <% end %>
+
+  <%= turbo_stream.update "modal" do %>
+    "" 
+  <% end %>
+<% end %>

@@ -1,8 +1,8 @@
-class Managers::SlotsController < Managers::BaseController
+class Doctors::SlotsController < Doctors::BaseController
   before_action :find_and_authorize_slot, only: %i[edit update destroy]
 
   def index
-    @slots = policy_scope(Slot).ordered.page(params[:page]).per(10)
+    @slots = policy_scope(Slot).ordered.page(params[:page]).per(8)
   end
 
   def new
@@ -10,13 +10,13 @@ class Managers::SlotsController < Managers::BaseController
   end
 
   def create
-    @slot = Slot.new(slot_params)
+    @slot = Slot.new(slot_params.merge(doctor: current_user))
     authorize @slot
 
     if @slot.save
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to managers_slots_path, notice: "Slot created successfully" }
+        format.html { redirect_to doctors_slots_path, notice: "Slot created successfully" }
       end
     else
       respond_to do |format|
@@ -32,11 +32,11 @@ class Managers::SlotsController < Managers::BaseController
     if @slot.update(slot_params)
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to managers_slots_path, notice: "Slot updated successfully" }
+        format.html { redirect_to doctors_slots_path, notice: "Slot updated successfully" }
       end
     else
       respond_to do |format|
-        format.turbo_stream { render :edit, status: :unprocessable_entity }
+        format.turbo_stream
         format.html { render :edit, status: :unprocessable_entity }
       end
     end
@@ -46,7 +46,7 @@ class Managers::SlotsController < Managers::BaseController
     @slot.destroy
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to managers_slots_path, notice: "Slot deleted successfully" }
+      format.html { redirect_to doctors_slots_path, notice: "Slot deleted" }
     end
   end
 
@@ -58,6 +58,6 @@ class Managers::SlotsController < Managers::BaseController
   end
 
   def slot_params
-    params.require(:slot).permit(:doctor_id, :weekday, :start_time, :end_time, :is_recurring)
+    params.require(:slot).permit(:weekday, :start_time, :end_time, :is_recurring)
   end
 end

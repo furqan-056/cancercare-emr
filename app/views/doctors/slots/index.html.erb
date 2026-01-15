@@ -1,0 +1,49 @@
+<h1 class="text-3xl font-bold mb-6 text-primary-text">My Slots - Weekly View</h1>
+
+<%= link_to "New Slot", new_doctors_slot_path, data: { turbo_frame: "modal" }, class: "bg-accent-1 hover:bg-accent-1-hover text-primary-bg px-5 py-2 rounded mb-4 inline-block font-semibold" %>
+
+<div class="overflow-x-auto">
+  <table class="w-full border border-primary-border table-fixed text-primary-text">
+    <thead>
+      <tr class="bg-secondary-bg text-secondary-text">
+        <th class="p-3 border border-primary-border text-left">Time / Day</th>
+        <% Slot.weekdays.keys.unshift("sunday").uniq.each do |day| %>
+          <th class="p-3 border border-primary-border text-center"><%= day.titleize %></th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% my_slots = @slots.where(doctor_id: current_user.id).order(:start_time) %>
+      <% time_ranges = my_slots.map { |s| "#{s.start_time.strftime('%H:%M')} - #{s.end_time.strftime('%H:%M')}" }.uniq %>
+
+      <% time_ranges.each do |time_range| %>
+        <tr class="border-t border-primary-border hover:bg-hover-bg">
+          <td class="p-3 font-semibold border border-primary-border text-primary-text whitespace-nowrap">
+            <%= time_range %>
+          </td>
+
+          <% Slot.weekdays.keys.unshift("sunday").uniq.each do |day| %>
+            <td class="p-3 border border-primary-border align-top bg-primary-bg" id="slot_row_<%= day %>_<%= time_range.parameterize %>">
+              <% slots_for_day_time = my_slots.select do |s|
+                   s.weekday.to_s == day.to_s &&
+                   "#{s.start_time.strftime('%H:%M')} - #{s.end_time.strftime('%H:%M')}" == time_range
+                 end %>
+
+              <% slots_for_day_time.each do |slot| %>
+                <%= render partial: "slot_row", locals: { slot: slot } %>
+              <% end %>
+
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @slots.total_pages > 1 %>
+    <div class="mt-4 flex justify-center">
+      <%= paginate @slots, params: { turbo_frame: "slots_table" } %>
+    </div>
+  <% end %>
+</div>

@@ -23,19 +23,10 @@
             <%= time_range %>
           </td>
 
-          <% Slot.weekdays.keys.unshift("sunday").uniq.each do |day| %>
-            <td class="p-3 border border-primary-border align-top bg-primary-bg" id="slot_row_<%= day %>_<%= time_range.parameterize %>">
-              <% slots_for_day_time = my_slots.select do |s|
-                   s.weekday.to_s == day.to_s &&
-                   "#{s.start_time.strftime('%H:%M')} - #{s.end_time.strftime('%H:%M')}" == time_range
-                 end %>
-
-              <% slots_for_day_time.each do |slot| %>
-                <%= render partial: "slot_row", locals: { slot: slot } %>
-              <% end %>
-
-            </td>
+          <% weekdays_for_table.each do |day| %>
+            <%= render_all_slots_td(my_slots, day, time_range) %>
           <% end %>
+
         </tr>
       <% end %>
     </tbody>

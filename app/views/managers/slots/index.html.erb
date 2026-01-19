@@ -17,9 +17,7 @@
     </thead>
 
     <tbody>
-      <% all_slots = @slots.order(:start_time) %>
-      <% time_ranges = all_slots.map { |s| "#{s.start_time.strftime('%H:%M')} - #{s.end_time.strftime('%H:%M')}" }.uniq %>
-      <% display_limit = 3 %>
+      <% slot_data = prepare_slots_for_table(@slots); all_slots = slot_data[:all_slots]; time_ranges = slot_data[:time_ranges]; display_limit = slot_data[:display_limit] %>
 
       <% time_ranges.each do |time_range| %>
         <tr class="border-t border-primary-border hover:bg-hover-bg">
@@ -27,33 +25,8 @@
             <%= time_range %>
           </td>
 
-          <% Slot.weekdays.keys.unshift("sunday").uniq.each do |day| %>
-            <td class="p-3 border border-primary-border align-top bg-primary-bg" id="slot_row_<%= day %>_<%= time_range.parameterize %>">
-
-              <% slots_for_day_time = @slots.select do |s|
-                   s.weekday.to_s == day.to_s &&
-                   "#{s.start_time.strftime('%H:%M')} - #{s.end_time.strftime('%H:%M')}" == time_range
-                 end %>
-
-              <% slots_for_day_time.first(display_limit).each do |slot| %>
-                <%= render partial: "slot_row", locals: { slot: slot } %>
-              <% end %>
-
-              <% if slots_for_day_time.size > display_limit %>
-                <div x-data="{ open: false }" class="mt-1">
-                  <button @click="open = !open" class="text-xs text-accent-1 font-medium focus:outline-none">
-                    +<%= slots_for_day_time.size - display_limit %> more
-                  </button>
-
-                  <div x-show="open" x-transition class="mt-1 space-y-1">
-                    <% slots_for_day_time.drop(display_limit).each do |slot| %>
-                      <%= render partial: "slot_row", locals: { slot: slot } %>
-                    <% end %>
-                  </div>
-                </div>
-              <% end %>
-
-            </td>
+          <% weekdays_for_table.each do |day| %>
+            <%= render_slots_td(@slots, day, time_range, display_limit: display_limit) %>
           <% end %>
         </tr>
       <% end %>

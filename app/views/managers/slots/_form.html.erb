@@ -26,12 +26,8 @@
             <% end %>
 
             <div class="flex justify-end mb-4">
-              <a href="#"
-                 data-action="modal#close"
-                 class="theme-text-field hover:text-red-500 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+              <a href="#" data-action="modal#close" class="theme-text-field hover:text-red-500 transition">
+                <i class="fas fa-times"></i>
               </a>
             </div>
 
@@ -40,19 +36,12 @@
 
               <div>
                 <%= f.label :doctor_id, "Doctor", class: "block text-sm font-medium" %>
-                <%= f.collection_select :doctor_id,
-                      User.where(type: 'Doctor', organization_id: current_user.organization_id),
-                      :id, :first_name,
-                      { prompt: "Select Doctor" },
-                      class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 theme-text-field" %>
+                <%= doctor_select_options(f) %>
               </div>
 
               <div>
                 <%= f.label :weekday, "Weekday", class: "block text-sm font-medium" %>
-                <%= f.select :weekday,
-                      Slot.weekdays.keys.map { |d| [d.titleize, d] },
-                      { prompt: "Select Day" },
-                      class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 theme-text-field" %>
+                <%= weekday_select_options(f) %>
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

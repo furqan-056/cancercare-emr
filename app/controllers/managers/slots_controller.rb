@@ -52,11 +52,6 @@ class Managers::SlotsController < Managers::BaseController
 
   private
 
-  def find_and_authorize_slot
-    @slot = policy_scope(Slot).find(params[:id])
-    authorize @slot
-  end
-
   def slot_params
     params.require(:slot).permit(:doctor_id, :weekday, :start_time, :end_time, :is_recurring)
   end

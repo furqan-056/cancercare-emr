@@ -1,0 +1,25 @@
+<% if @slot_exception.errors.any? %>
+  <%= turbo_stream.update "modal" do %>
+    <%= render "form", slot_exception: @slot_exception %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.replace "slot_exception_#{@slot_exception.id}" do %>
+    <%= render partial: "slot_exception_row", locals: { slot_exception: @slot_exception } %>
+  <% end %>
+
+  <%= turbo_stream.update "modal" do %>
+    ""
+  <% end %>
+
+  <%= turbo_stream.append "flash-container" do %>
+    <div
+      data-controller="flash"
+      class="relative bg-green-500 text-white px-5 py-3 rounded-2xl shadow-lg flex items-center justify-between animate-slide-in-right transition-opacity duration-500">
+      <span>Slot Exception created successfully</span>
+
+      <button data-action="click->flash#close" class="ml-4 text-white/80 hover:text-white cursor-pointer">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  <% end %>
+<% end %>

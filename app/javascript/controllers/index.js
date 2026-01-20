@@ -27,3 +27,6 @@ application.register("active-link", ActiveLinkController)
 
 import LiveSearchController from "./live_search_controller"
 application.register("live-search", LiveSearchController)
+
+import SlotExceptionController from "./slot_exception_controller"
+application.register("slot-exception", SlotExceptionController)

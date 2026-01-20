@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   belongs_to :organization, optional: true
-  has_many :slots, foreign_key: :doctor_id, dependent: :destroy
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   enum :role, { manager: 0, doctor: 1, patient: 2 }
@@ -29,6 +28,10 @@ class User < ApplicationRecord
 
   def self.ransackable_associations(auth_object = nil)
     ["organization"]
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
   end
 
   private

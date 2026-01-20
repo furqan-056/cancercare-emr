@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_14_065027) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_15_113955) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -78,6 +78,19 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_14_065027) do
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
+  create_table "slot_exceptions", force: :cascade do |t|
+    t.bigint "slot_id"
+    t.bigint "doctor_id"
+    t.date "exception_date", null: false
+    t.integer "exception_type", default: 0
+    t.string "reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctor_id"], name: "index_slot_exceptions_on_doctor_id"
+    t.index ["slot_id", "exception_date"], name: "index_slot_exceptions_on_slot_id_and_exception_date", unique: true
+    t.index ["slot_id"], name: "index_slot_exceptions_on_slot_id"
+  end
+
   create_table "slots", force: :cascade do |t|
     t.bigint "doctor_id", null: false
     t.integer "weekday", null: false
@@ -114,6 +127,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_14_065027) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "slot_exceptions", "slots"
+  add_foreign_key "slot_exceptions", "users", column: "doctor_id"
   add_foreign_key "slots", "users", column: "doctor_id"
   add_foreign_key "users", "organizations"
 end

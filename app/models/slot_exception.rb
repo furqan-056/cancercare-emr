@@ -7,7 +7,7 @@ class SlotException < ApplicationRecord
 
   validates :reason, presence: true
   validates :exception_date, uniqueness: { scope: :slot_id, message: "already has an exception for this specific slot" }, if: -> { slot_id.present? }
-  before_validation :set_exception_type_for_doctor, on: :create
+  before_create :assign_doctor_unavailable_type
 
   scope :for_date, ->(date) { where(exception_date: date) }
   scope :for_doctor, ->(doctor_id) { where(doctor_id: doctor_id) }
@@ -28,10 +28,7 @@ class SlotException < ApplicationRecord
 
   private
 
-def set_exception_type_for_doctor
-    if current_user&.doctor?
-      self.exception_type = "doctor_unavailable"
-      self.doctor_id = current_user.id
-    end
+  def assign_doctor_unavailable_type
+    self.exception_type = :doctor_unavailable if doctor.present?
   end
 end

@@ -1,0 +1,74 @@
+<%= turbo_frame_tag "modal" do %>
+  <div id="modal"
+       data-controller="modal"
+       data-action="click->modal#closeOnOutsideClick"
+       class="hidden fixed inset-0 z-50 overflow-y-auto bg-opacity-50 backdrop-blur-md"
+       role="dialog"
+       aria-modal="true">
+
+    <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-lg md:max-w-4xl w-150">
+        <div class="p-6 lg:p-8 bg-card-bg theme-text-field">
+          <%= form_with model: form_model, url: form_url, data: { turbo_frame: "modal" } do |f| %>
+
+            <% if form_model.errors.any? %>
+              <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md">
+                <h2 class="font-bold mb-2">
+                  <%= pluralize(form_model.errors.count, "error") %> prevented this slot from being saved:
+                </h2>
+                <ul class="list-disc list-inside">
+                  <% form_model.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <div class="flex justify-end mb-4">
+              <a href="#" data-action="modal#close" class="theme-text-field hover:text-red-500 transition">
+                <i class="fas fa-times"></i>
+              </a>
+            </div>
+
+            <div class="space-y-6">
+              <h3 class="text-xl font-semibold mb-4">Slot Details</h3>
+
+              <% if show_doctor_field %>
+                <div>
+                  <%= f.label :doctor_id, "Doctor", class: "block text-sm font-medium" %>
+                  <%= doctor_select_options(f) %>
+                </div>
+              <% end %>
+
+              <div>
+                <%= f.label :weekday, "Weekday", class: "block text-sm font-medium" %>
+                <%= weekday_select_options(f) %>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <%= f.label :start_time, class: "block text-sm font-medium" %>
+                  <%= f.time_field :start_time, class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 theme-text-field" %>
+                </div>
+                <div>
+                  <%= f.label :end_time, class: "block text-sm font-medium" %>
+                  <%= f.time_field :end_time, class: "block w-full rounded-xl border border-primary-border shadow-sm text-sm p-3 focus:border-accent-1 focus:ring-accent-1 theme-text-field" %>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <%= f.check_box :is_recurring, class: "h-4 w-4 rounded border-primary-border text-accent-1 focus:ring-accent-1 bg-card-bg" %>
+                <%= f.label :is_recurring, "Recurring Weekly", class: "text-sm font-medium" %>
+              </div>
+
+              <div class="pt-5">
+                <%= f.submit form_model.persisted? ? "Update Slot" : "Create Slot",
+                      class: "inline-flex justify-center rounded-xl border border-transparent bg-accent-1 py-3 px-6 text-sm font-medium theme-text-field shadow-lg hover:bg-accent-1-hover focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 cursor-pointer transition duration-200" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

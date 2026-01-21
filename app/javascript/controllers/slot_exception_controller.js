@@ -21,8 +21,7 @@ export default class extends Controller {
     }
 
     const jsDay = new Date(date).getDay()
-    const jsToRailsWeekday = [6, 0, 1, 2, 3, 4, 5]
-    const weekday = jsToRailsWeekday[jsDay]
+    const weekday = jsDay
 
     options.forEach(option => {
       const optionWeekday = parseInt(option.dataset.weekday)

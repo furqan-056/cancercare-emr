@@ -7,9 +7,4 @@ class Managers::BaseController < ApplicationController
     @slot = policy_scope(Slot).find(params[:id])
     authorize @slot
   end
-
-  def find_slot_exception
-    @slot_exception = policy_scope(SlotException).find(params[:id])
-    authorize @slot_exception
-  end
 end

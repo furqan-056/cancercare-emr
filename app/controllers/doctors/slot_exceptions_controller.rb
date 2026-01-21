@@ -12,8 +12,7 @@ class Doctors::SlotExceptionsController < Doctors::BaseController
   end
 
   def create
-    @slot_exception = SlotException.new(slot_exception_params)
-    @slot_exception.current_user = current_user
+    @slot_exception = current_user.slot_exceptions.new(slot_exception_params)
     authorize @slot_exception
 
     if @slot_exception.save
@@ -59,6 +58,11 @@ class Doctors::SlotExceptionsController < Doctors::BaseController
   def show; end
 
   private
+
+  def find_and_authorize_slot_exception
+    @slot_exception = policy_scope(SlotException).find(params[:id])
+    authorize @slot_exception
+  end
 
   def slot_exception_params
     params.require(:slot_exception).permit(:slot_id, :exception_date, :exception_type, :reason)

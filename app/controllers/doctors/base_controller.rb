@@ -12,9 +12,4 @@ class Doctors::BaseController < ApplicationController
     @slot = policy_scope(Slot).find(params[:id])
     authorize @slot
   end
-
-  def find_and_authorize_slot_exception
-    @slot_exception = policy_scope(SlotException).find(params[:id])
-    authorize @slot_exception
-  end
 end

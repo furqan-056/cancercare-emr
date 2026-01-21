@@ -58,6 +58,11 @@ class Managers::SlotExceptionsController < Managers::BaseController
 
   private
 
+  def find_slot_exception
+    @slot_exception = policy_scope(SlotException).find(params[:id])
+    authorize @slot_exception
+  end
+
   def slot_exception_params
     params.require(:slot_exception).permit(:slot_id, :doctor_id, :exception_date, :exception_type, :reason)
   end

@@ -1,7 +1,6 @@
 class Slot < ApplicationRecord
   belongs_to :doctor, class_name: "User"
   has_many :slot_exceptions, dependent: :destroy
-  has_many :appointments
 
   enum :weekday, { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 }
 

@@ -26,7 +26,7 @@ class SlotExceptionPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       if user.manager?
-        scope.joins(:doctor).where(users: { organization_id: user.organization_id })
+        scope.all
       elsif user.doctor?
         scope.where(doctor_id: user.id)
       else

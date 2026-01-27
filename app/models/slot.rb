@@ -1,4 +1,5 @@
 class Slot < ApplicationRecord
+  has_paper_trail
   belongs_to :doctor, class_name: "User"
   has_many :slot_exceptions, dependent: :destroy
 

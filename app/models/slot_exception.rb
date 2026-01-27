@@ -23,7 +23,7 @@ class SlotException < ApplicationRecord
   end
 
   def self.blocked?(slot_id:, doctor_id:, date:)
-    exists?(["(slot_id = ? OR slot_id IS NULL) AND (doctor_id IS NULL OR doctor_id = ?) AND exception_date = ?", slot_id, doctor_id, date])
+    where(exception_date: date).where("slot_id = ? OR slot_id IS NULL", slot_id).where("doctor_id IS NULL OR doctor_id = ?", doctor_id).exists?
   end
 
   private

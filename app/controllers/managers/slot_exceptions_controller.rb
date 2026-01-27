@@ -8,6 +8,7 @@ class Managers::SlotExceptionsController < Managers::BaseController
 
   def new
     @slot_exception = SlotException.new
+    authorize @slot_exception
   end
 
   def create
@@ -41,7 +42,7 @@ class Managers::SlotExceptionsController < Managers::BaseController
       end
     else
       respond_to do |format|
-        format.turbo_stream { render :edit, status: :unprocessable_entity }
+        format.turbo_stream
         format.html { render :edit, status: :unprocessable_entity }
       end
     end

@@ -7,6 +7,7 @@ class Doctors::SlotsController < Doctors::BaseController
 
   def new
     @slot = Slot.new
+    authorize @slot
   end
 
   def create

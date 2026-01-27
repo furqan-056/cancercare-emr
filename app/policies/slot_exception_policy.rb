@@ -3,6 +3,10 @@ class SlotExceptionPolicy < ApplicationPolicy
     user.manager? || user.doctor?
   end
 
+  def new
+    index?
+  end
+
   def create?
     index?
   end

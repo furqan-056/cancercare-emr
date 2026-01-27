@@ -7,6 +7,7 @@ class Managers::SlotsController < Managers::BaseController
 
   def new
     @slot = Slot.new
+    authorize @slot
   end
 
   def create
@@ -36,7 +37,7 @@ class Managers::SlotsController < Managers::BaseController
       end
     else
       respond_to do |format|
-        format.turbo_stream { render :edit, status: :unprocessable_entity }
+        format.turbo_stream
         format.html { render :edit, status: :unprocessable_entity }
       end
     end

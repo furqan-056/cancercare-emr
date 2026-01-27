@@ -2,7 +2,7 @@ class Managers::SlotExceptionsController < Managers::BaseController
   before_action :find_slot_exception, only: %i[edit update destroy show]
 
   def index
-    @q = SlotException.ransack(params[:q])
+    @q = policy_scope(SlotException).ransack(params[:q])
     @slot_exceptions = @q.result.includes(:doctor, :slot).recent_first.page(params[:page]).per(10)
   end
 

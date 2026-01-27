@@ -11,3 +11,5 @@
 <%= turbo_stream.update "modal" do %>
   "" 
 <% end %>
+
+<%= render "shared/turbo_flash", message: "Slot updated successfully", type: "green" %>

@@ -18,13 +18,8 @@ class Slot < ApplicationRecord
   private
 
   def no_overlapping_slots
-    return unless doctor && weekday && start_time && end_time
-
     overlapping_slot = Slot.where(doctor_id: doctor.id, weekday: weekday).where("start_time < ? AND end_time > ?", end_time, start_time).exists?
-
-    if overlapping_slot
-      errors.add(:base, "This slot overlaps with another slot for the same doctor")
-    end
+    errors.add(:base, "This slot overlaps with another slot for the same doctor") if overlapping_slot
   end
 
   def end_time_after_start_time

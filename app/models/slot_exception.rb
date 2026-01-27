@@ -1,4 +1,5 @@
 class SlotException < ApplicationRecord
+  has_paper_trail
   belongs_to :slot, optional: true
   belongs_to :doctor, class_name: "User", optional: true
 

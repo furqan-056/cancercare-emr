@@ -3,7 +3,6 @@ class SlotException < ApplicationRecord
   belongs_to :doctor, class_name: "User", optional: true
 
   enum :exception_type, { holiday: 0, doctor_unavailable: 1, blocked_date: 2 }
-  attr_accessor :current_user
 
   validates :reason, presence: true
   validates :exception_date, uniqueness: { scope: :slot_id, message: "already has an exception for this specific slot" }, if: -> { slot_id.present? }

@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   include Pundit::Authorization
   allow_browser versions: :modern
   before_action :set_current_organization
+  before_action :set_paper_trail_whodunnit
 
   def pundit_user
     if defined?(current_admin) && current_admin

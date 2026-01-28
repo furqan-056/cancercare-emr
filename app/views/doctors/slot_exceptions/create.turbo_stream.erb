@@ -1,0 +1,17 @@
+<% if @slot_exception.errors.any? %>
+  <%= turbo_stream.update "modal" do %>
+    <%= render "form", slot_exception: @slot_exception %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.prepend "slot_exceptions_tbody" do %>
+    <%= render "slot_exception_row", slot_exception: @slot_exception %>
+  <% end %>
+
+  <%= turbo_stream.remove "no_records" %>
+
+  <%= turbo_stream.replace "modal" do %>
+    <turbo-frame id="modal"></turbo-frame>
+  <% end %>
+
+  <%= render "shared/turbo_flash", message: "Slot Exception created successfully", type: "green" %>
+<% end %>

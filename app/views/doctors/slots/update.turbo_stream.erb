@@ -1,0 +1,16 @@
+<% old_cell_id = "slot_row_#{@slot.weekday_before_last_save}_#{(@slot.start_time_before_last_save.strftime('%H:%M') + '-' + @slot.end_time_before_last_save.strftime('%H:%M')).parameterize}" rescue nil %>
+<% new_cell_id = "slot_row_#{@slot.weekday}_#{(@slot.start_time.strftime('%H:%M') + '-' + @slot.end_time.strftime('%H:%M')).parameterize}" %>
+
+<% if old_cell_id && old_cell_id != new_cell_id %>
+  <%= turbo_stream.remove dom_id(@slot) %>
+<% end %>
+
+<%= turbo_stream.append new_cell_id do %>
+  <%= render partial: "slot_row", locals: { slot: @slot } %>
+<% end %>
+
+<%= turbo_stream.update "modal" do %>
+  ""
+<% end %>
+
+<%= render "shared/turbo_flash", message: "Slot updated successfully", type: "green" %>

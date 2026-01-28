@@ -1,0 +1,82 @@
+<div class="p-6 lg:p-8">
+
+  <div class="sm:flex sm:items-center border-b border-primary-border pb-4 mb-6">
+    <div class="sm:flex-auto">
+      <h1 class="text-3xl font-bold tracking-tight text-secondary-text">
+        Slot Exceptions
+      </h1>
+      <p class="mt-2 text-sm text-secondary-text">
+        Manage your slot exceptions.
+      </p>
+    </div>
+
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <%= link_to "New Exception", new_doctors_slot_exception_path, data: { turbo_frame: "modal" }, class: "block rounded-xl bg-accent-1 px-4 py-2 text-center text-sm font-semibold text-white shadow hover:bg-accent-1-hover transition" %>
+    </div>
+  </div>
+
+  <div class="mb-6">
+    <%= search_form_for @q, url: doctors_slot_exceptions_path, method: :get,
+          html: {
+            data: {
+              turbo_frame: "slot_exceptions_list",
+              controller: "live-search",
+              live_search_target: "form",
+              action: "input->live-search#search"
+            }
+          }, class: "flex flex-wrap gap-4 items-center" do |f| %>
+
+      <div class="flex-1 min-w-[150px]">
+        <%= f.search_field :exception_date_eq,
+              type: "date",
+              placeholder: "Filter by Date",
+              class: "w-50 rounded-xl border border-primary-border p-3 text-sm bg-card-bg text-secondary-text focus:ring-accent-1 focus:border-accent-1" %>
+      </div>
+    <% end %>
+  </div>
+
+  <%= turbo_frame_tag "slot_exceptions_list" do %>
+    <div class="overflow-x-auto rounded-xl border border-primary-border shadow">
+      <table class="min-w-full divide-y divide-primary-border">
+        <thead class="bg-secondary-bg">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-semibold">Date</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold">Type</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold">Slot</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold">Doctor</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold">Reason</th>
+            <th class="px-6 py-3 text-right text-sm font-semibold">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody id="slot_exceptions_tbody" class="divide-y divide-primary-border bg-card-bg">
+          <% if @slot_exceptions.any? %>
+            <% @slot_exceptions.each do |slot_exception| %>
+              <%= render "slot_exception_row", slot_exception: slot_exception %>
+            <% end %>
+          <% else %>
+            <tr id="no_records">
+              <td colspan="6" class="py-6 text-center text-sm text-secondary-text">
+                No slot exceptions found.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+
+        <% if @slot_exceptions.respond_to?(:total_pages) && @slot_exceptions.total_pages > 1 %>
+          <tfoot>
+            <tr>
+              <td colspan="6" class="py-4 bg-card-bg">
+                <div class="flex justify-center">
+                  <%= paginate @slot_exceptions, params: { turbo_frame: "slot_exceptions_list" } %>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+</div>
+
+<%= turbo_frame_tag "modal" %>

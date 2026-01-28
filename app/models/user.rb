@@ -30,6 +30,10 @@ class User < ApplicationRecord
     ["organization"]
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   private
 
   def sync_type_with_role

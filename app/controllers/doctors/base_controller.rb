@@ -7,4 +7,9 @@ class Doctors::BaseController < ApplicationController
   def ensure_doctor!
     redirect_to root_path, alert: "Access denied" unless current_user&.doctor?
   end
+
+  def find_and_authorize_slot
+    @slot = policy_scope(Slot).find(params[:id])
+    authorize @slot
+  end
 end

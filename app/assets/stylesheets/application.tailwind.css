@@ -138,3 +138,27 @@ html.light .hover\:bg-hover-bg:hover {
 .hover\:bg-accent-1-hover:hover { background-color: var(--color-accent-1-hover) !important; }
 .bg-accent-2 { background-color: var(--color-accent-2) !important; }
 .hover\:bg-accent-2-hover:hover { background-color: var(--color-accent-2-hover) !important; }
+
+.theme-text-field {
+  color: var(--color-main-area-text);
+}
+
+.theme-text-field input,
+.theme-text-field select,
+.theme-text-field textarea {
+  color: var(--color-main-area-text);
+  background-color: var(--color-card-bg);
+  border-color: var(--color-primary-border);
+}
+
+html:not(.light) .theme-text-field {
+  color: var(--color-primary-text);
+}
+
+html:not(.light) .theme-text-field input,
+html:not(.light) .theme-text-field select,
+html:not(.light) .theme-text-field textarea {
+  color: var(--color-primary-text);
+  background-color: var(--color-card-bg);
+  border-color: var(--color-primary-border);
+}

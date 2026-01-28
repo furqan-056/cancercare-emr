@@ -19,11 +19,15 @@ Rails.application.routes.draw do
       get 'dashboard', to: 'dashboards#index', as: 'dashboard'
       resources :doctors
       resources :patients
+      resources :slots
+      resources :slot_exceptions
     end
 
     namespace :doctors do
       get 'dashboard', to: 'dashboards#index', as: 'dashboard'
       resources :patients
+      resources :slots
+      resources :slot_exceptions
     end
 
     namespace :patients do

@@ -1,0 +1,15 @@
+<% new_cell_id = "slot_row_#{@slot.weekday}_#{(@slot.start_time.strftime('%H:%M') + '-' + @slot.end_time.strftime('%H:%M')).parameterize}" %>
+
+<%= turbo_stream.remove dom_id(@slot) %>
+
+<%= turbo_stream.update new_cell_id do %>
+  <% slots_for_day_time = Slot.where(weekday: @slot.weekday, start_time: @slot.start_time, end_time: @slot.end_time) %>
+  <% slots_for_day_time.each do |slot| %>
+    <%= render partial: "slot_row", locals: { slot: slot } %>
+  <% end %>
+<% end %>
+<%= turbo_stream.update "modal" do %>
+  "" 
+<% end %>
+
+<%= render "shared/turbo_flash", message: "Slot updated successfully", type: "green" %>

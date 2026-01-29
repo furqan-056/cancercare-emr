@@ -5,6 +5,8 @@ class DoctorPolicy < ApplicationPolicy
 
       if user.manager?
         scope.where(organization_id: user.organization_id)
+      elsif user.patient?
+        scope.where(organization_id: user.organization_id)
       else
         scope.none
       end

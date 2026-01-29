@@ -1,0 +1,3 @@
+<%= turbo_frame_tag "appointment_form" do %>
+  <%= render "form", appointment: @appointment, doctor: @doctor, exceptions: @exceptions, form_url: patients_doctor_appointment_path(@doctor, @appointment) %>
+<% end %>

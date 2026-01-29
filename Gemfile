@@ -73,3 +73,4 @@ gem 'jquery-rails'
 
 gem "kaminari"
 gem 'ransack'
+gem 'paper_trail'

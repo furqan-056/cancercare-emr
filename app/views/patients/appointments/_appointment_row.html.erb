@@ -1,0 +1,53 @@
+<tr id="<%= dom_id(appointment) %>" class="hover:bg-hover-bg/10 transition-colors group">
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-hover-bg flex items-center justify-center text-black border border-primary-border">
+        <i class="fa-solid fa-user-doctor"></i>
+      </div>
+      <div class="text-sm font-bold text-primary-text">
+        Dr. <%= appointment.doctor.full_name %>
+      </div>
+    </div>
+  </td>
+
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div class="flex flex-col gap-1">
+      <span class="text-sm font-semibold text-primary-text flex items-center gap-2">
+        <i class="fa-solid fa-calendar-day text-accent-1 text-xs"></i>
+        <%= appointment.appointment_date.strftime('%b %d, %Y') %>
+      </span>
+      <span class="text-xs text-secondary-text flex items-center gap-2">
+        <i class="fa-solid fa-clock text-accent-1 text-[10px]"></i>
+        <%= appointment.slot&.display_name || "No Slot" %>
+      </span>
+    </div>
+  </td>
+
+  <td class="px-6 py-4">
+    <div class="text-sm text-secondary-text max-w-xs truncate" title="<%= appointment.reason %>">
+      <%= appointment.reason %>
+    </div>
+  </td>
+
+  <td class="px-6 py-4 whitespace-nowrap">
+    <% meta = appointment_status_meta(appointment.status) %>
+    <span class="px-3 py-1 inline-flex items-center gap-1.5 text-[10px] leading-5 font-black rounded-full border uppercase tracking-tighter <%= meta[:classes] %>">
+      <i class="fa-solid <%= meta[:icon] %>"></i>
+      <%= appointment.status.titleize %>
+    </span>
+  </td>
+
+  <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium flex justify-center gap-2">
+    <% if appointment.pending? %>
+      <%= link_to edit_patients_doctor_appointment_path(appointment.doctor, appointment), data: { turbo_frame: "appointment_form" }, class: "inline-flex items-center gap-1 text-blue-500 hover:text-blue-400 px-3 py-1.5 rounded-lg transition-all" do %>
+        <i class="fa-solid fa-pen-to-square fa-lg"></i>
+      <% end %>
+
+      <%= button_to patients_appointment_path(appointment), method: :delete, form: { data: { turbo_confirm: "Are you sure you want to cancel this appointment?" } }, class: "inline-flex items-center gap-1 text-red-500 hover:text-red-400 bg-red-500/10 hover:bg-red-500/20 px-3 py-1.5 rounded-lg transition-all" do %>
+        <i class="fa-solid fa-trash-can fa-lg"></i>
+      <% end %>
+    <% else %>
+      <span class="text-secondary-text opacity-40 italic text-xs">No Actions</span>
+    <% end %>
+  </td>
+</tr>

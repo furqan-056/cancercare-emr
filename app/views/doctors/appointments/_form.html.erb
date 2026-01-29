@@ -1,0 +1,100 @@
+<div id="modal"
+     data-controller="modal"
+     data-action="click->modal#closeOnOutsideClick"
+     class="hidden fixed inset-0 z-50 overflow-y-auto bg-opacity-50 backdrop-blur-md"
+     aria-labelledby="modal-title"
+     role="dialog"
+     aria-modal="true">
+
+  <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+
+    <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-lg md:max-w-4xl w-full">
+
+      <div class="p-6 lg:p-8 bg-card-bg">
+        <%= form_with model: [:doctors, appointment], url: appointment.persisted? ? doctors_appointment_path(appointment) : doctors_appointments_path, data: { turbo_frame: "appointment_form", controller: "appointment-form" } do |f| %>
+
+          <% if appointment.errors.any? %>
+            <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md">
+              <h2 class="font-bold mb-2">
+                <%= pluralize(appointment.errors.count, "error") %> prevented this appointment from being saved:
+              </h2>
+              <ul class="list-disc list-inside">
+                <% appointment.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="flex justify-end mb-4">
+            <a href="#"
+               data-action="modal#close"
+               class="text-secondary-text hover:text-red-500 transition">
+              <i class="fas fa-times"></i>
+            </a>
+          </div>
+
+          <div class="space-y-6">
+
+            <h3 class="text-xl font-semibold text-secondary-text mb-4">
+              Appointment Details
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              <div>
+                <%= f.label :patient_id, "Patient", class: "block text-sm font-medium text-secondary-text" %>
+                <%= f.collection_select :patient_id, User.patient, :id, :full_name,
+                      { prompt: "Select Patient" },
+                      class: "block w-full rounded-xl border border-primary-border shadow-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
+              </div>
+
+              <div>
+                <%= f.label :status, class: "block text-sm font-medium text-secondary-text" %>
+                <%= f.select :status,
+                      Appointment.statuses.keys.map { |s| [s.titleize, s] },
+                      {},
+                      class: "block w-full rounded-xl border border-primary-border shadow-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text" %>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              <div>
+                <%= f.label :appointment_date, class: "block text-sm font-medium text-secondary-text" %>
+                <%= f.date_field :appointment_date,
+                      value: appointment.appointment_date,
+                      class: "block w-full rounded-xl border border-primary-border shadow-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text",
+                      data: { target: "appointment-form.date" } %>
+              </div>
+
+              <div>
+                <%= f.label :slot_id, "Slot", class: "block text-sm font-medium text-secondary-text" %>
+                <select name="appointment[slot_id]"
+                        id="appointment_slot_id"
+                        data-target="appointment-form.slot"
+                        class="block w-full rounded-xl border border-primary-border shadow-sm p-3 focus:border-accent-1 focus:ring-accent-1 bg-card-bg text-secondary-text">
+                  <option value="">Select Slot</option>
+                  <% appointment.doctor&.slots&.each do |slot| %>
+                    <option value="<%= slot.id %>"
+                            data-weekday="<%= slot.weekday_before_type_cast %>"
+                            data-doctor-id="<%= slot.doctor_id %>"
+                            <%= "selected" if appointment.slot_id == slot.id %>>
+                      <%= slot.display_name %>
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+
+            </div>
+
+            <div class="pt-5">
+              <%= f.submit appointment.persisted? ? "Update Appointment" : "Create Appointment",
+                    class: "inline-flex justify-center rounded-xl border border-transparent bg-accent-1 py-3 px-6 text-sm font-medium text-primary-text shadow-lg hover:bg-accent-1-hover focus:outline-none focus:ring-2 focus:ring-accent-1 focus:ring-offset-2 cursor-pointer transition duration-200" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

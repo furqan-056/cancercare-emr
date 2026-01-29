@@ -1,0 +1,37 @@
+<h2>Appointment Updated by Patient</h2>
+
+<p>Dear <strong><%= @appointment.doctor.full_name %></strong>,</p>
+
+<p>The patient <strong><%= @appointment.patient.full_name %></strong> has updated your appointment. Please find the updated details below:</p>
+
+<hr class="my-2">
+
+<p>
+  <strong>Doctor:</strong> <%= @appointment.doctor.full_name %> (<%= @appointment.doctor.specialization %>)<br>
+  <strong>Patient:</strong> <%= @appointment.patient.full_name %><br>
+  <strong>Date:</strong> <%= @appointment.appointment_date.strftime("%A, %d %B %Y") %><br>
+  <strong>Time:</strong> 
+  <% if @appointment.slot %>
+    <%= @appointment.slot.start_time.strftime("%I:%M %p") %>
+    <% if @appointment.slot.end_time.present? %>
+      - <%= @appointment.slot.end_time.strftime("%I:%M %p") %>
+    <% end %>
+  <% else %>
+    Not assigned
+  <% end %><br>
+  <strong>Status:</strong> <%= @appointment.status.titleize %>
+</p>
+
+<% if @appointment.reason.present? %>
+  <p><strong>Reason for Appointment:</strong> <%= @appointment.reason %></p>
+<% else %>
+  <p><strong>Reason for Appointment:</strong> Not provided</p>
+<% end %>
+
+<p>Please make sure to review this update. If you need to contact the patient for any changes or confirmations, please do so promptly.</p>
+
+<p>Thank you for your attention and continued care.</p>
+
+<hr class="my-2">
+
+<p><em>This is an automated notification. Please do not reply to this email.</em></p>

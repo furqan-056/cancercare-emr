@@ -1,0 +1,4 @@
+<h2 class="text-xl font-bold mb-4">Edit Appointment</h2>
+<%= turbo_frame_tag "appointment_form" do %>
+  <%= render "form", appointment: @appointment, slots: @slots %>
+<% end %>

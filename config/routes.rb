@@ -1,9 +1,15 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   devise_for :users
   root "pages#home"
 
   constraints AdminSubdomainConstraint do
     devise_for :admins
+
+    authenticate :admin do
+      mount Sidekiq::Web => '/admin/background-jobs'
+    end
 
     namespace :admins do
       get 'dashboard', to: 'dashboards#index', as: 'dashboard'

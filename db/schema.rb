@@ -80,7 +80,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_27_080627) do
     t.index ["doctor_id"], name: "index_appointments_on_doctor_id"
     t.index ["patient_id", "appointment_date"], name: "index_appointments_on_patient_id_and_appointment_date"
     t.index ["patient_id"], name: "index_appointments_on_patient_id"
-    t.index ["slot_id", "appointment_date"], name: "index_appointments_on_slot_id_and_appointment_date", unique: true
+    t.index ["slot_id", "appointment_date"], name: "index_appointments_on_slot_and_date_active", unique: true, where: "(status = ANY (ARRAY[0, 1]))"
     t.index ["slot_id"], name: "index_appointments_on_slot_id"
   end
 

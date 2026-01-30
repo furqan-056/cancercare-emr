@@ -74,3 +74,5 @@ gem 'jquery-rails'
 gem "kaminari"
 gem 'ransack'
 gem 'paper_trail'
+gem 'sidekiq', '~> 7.2'
+gem 'connection_pool', '~> 2.4.1'

@@ -2,6 +2,8 @@
   <%= render "patients/appointments/appointment_row", appointment: @appointment %>
 <% end %>
 
+<%= turbo_stream.update "appointment_form", "" %>
+
 <%= turbo_stream.append "flash-container" do %>
   <div
     data-controller="flash"

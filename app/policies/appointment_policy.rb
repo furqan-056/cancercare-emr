@@ -12,7 +12,7 @@ class AppointmentPolicy < ApplicationPolicy
   end
 
   def update?
-    record.patient == user || record.doctor == user
+    user.patient? || user.doctor?
   end
 
   def destroy?

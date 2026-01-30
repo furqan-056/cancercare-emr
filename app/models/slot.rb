@@ -14,19 +14,15 @@ class Slot < ApplicationRecord
 
   def available_on?(date)
     return false unless is_recurring
+
     return false unless date.wday == self.class.weekdays[weekday]
 
     return false if slot_exceptions.any? do |e|
-      e.exception_date == date && e.slot_id.nil? && e.doctor_id == doctor.id
+      e.exception_date == date &&
+      ((e.slot_id.nil? && e.doctor_id == doctor.id) || e.slot_id == id)
     end
 
-    return false if slot_exceptions.any? do |e|
-      e.exception_date == date && e.slot_id == id
-    end
-
-    return false if appointments.any? do |a|
-      a.appointment_date == date && (a.pending? || a.approved?)
-    end
+    return false if appointments.any? { |a| a.appointment_date == date && (a.pending? || a.approved?) }
 
     true
   end

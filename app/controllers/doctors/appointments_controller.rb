@@ -1,5 +1,5 @@
 class Doctors::AppointmentsController < Doctors::BaseController
-  before_action :find_appointment_and_authorize, only: [:show, :edit, :update, :destroy]
+  before_action :find_and_authorize_appointment, only: [:show, :edit, :update, :destroy]
   before_action :load_slots, only: [:edit, :update]
 
   def index
@@ -8,11 +8,16 @@ class Doctors::AppointmentsController < Doctors::BaseController
   end
 
   def edit; end
+
   def show; end
 
   def update
     if @appointment.update(appointment_params)
-       @appointment.send_status_email if @appointment.saved_change_to_status?
+
+      if @appointment.saved_change_to_status?
+        AppointmentMailer.status_changed(@appointment).deliver_later(wait: 5.seconds)
+      end
+
       flash.now[:notice] = "Appointment updated successfully"
       respond_to do |format|
         format.turbo_stream
@@ -21,8 +26,6 @@ class Doctors::AppointmentsController < Doctors::BaseController
     else
       render :edit, status: :unprocessable_entity
     end
-  rescue ActiveRecord::RecordNotUnique
-    handle_unique_slot_error
   end
 
   def destroy
@@ -44,7 +47,7 @@ class Doctors::AppointmentsController < Doctors::BaseController
     render :edit, status: :unprocessable_entity
   end
 
-  def find_appointment_and_authorize
+  def find_and_authorize_appointment
     @appointment = Appointment.find(params[:id])
     authorize @appointment
   end

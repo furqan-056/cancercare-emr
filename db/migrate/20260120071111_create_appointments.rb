@@ -12,7 +12,7 @@ class CreateAppointments < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :appointments, [:slot_id, :appointment_date], unique: true
+    add_index :appointments, [:slot_id, :appointment_date], unique: true, where: "status IN (0,1)", name: "index_appointments_on_slot_and_date_active"
 
     add_index :appointments, [:doctor_id, :appointment_date]
     add_index :appointments, [:patient_id, :appointment_date]

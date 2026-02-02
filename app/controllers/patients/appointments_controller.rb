@@ -15,9 +15,8 @@ class Patients::AppointmentsController < Patients::BaseController
   def edit; end
 
   def create
-    @appointment = current_user.appointments.new(appointment_params)
-    @appointment.doctor = @doctor
-    @appointment.status ||= :pending  
+    @appointment = @doctor.appointments.new(appointment_params.merge(patient: current_user))
+    @appointment.status ||= :pending
 
     if @appointment.save
       flash[:notice] = "Appointment booked successfully"
@@ -29,7 +28,7 @@ class Patients::AppointmentsController < Patients::BaseController
 
   def update
   if @appointment.update(appointment_params)
-      AppointmentMailer.updated_by_patient(@appointment).deliver_later(wait: 10.seconds)
+    AppointmentMailer.updated_by_patient(@appointment).deliver_later
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to patients_appointments_path, notice: "Appointment updated successfully" }
@@ -40,7 +39,15 @@ class Patients::AppointmentsController < Patients::BaseController
   end
 
   def destroy
-    @appointment.current_user_for_destroy = current_user
+    if current_user.patient? && @appointment.appointment_date == Date.current
+      @appointment.errors.add(:base, "You cannot delete an appointment scheduled for today")
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to patients_appointments_path, alert: @appointment.errors.full_messages.to_sentence }
+      end
+      return
+    end
+
     @appointment.destroy
     respond_to do |format|
       format.turbo_stream
@@ -49,16 +56,10 @@ class Patients::AppointmentsController < Patients::BaseController
   end
 
   def available_slots
-    date = Date.parse(params[:date])
-    weekday_name = Slot.weekdays.key(date.wday)
-    @slots = Slot.where(doctor_id: @doctor.id, weekday: weekday_name).includes(:appointments, :slot_exceptions).ordered
-    @selected_date = date
-
-    @slot_availability = @slots.map do |slot|
-      { id: slot.id, name: slot.display_name, available: slot.available_on?(date) }
-    end
-
-    render partial: 'patients/appointments/slots_list', locals: { slots: @slot_availability, selected_date: @selected_date }
+    @selected_date = Date.parse(params[:date])
+    @slots = Slot.where(doctor_id: @doctor.id, weekday: Slot.weekdays.key(@selected_date.wday)).includes(:appointments, :slot_exceptions).ordered
+    @slot_availability = @slots.map { |slot| slot.to_availability(@selected_date) }
+    render layout: false
   end
 
   private

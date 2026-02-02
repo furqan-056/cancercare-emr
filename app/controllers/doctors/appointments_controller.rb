@@ -13,11 +13,7 @@ class Doctors::AppointmentsController < Doctors::BaseController
 
   def update
     if @appointment.update(appointment_params)
-
-      if @appointment.saved_change_to_status?
-        AppointmentMailer.status_changed(@appointment).deliver_later(wait: 5.seconds)
-      end
-
+      AppointmentMailer.status_changed(@appointment).deliver_later if @appointment.saved_change_to_status?
       flash.now[:notice] = "Appointment updated successfully"
       respond_to do |format|
         format.turbo_stream
@@ -40,11 +36,6 @@ class Doctors::AppointmentsController < Doctors::BaseController
 
   def load_slots
     @slots = current_user.slots.ordered
-  end
-
-  def handle_unique_slot_error
-    @appointment.errors.add(:base, "This slot is already booked for this date")
-    render :edit, status: :unprocessable_entity
   end
 
   def find_and_authorize_appointment

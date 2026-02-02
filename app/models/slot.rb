@@ -31,6 +31,10 @@ class Slot < ApplicationRecord
     "#{weekday.titleize} #{start_time.strftime('%H:%M')} - #{end_time.strftime('%H:%M')} (#{doctor.full_name})"
   end
 
+  def to_availability(date)
+    { id: id, name: display_name, available: available_on?(date) }
+  end
+
   private
 
   def no_overlapping_slots

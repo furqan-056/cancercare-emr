@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     devise_for :admins
 
     authenticate :admin do
-      mount Sidekiq::Web => '/admin/background-jobs'
+      mount Sidekiq::Web => '/sidekiq'
     end
 
     namespace :admins do

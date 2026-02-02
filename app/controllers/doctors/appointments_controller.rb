@@ -4,7 +4,7 @@ class Doctors::AppointmentsController < Doctors::BaseController
 
   def index
     @q = policy_scope(Appointment).ransack(params[:q])
-    @appointments = @q.result.includes(:patient, :doctor, :slot).recent_order_first.page(params[:page]).per(10)
+    @appointments = @q.result.includes(:patient, :doctor, slot: :doctor).recent_order_first.page(params[:page]).per(10)
   end
 
   def edit; end

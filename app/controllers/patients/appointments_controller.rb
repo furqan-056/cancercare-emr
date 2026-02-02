@@ -4,7 +4,7 @@ class Patients::AppointmentsController < Patients::BaseController
   before_action :set_slots_and_exceptions, only: [:new, :edit,  :create]
 
   def index
-    @q = policy_scope(Appointment).includes(:doctor, :slot).ransack(params[:q])
+    @q = policy_scope(Appointment).includes(:doctor, slot: :doctor).ransack(params[:q])
     @appointments = @q.result.recent_order_first.page(params[:page]).per(10)
   end
 
@@ -57,7 +57,7 @@ class Patients::AppointmentsController < Patients::BaseController
 
   def available_slots
     @selected_date = Date.parse(params[:date])
-    @slots = Slot.where(doctor_id: @doctor.id, weekday: Slot.weekdays.key(@selected_date.wday)).includes(:appointments, :slot_exceptions).ordered
+    @slots = Slot.where(doctor_id: @doctor.id, weekday: Slot.weekdays.key(@selected_date.wday)).includes(:doctor, :appointments, :slot_exceptions).ordered
     @slot_availability = @slots.map { |slot| slot.to_availability(@selected_date) }
     render layout: false
   end

@@ -47,12 +47,6 @@ class Patients::AppointmentsController < Patients::BaseController
       end
       return
     end
-
-    @appointment.destroy
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to patients_appointments_path, notice: "Appointment canceled successfully." }
-    end
   end
 
   def available_slots

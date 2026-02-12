@@ -41,11 +41,21 @@ class Patients::AppointmentsController < Patients::BaseController
   def destroy
     if @appointment.appointment_date == Date.current
       @appointment.errors.add(:base, "You cannot delete an appointment scheduled for today")
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to patients_appointments_path, alert: @appointment.errors.full_messages.to_sentence }
+      success = false
+    else
+      @appointment.destroy
+      success = true
+    end
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html do
+        if success
+          redirect_to patients_appointments_path, notice: "Appointment canceled successfully."
+        else
+          redirect_to patients_appointments_path, alert: @appointment.errors.full_messages.to_sentence
+        end
       end
-      return
     end
   end
 

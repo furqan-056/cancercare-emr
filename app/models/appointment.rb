@@ -5,11 +5,13 @@ class Appointment < ApplicationRecord
 
   validates :appointment_date, presence: true
   validates :slot_id, :reason, presence: true
-  validates :slot_id, uniqueness: { scope: :appointment_date, message: "is already booked for this date" }, if: :slot_present?
+  validates :slot_id, uniqueness: { scope: :appointment_date, message: "is already booked for this date",  conditions: -> { where.not(status: :rejected)  }}, if: :slot_present?
+  validate :past_date
 
   enum :status, { pending: 0, approved: 1, rejected: 2 }
 
   after_create_commit :send_created_email
+  before_destroy :destroy_by_current_date
 
   scope :recent_order_first, -> { order(appointment_date: :desc) }
 
@@ -22,6 +24,21 @@ class Appointment < ApplicationRecord
   end
 
   private
+
+  def past_date
+    if appointment_date < Date.current
+      errors.add(:appointment_date, "cannot be in the past")
+    end
+  end
+
+  def destroy_by_current_date
+    if appointment_date == Date.current
+      errors.add(:base, "You cannot delete an appointment scheduled for today")
+      return false
+    end
+
+    destroy
+  end
 
   def slot_present?
     slot_id.present? && appointment_date.present?

@@ -39,7 +39,7 @@ class Patients::AppointmentsController < Patients::BaseController
   end
 
   def destroy
-    if current_user.patient? && @appointment.appointment_date == Date.current
+    if @appointment.appointment_date == Date.current
       @appointment.errors.add(:base, "You cannot delete an appointment scheduled for today")
       respond_to do |format|
         format.turbo_stream
@@ -70,6 +70,7 @@ class Patients::AppointmentsController < Patients::BaseController
 
   def find_appointment
     @appointment = current_user.appointments.find(params[:id])
+    authorize @appointment
   end
 
   def set_slots_and_exceptions

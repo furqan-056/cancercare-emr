@@ -1,0 +1,32 @@
+<h2>Appointment Successfully Booked!</h2>
+
+<p>Dear <strong><%= @appointment.patient.full_name %></strong>,</p>
+
+<p>Your appointment has been successfully scheduled. Here are the details:</p>
+
+<hr class="my-2">
+
+<p>
+  <strong>Status:</strong> <%= @appointment.status.titleize %><br>
+  <strong>Doctor:</strong> <%= @appointment.doctor.full_name %> (<%= @appointment.doctor.specialization %>)<br>
+  <strong>Patient:</strong> <%= @appointment.patient.full_name %><br>
+  <strong>Date:</strong> <%= @appointment.appointment_date.strftime("%A, %d %B %Y") %><br>
+  <strong>Time:</strong> 
+  <% if @appointment.slot %>
+    <%= @appointment.slot.start_time.strftime("%I:%M %p") %>
+  <% end %>
+</p>
+
+<% if @appointment.reason.present? %>
+  <p><strong>Reason for Appointment:</strong> <%= @appointment.reason %></p>
+<% else %>
+  <p><strong>Reason for Appointment:</strong> Not provided</p>
+<% end %>
+
+<p>Please make sure to arrive at the clinic at least 10–15 minutes before your scheduled time. If you need to reschedule or cancel, contact us as soon as possible.</p>
+
+<p>Thank you for choosing our services. We look forward to seeing you!</p>
+
+<hr class="my-2">
+
+<p><em>This is an automated notification. Please do not reply to this email.</em></p>

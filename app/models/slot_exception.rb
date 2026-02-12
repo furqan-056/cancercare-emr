@@ -26,6 +26,13 @@ class SlotException < ApplicationRecord
     where(exception_date: date).where("slot_id = ? OR slot_id IS NULL", slot_id).where("doctor_id IS NULL OR doctor_id = ?", doctor_id).exists?
   end
 
+  def self.exceptions_for_calendar(doctor)
+    {
+      holidays: holidays.pluck(:exception_date).map { |d| d.iso8601 },
+      doctor_blocked: for_doctor(doctor.id).where(slot_id: nil).pluck(:exception_date).map { |d| d.iso8601 }
+    }
+  end
+
   private
 
   def assign_doctor_unavailable_type

@@ -30,3 +30,6 @@ application.register("live-search", LiveSearchController)
 
 import SlotExceptionController from "./slot_exception_controller"
 application.register("slot-exception", SlotExceptionController)
+
+import CalendarController from "./calendar_controller"
+application.register("calendar", CalendarController)

@@ -1,0 +1,144 @@
+<div class="container mx-auto px-4 py-8 bg-primary-bg transition-colors duration-300 min-h-screen">
+
+  <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-primary-border pb-6 gap-4">
+    <h1 class="text-3xl font-extrabold text-primary-text tracking-tight">
+      My <span class="text-accent-1">Appointments</span>
+    </h1>
+
+    <%= link_to patients_doctors_path, class: "flex items-center gap-2 bg-accent-1 hover:bg-accent-1-hover text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-all transform active:scale-95" do %>
+      <i class="fa-solid fa-calendar-plus"></i>
+      <span>Book New Appointment</span>
+    <% end %>
+  </div>
+
+  <div class="mb-6">
+    <%= search_form_for @q, url: patients_appointments_path, method: :get, local: false,
+          html: {
+            data: {
+              controller: "live-search",
+              live_search_target: "form",
+              turbo_frame: "appointments_list"
+            },
+            class: "flex gap-4 mb-6 flex-wrap"
+          } do |f| %>
+
+      <div class="flex-grow min-w-[200px]">
+        <%= f.label :appointment_date_eq, "Filter by Date",
+              class: "block text-sm font-medium text-primary-text mb-1" %>
+        <%= f.date_field :appointment_date_eq,
+              class: "w-50 border border-primary-border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-accent-1 text-primary-text",
+              data: { action: "change->live-search#search" } %>
+      </div>
+    <% end %>
+  </div>
+
+  <div id="appointment_form_container" class="mb-6">
+    <%= turbo_frame_tag "appointment_form" %>
+  </div>
+
+  <%= turbo_frame_tag "appointments_list" do %>
+    <% if @appointments.any? %>
+      <div class="bg-secondary-bg border border-primary-border rounded-2xl shadow-xl overflow-hidden transition-all duration-300">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-primary-border">
+            <thead class="bg-hover-bg/30">
+              <tr class="text-secondary-text text-xs font-bold uppercase tracking-widest">
+                <th class="px-6 py-4 text-left">Doctor</th>
+                <th class="px-6 py-4 text-left">Schedule</th>
+                <th class="px-6 py-4 text-left">Reason</th>
+                <th class="px-6 py-4 text-left">Status</th>
+                <th class="px-6 py-4 text-center">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-primary-border">
+              <% @appointments.each do |appt| %>
+                <% meta = appointment_status_meta(appt.status) %>
+
+                <tr id="<%= dom_id(appt) %>" class="hover:bg-hover-bg/10 transition-colors group">
+
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-full bg-hover-bg flex items-center justify-center text-black border border-primary-border">
+                        <i class="fa-solid fa-user-doctor"></i>
+                      </div>
+                      <div class="text-sm font-bold text-primary-text">
+                        Dr. <%= appt.doctor.full_name %>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex flex-col gap-1">
+                      <span class="text-sm font-semibold text-primary-text flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-day text-accent-1 text-xs"></i>
+                        <%= appt.appointment_date.strftime('%b %d, %Y') %>
+                      </span>
+                      <span class="text-xs text-secondary-text flex items-center gap-2">
+                        <i class="fa-solid fa-clock text-accent-1 text-[10px]"></i>
+                        <%= appt.slot&.display_name || "No Slot" %>
+                      </span>
+                    </div>
+                  </td>
+
+                  <td class="px-6 py-4">
+                    <div class="text-sm text-secondary-text max-w-xs truncate" title="<%= appt.reason %>">
+                      <%= appt.reason %>
+                    </div>
+                  </td>
+
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-3 py-1 inline-flex items-center gap-1.5 text-[10px] leading-5 font-black rounded-full border uppercase tracking-tighter <%= meta[:classes] %>">
+                      <i class="fa-solid <%= meta[:icon] %>"></i>
+                      <%= appt.status.titleize %>
+                    </span>
+                  </td>
+
+                  <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium flex justify-center gap-2">
+                    <% if appt.pending? %>
+                      <%= link_to edit_patients_doctor_appointment_path(appt.doctor, appt),
+                                  data: { turbo_frame: "appointment_form" },
+                                  class: "inline-flex items-center gap-1 text-blue-500 hover:text-blue-400 px-3 py-1.5 rounded-lg transition-all" do %>
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      <% end %>
+
+                      <%= button_to patients_appointment_path(appt), 
+                                    method: :delete,
+                                    form: { data: { turbo_confirm: "Are you sure you want to cancel this appointment?" } },
+                                    class: "inline-flex items-center gap-1 text-red-500 hover:text-red-400 bg-red-500/10 hover:bg-red-500/20 px-3 py-1.5 rounded-lg transition-all" do %>
+                        <i class="fa-solid fa-trash-can"></i>
+                      <% end %>
+                    <% else %>
+                      <span class="text-secondary-text opacity-40 italic text-xs">No Actions</span>
+                    <% end %>
+                  </td>
+
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <% if @appointments.total_pages > 1 %>
+        <div class="mt-8 flex justify-center">
+          <div class="bg-secondary-bg p-2 rounded-xl border border-primary-border shadow-md">
+            <%= paginate @appointments, params: { turbo_frame: "appointments_list" } %>
+          </div>
+        </div>
+      <% end %>
+
+    <% else %>
+      <div class="bg-secondary-bg border-2 border-dashed border-primary-border rounded-2xl p-12 text-center transition-all">
+        <div class="w-20 h-20 bg-hover-bg rounded-full flex items-center justify-center text-accent-1 mx-auto mb-6">
+          <i class="fa-solid fa-calendar-xmark text-4xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-primary-text mb-2">No Appointments Found</h3>
+        <p class="text-secondary-text mb-8 max-w-sm mx-auto">
+          You haven't scheduled any consultations yet.
+        </p>
+      </div>
+    <% end %>
+
+  <% end %>
+</div>

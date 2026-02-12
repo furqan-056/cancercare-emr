@@ -79,4 +79,12 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: "admin.localhost", port: 3000 }
   config.action_dispatch.tld_length = 0
   config.app_domain = "localhost:3000"
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.alert = true
+    Bullet.bullet_logger = false
+    Bullet.console = false
+    Bullet.rails_logger = true
+    Bullet.add_footer = true
+  end
 end

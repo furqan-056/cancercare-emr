@@ -56,6 +56,7 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
   gem 'letter_opener_web'
+  gem 'bullet'
 end
 
 group :test do
@@ -73,3 +74,6 @@ gem 'jquery-rails'
 
 gem "kaminari"
 gem 'ransack'
+gem 'paper_trail'
+gem 'sidekiq', '~> 7.2'
+gem 'connection_pool', '~> 2.4.1'

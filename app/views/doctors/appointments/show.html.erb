@@ -1,0 +1,102 @@
+<%= turbo_frame_tag "modal" do %>
+  <div id="modal"
+       data-controller="modal"
+       data-action="click->modal#closeOnOutsideClick"
+       class="hidden fixed inset-0 z-50 overflow-y-auto backdrop-blur-md bg-black/40"
+       aria-labelledby="modal-title"
+       role="dialog"
+       aria-modal="true">
+
+    <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+        <div class="p-6 lg:p-8 bg-card-bg">
+
+          <div class="flex justify-end mb-4">
+            <%= link_to "#", data: { action: "modal#close" }, class: "text-secondary-text hover:text-red-500 transition" do %>
+              <i class="fas fa-times fa-lg"></i>
+            <% end %>
+          </div>
+
+          <div class="space-y-6">
+            <div class="sm:flex sm:items-center sm:justify-between border-b border-primary-border pb-4 mb-4">
+              <div class="sm:flex-auto">
+                <h1 id="modal-title" class="text-3xl font-bold leading-tight tracking-tight text-secondary-text">
+                  Appointment Details
+                </h1>
+                <p class="mt-1 text-lg text-accent-1 font-medium">
+                  Status: <%= @appointment.status.titleize %>
+                </p>
+              </div>
+
+            <div class="bg-card-bg overflow-hidden rounded-3xl">
+              <div class="divide-y divide-primary-border">
+                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-secondary-bg/20">
+                  <dt class="text-lg font-semibold text-accent-1 sm:col-span-3">Patient & Doctor</dt>
+                </div>
+
+                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-secondary-text">Patient</dt>
+                  <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @appointment.patient&.full_name || "N/A" %></dd>
+                </div>
+
+                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-secondary-text">Doctor</dt>
+                  <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @appointment.doctor&.full_name || "N/A" %></dd>
+                </div>
+
+                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-secondary-bg/20">
+                  <dt class="text-lg font-semibold text-accent-1 sm:col-span-3">Appointment Info</dt>
+                </div>
+
+                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-secondary-text">Date</dt>
+                  <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @appointment.appointment_date&.strftime("%d %b %Y") || "N/A" %></dd>
+                </div>
+
+                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-secondary-text">Slot</dt>
+                  <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @appointment.slot&.display_name || "No Slot" %></dd>
+                </div>
+
+                <% if @appointment.slot.present? %>
+                  <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-secondary-bg/20">
+                    <dt class="text-lg font-semibold text-accent-1 sm:col-span-3">Slot Details</dt>
+                  </div>
+
+                  <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-secondary-text">Start Time</dt>
+                    <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @appointment.slot.start_time.strftime("%I:%M %p") %></dd>
+                  </div>
+
+                  <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-secondary-text">End Time</dt>
+                    <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @appointment.slot.end_time.strftime("%I:%M %p") %></dd>
+                  </div>
+
+                  <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-secondary-text">Weekday</dt>
+                    <dd class="mt-1 text-sm text-secondary-text sm:col-span-2 sm:mt-0"><%= @appointment.slot.weekday.titleize %></dd>
+                  </div>
+                <% end %>
+
+                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-secondary-bg/20">
+                  <dt class="text-lg font-semibold text-accent-1 sm:col-span-3">Reason</dt>
+                </div>
+
+                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dd class="mt-1 text-sm text-secondary-text sm:col-span-3 sm:mt-0">
+                    <% if @appointment.reason.present? %>
+                      <div class="p-3 bg-primary-bg rounded-xl"><%= simple_format(@appointment.reason) %></div>
+                    <% else %>
+                      <p class="italic text-gray-400">No reason provided.</p>
+                    <% end %>
+                  </dd>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

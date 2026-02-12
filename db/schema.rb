@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_15_113955) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_27_080627) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -65,6 +65,23 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_15_113955) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "appointments", force: :cascade do |t|
+    t.bigint "slot_id", null: false
+    t.bigint "doctor_id", null: false
+    t.bigint "patient_id", null: false
+    t.date "appointment_date", null: false
+    t.integer "status", default: 0, null: false
+    t.string "reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctor_id", "appointment_date"], name: "index_appointments_on_doctor_id_and_appointment_date"
+    t.index ["doctor_id"], name: "index_appointments_on_doctor_id"
+    t.index ["patient_id", "appointment_date"], name: "index_appointments_on_patient_id_and_appointment_date"
+    t.index ["patient_id"], name: "index_appointments_on_patient_id"
+    t.index ["slot_id", "appointment_date"], name: "index_appointments_on_slot_and_date_active", unique: true, where: "(status = ANY (ARRAY[0, 1]))"
+    t.index ["slot_id"], name: "index_appointments_on_slot_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -125,8 +142,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_15_113955) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.bigint "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "appointments", "slots"
+  add_foreign_key "appointments", "users", column: "doctor_id"
+  add_foreign_key "appointments", "users", column: "patient_id"
   add_foreign_key "slot_exceptions", "slots"
   add_foreign_key "slot_exceptions", "users", column: "doctor_id"
   add_foreign_key "slots", "users", column: "doctor_id"

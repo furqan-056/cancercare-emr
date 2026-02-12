@@ -1,0 +1,7 @@
+<%= turbo_stream.replace dom_id(@appointment) do %>
+  <%= render partial: "appointment_row", locals: { appointment: @appointment } %>
+<% end %>
+
+<%= render "shared/turbo_flash", message: "Appointment updated successfully", type: "green" %>
+
+<%= turbo_stream.remove "modal" %>

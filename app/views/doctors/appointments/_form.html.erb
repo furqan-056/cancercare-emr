@@ -11,7 +11,7 @@
     <div class="inline-block align-bottom bg-primary-bg rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-lg md:max-w-4xl w-full">
 
       <div class="p-6 lg:p-8 bg-card-bg">
-        <%= form_with model: [:doctors, appointment], url: appointment.persisted? ? doctors_appointment_path(appointment) : doctors_appointments_path, data: { turbo_frame: "appointment_form", controller: "appointment-form" } do |f| %>
+        <%= form_with model: [:doctors, appointment], url: appointment.persisted? ? doctors_appointment_path(appointment) : doctors_appointments_path, html: { multipart: true }, data: { turbo_frame: "appointment_form", controller: "appointment-form" } do |f| %>
 
           <% if appointment.errors.any? %>
             <div class="mb-4 p-4 border border-red-400 bg-red-50 text-red-700 rounded-md">
@@ -85,7 +85,50 @@
                   <% end %>
                 </select>
               </div>
+            </div>
 
+            <div class="pt-4">
+              <%= f.label :pictures, "Upload Scan Pictures (2-3)", class: "block text-sm font-medium text-secondary-text" %>
+              <%= f.file_field :pictures, multiple: true, class: "block w-full rounded-xl border border-primary-border shadow-sm p-3 bg-card-bg text-secondary-text" %>
+
+              <% if appointment.pictures.attached? %>
+                <ul class="mt-2">
+                  <% appointment.pictures.each do |img| %>
+                    <li class="flex items-center justify-between">
+                      <a href="<%= url_for(img) %>" target="_blank" class="text-accent-1 hover:underline">
+                        <%= img.filename %>
+                      </a>
+                      <div class="flex items-center space-x-2">
+                        <%= check_box_tag "appointment[remove_picture_ids][]", img.id, false, id: "remove_picture_#{img.id}" %>
+                        <%= label_tag "remove_picture_#{img.id}", "Remove", class: "text-red-500" %>
+                      </div>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
+            </div>
+
+            <div class="pt-4">
+              <%= f.label :pdfs, "Upload PDF", class: "block text-sm font-medium text-secondary-text" %>
+              <%= f.file_field :pdfs, multiple: true, class: "block w-full rounded-xl border border-primary-border shadow-sm p-3 bg-card-bg text-secondary-text" %>
+
+              <% if appointment.persisted? && appointment.pdfs.attached? %>
+                <ul class="mt-2">
+                  <% appointment.pdfs.each do |pdf| %>
+                    <% next unless pdf.persisted? && pdf.blob.present? %>
+
+                    <li class="flex items-center justify-between">
+                      <%= link_to pdf.filename,  url_for(pdf),  target: "_blank",  class: "text-accent-1 hover:underline" %>
+
+                      <div class="flex items-center space-x-2">
+                        <%= check_box_tag "appointment[remove_pdf_ids][]", pdf.id, false, id: "remove_pdf_#{pdf.id}" %>
+
+                        <%= label_tag "remove_pdf_#{pdf.id}", "Remove", class: "text-red-500" %>
+                      </div>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
             </div>
 
             <div class="pt-5">

@@ -51,7 +51,7 @@ class Doctors::AppointmentsController < Doctors::BaseController
       @appointment.errors.add(:base, "You cannot delete an appointment scheduled for today")
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to patients_appointments_path, alert: @appointment.errors.full_messages.to_sentence }
+        format.html { redirect_to doctors_appointments_path, alert: @appointment.errors.full_messages.to_sentence }
       end
       return
     end
@@ -59,7 +59,7 @@ class Doctors::AppointmentsController < Doctors::BaseController
     @appointment.destroy
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to patients_appointments_path, notice: "Appointment canceled successfully." }
+      format.html { redirect_to doctors_appointments_path, notice: "Appointment canceled successfully." }
     end
   end
 

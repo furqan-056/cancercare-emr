@@ -5,7 +5,6 @@ class Appointment < ApplicationRecord
   has_many_attached :pictures
   has_many_attached :pdfs
 
-
   validates :appointment_date, presence: true
   validates :slot_id, :reason, presence: true
   validates :slot_id, uniqueness: { scope: :appointment_date, message: "is already booked for this date",  conditions: -> { where.not(status: :rejected)  }}, if: :slot_present?

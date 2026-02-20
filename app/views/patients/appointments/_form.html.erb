@@ -4,6 +4,12 @@
      data-calendar-blocked-value="<%= exceptions[:doctor_blocked].join(',') %>"
      class="animate-slide-in-right">
 
+  <nav class="mb-6 text-sm text-secondary-text flex items-center gap-2">
+    <%= link_to "Doctors", patients_doctors_path, class: "text-blue-500 hover:text-accent-1 transition" %>
+    <span>/</span>
+    <span>Book Appointment</span>
+  </nav>
+
   <h2 class="text-xl font-bold text-primary-text mb-4">
      Book Appointment with <span class="text-accent-1">Dr. <%= @doctor.full_name %></span>
   </h2>

@@ -92,6 +92,46 @@
                     <% end %>
                   </dd>
                 </div>
+
+                <% if @appointment.pictures.attached? || @appointment.pdfs.attached? %>
+                  <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-secondary-bg/20">
+                    <dt class="text-lg font-semibold text-accent-1 sm:col-span-3">Attachments</dt>
+                  </div>
+
+                  <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dd class="mt-1 text-sm text-secondary-text sm:col-span-3 sm:mt-0 space-y-2">
+                      <% if @appointment.pictures.attached? %>
+                        <div>
+                          <strong>Scan Pictures:</strong>
+                          <ul class="list-disc list-inside ml-4">
+                            <% @appointment.pictures.each do |img| %>
+                              <li>
+                                <a href="<%= url_for(img) %>" target="_blank" class="text-accent-1 hover:underline">
+                                  <%= img.filename %>
+                                </a>
+                              </li>
+                            <% end %>
+                          </ul>
+                        </div>
+                      <% end %>
+
+                      <% if @appointment.pdfs.attached? %>
+                        <div>
+                          <strong>Report</strong>
+                          <ul class="list-disc list-inside ml-4">
+                            <% @appointment.pdfs.each do |pdf| %>
+                              <li>
+                                <a href="<%= url_for(pdf) %>" target="_blank" class="text-accent-1 hover:underline">
+                                  <%= pdf.filename %>
+                                </a>
+                              </li>
+                            <% end %>
+                          </ul>
+                        </div>
+                      <% end %>
+                    </dd>
+                  </div>
+                <% end %>
               </div>
             </div>
           </div>

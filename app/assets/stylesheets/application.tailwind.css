@@ -24,6 +24,19 @@
     }
   }
 
+  @keyframes slide-left-to-right {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-slide-left-to-right {
+    animation: slide-left-to-right 12s linear infinite;
+  }
+
   .animate-slide-in-right {
     animation: slide-in-right 0.5s ease-out forwards;
   }
@@ -39,6 +52,10 @@
   --turquoise-surf: #00b4d8ff;
   --frosted-blue: #90e0efff;
   --light-cyan: #caf0f8ff;
+}
+
+.input {
+  @apply block w-full rounded-xl border border-gray-300 p-3 text-sm;
 }
 
 :root {

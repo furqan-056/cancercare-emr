@@ -29,6 +29,23 @@
     </div>
   </td>
 
+  <td class="px-6 py-4 whitespace-nowrap text-sm">
+    <% if appointment.pdfs.attached? || appointment.pictures.attached? %>
+      <% appointment.pdfs.each do |pdf| %>
+        <div>
+          <%= link_to pdf.filename.to_s, url_for(pdf), target: "_blank", class: "text-accent-1 hover:underline block" %>
+        </div>
+      <% end %>
+      <% appointment.pictures.each do |pic| %>
+        <div>
+          <%= link_to pic.filename.to_s, url_for(pic), target: "_blank", class: "text-accent-1 hover:underline block" %>
+        </div>
+      <% end %>
+    <% else %>
+      <span class="text-secondary-text italic text-xs opacity-60">No report and scans included</span>
+    <% end %>
+  </td>
+
   <td class="px-6 py-4 whitespace-nowrap">
     <% meta = appointment_status_meta(appointment.status) %>
     <span class="px-3 py-1 inline-flex items-center gap-1.5 text-[10px] leading-5 font-black rounded-full border uppercase tracking-tighter <%= meta[:classes] %>">
